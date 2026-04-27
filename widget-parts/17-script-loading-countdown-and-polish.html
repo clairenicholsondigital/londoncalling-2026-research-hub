@@ -1,0 +1,428 @@
+  function hsrtx26np20260316RenderLoadingState() {
+    if (hsrtx26np20260316Elements.sessionsOutput) hsrtx26np20260316Elements.sessionsOutput.innerHTML = '<div class="hsrtx26np20260316-empty-state">Loading sessions…</div>';
+    if (hsrtx26np20260316Elements.postersOutput) hsrtx26np20260316Elements.postersOutput.innerHTML = '<div class="hsrtx26np20260316-empty-state">Loading posters…</div>';
+    if (hsrtx26np20260316Elements.documentsOutput) hsrtx26np20260316Elements.documentsOutput.innerHTML = '<div class="hsrtx26np20260316-empty-state">Loading documents…</div>';
+    if (hsrtx26np20260316Elements.videosOutput) hsrtx26np20260316Elements.videosOutput.innerHTML = '<div class="hsrtx26np20260316-empty-state">Loading videos…</div>';
+    if (hsrtx26np20260316Elements.secretCinemaOutput) hsrtx26np20260316Elements.secretCinemaOutput.innerHTML = '<div class="hsrtx26np20260316-empty-state">Loading Secret Cinema…</div>';
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.sessionsCount, 0);
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.postersCount, 0);
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.documentsCount, 0);
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.videosCount, 0);
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.secretCinemaCount, 0);
+  }
+
+  async function hsrtx26np20260316FetchKeywordHtmlForArea(areaConfig) {
+    var cacheKey = String(areaConfig.keyword || areaConfig.slug || '').trim();
+    var searchApiUrl;
+    var keywordSearchData;
+    if (!cacheKey) return '';
+    if (Object.prototype.hasOwnProperty.call(hsrtx26np20260316State.keywordHtmlCache, cacheKey)) return hsrtx26np20260316State.keywordHtmlCache[cacheKey];
+    if (hsrtx26np20260316State.keywordHtmlPromises[cacheKey]) return hsrtx26np20260316State.keywordHtmlPromises[cacheKey];
+    searchApiUrl = '/service-api/keyword-search/?keyword=' + encodeURIComponent(cacheKey);
+    hsrtx26np20260316State.keywordHtmlPromises[cacheKey] = (async function fetchKeywordHtmlOnce() {
+      keywordSearchData = await hsrtx26np20260316FetchJson(searchApiUrl);
+      hsrtx26np20260316State.keywordHtmlCache[cacheKey] = keywordSearchData && keywordSearchData.content ? keywordSearchData.content : '';
+      delete hsrtx26np20260316State.keywordHtmlPromises[cacheKey];
+      return hsrtx26np20260316State.keywordHtmlCache[cacheKey];
+    })();
+    return hsrtx26np20260316State.keywordHtmlPromises[cacheKey];
+  }
+
+  function hsrtx26np20260316QueueKeywordTablesForArea(areaConfig, loadToken) {
+    var idleCallback = window.requestIdleCallback || function fallbackIdleCallback(callback) { return window.setTimeout(callback, 350); };
+    idleCallback(function loadKeywordTablesWhenIdle() {
+      if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
+      hsrtx26np20260316LoadKeywordTablesForArea(areaConfig, loadToken);
+    });
+  }
+
+  function hsrtx26np20260316EnsureKeywordTablesForActiveArea() {
+    var activeAreaConfig = hsrtx26np20260316GetAreaConfigBySlug(hsrtx26np20260316State.activeAreaSlug);
+    if (!activeAreaConfig) return;
+    hsrtx26np20260316LoadKeywordTablesForArea(activeAreaConfig, hsrtx26np20260316State.latestLoadToken);
+  }
+
+  async function hsrtx26np20260316LoadKeywordTablesForArea(areaConfig, loadToken) {
+    var htmlContent = await hsrtx26np20260316FetchKeywordHtmlForArea(areaConfig);
+    var tempRootNode;
+    var documentsTableNode;
+    var videosTableNode;
+    if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
+    if (!htmlContent) {
+      hsrtx26np20260316RenderTableOutput(hsrtx26np20260316Elements.documentsOutput, null, '<div class="hsrtx26np20260316-empty-state">No documents found.</div>');
+      hsrtx26np20260316RenderTableOutput(hsrtx26np20260316Elements.videosOutput, null, '<div class="hsrtx26np20260316-empty-state">No videos found.</div>');
+      hsrtx26np20260316SetText(hsrtx26np20260316Elements.documentsCount, 0);
+      hsrtx26np20260316SetText(hsrtx26np20260316Elements.videosCount, 0);
+      return;
+    }
+    tempRootNode = document.createElement('div');
+    tempRootNode.innerHTML = htmlContent;
+    documentsTableNode = hsrtx26np20260316FindSectionTable(tempRootNode, ['documents', 'document', 'literature']);
+    videosTableNode = hsrtx26np20260316FindSectionTable(tempRootNode, ['videos', 'video']);
+    documentsTableNode = hsrtx26np20260316PrepareDocumentsTable(documentsTableNode);
+    videosTableNode = hsrtx26np20260316PrepareVideosTable(videosTableNode);
+    if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
+    hsrtx26np20260316RenderTableOutput(hsrtx26np20260316Elements.documentsOutput, documentsTableNode, '<div class="hsrtx26np20260316-empty-state">No documents found.</div>');
+    hsrtx26np20260316RenderTableOutput(hsrtx26np20260316Elements.videosOutput, videosTableNode, '<div class="hsrtx26np20260316-empty-state">No videos found.</div>');
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.documentsCount, hsrtx26np20260316CountDataRows(documentsTableNode));
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.videosCount, hsrtx26np20260316CountDataRows(videosTableNode));
+  }
+
+  async function hsrtx26np20260316LoadSessionsAndPostersForArea(areaConfig, loadToken) {
+    var webinarIds = hsrtx26np20260316CollectWebinarIds();
+    var keywordLower = String(areaConfig.keyword || '').trim().toLowerCase();
+    var sessionList = [];
+    var posterList = [];
+    var secretCinemaList = [];
+    var agendaIndex = await hsrtx26np20260316GetAgendaDetailsIndex();
+    var candidateDetails = [];
+    var detailIndex;
+    var webinarDetail;
+    var detailKeywordText;
+    var webinarType;
+    var sessionModel;
+    var posterHallModel;
+
+    if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
+
+    if (agendaIndex && agendaIndex.list && agendaIndex.list.length) {
+      if (webinarIds.length) {
+        webinarIds.forEach(function appendAgendaDetailById(webinarId) {
+          if (agendaIndex.map[webinarId]) candidateDetails.push(agendaIndex.map[webinarId]);
+        });
+      } else {
+        candidateDetails = agendaIndex.list.slice();
+      }
+    } else {
+      webinarIds = webinarIds.length ? webinarIds : await hsrtx26np20260316CollectWebinarIdsWhenReady(8, 200);
+      if (!webinarIds.length) console.warn('[hsrtx26np20260316] No webinar IDs found and the bulk agenda endpoint did not return usable data. If needed, set data-hsrtx26np20260316-webinar-ids or data-hsrtx26np20260316-app-id.');
+      candidateDetails = await hsrtx26np20260316FetchWebinarDetailsFallback(webinarIds, loadToken);
+    }
+
+    for (detailIndex = 0; detailIndex < candidateDetails.length; detailIndex += 1) {
+      webinarDetail = candidateDetails[detailIndex];
+      if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
+      if (!webinarDetail || !hsrtx26np20260316PickFirst(webinarDetail, ['title', 'webinar_title', 'webinarTitle', 'session_title', 'name'])) continue;
+      detailKeywordText = hsrtx26np20260316GetDetailKeywordText(webinarDetail).toLowerCase();
+      if (keywordLower && detailKeywordText.indexOf(keywordLower) === -1) continue;
+      if (hsrtx26np20260316DetailIsInWebinarGroup(webinarDetail, hsrtx26np20260316SecretCinemaGroupId)) {
+        sessionModel = hsrtx26np20260316BuildSessionModel(webinarDetail);
+        sessionModel.isSecretCinema = true;
+        secretCinemaList.push(sessionModel);
+        continue;
+      }
+      webinarType = hsrtx26np20260316GetDetailType(webinarDetail);
+      if (webinarType === 'poster') posterList.push(hsrtx26np20260316BuildPosterModel(webinarDetail));
+      else sessionList.push(hsrtx26np20260316BuildSessionModel(webinarDetail));
+    }
+
+    sessionList.sort(function sortSessionsByTimeThenTitle(firstSession, secondSession) {
+      if (firstSession.sortTime && secondSession.sortTime && firstSession.sortTime !== secondSession.sortTime) return firstSession.sortTime - secondSession.sortTime;
+      return String(firstSession.title || '').localeCompare(String(secondSession.title || ''));
+    });
+
+    secretCinemaList.sort(function sortSecretCinemaByTimeThenTitle(firstSession, secondSession) {
+      if (firstSession.sortTime && secondSession.sortTime && firstSession.sortTime !== secondSession.sortTime) return firstSession.sortTime - secondSession.sortTime;
+      return String(firstSession.title || '').localeCompare(String(secondSession.title || ''));
+    });
+
+    posterList.sort(function sortPostersByTitle(firstPoster, secondPoster) {
+      return String(firstPoster.title || '').localeCompare(String(secondPoster.title || ''));
+    });
+
+    posterHallModel = hsrtx26np20260316BuildPosterHallModel(areaConfig, posterList);
+
+    if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
+
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.sessionsCount, sessionList.length);
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.postersCount, posterList.length);
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.secretCinemaCount, secretCinemaList.length);
+
+    if (hsrtx26np20260316Elements.sessionsOutput) {
+      hsrtx26np20260316Elements.sessionsOutput.innerHTML = sessionList.length ? '<div class="hsrtx26np20260316-session-list">' + sessionList.map(hsrtx26np20260316RenderSessionCard).join('') + '</div>' : hsrtx26np20260316RenderAreaEmptyState('No sessions available', areaConfig, 'There are no sessions listed for this research area yet.');
+    }
+
+    if (hsrtx26np20260316Elements.postersOutput) {
+      hsrtx26np20260316Elements.postersOutput.innerHTML = posterHallModel ? '<div class="hsrtx26np20260316-poster-grid hsrtx26np20260316-poster-grid--single">' + hsrtx26np20260316RenderPosterHallCard(posterHallModel) + '</div>' : hsrtx26np20260316RenderAreaEmptyState('No poster hall available', areaConfig, 'There are no posters listed for this research area yet.');
+    }
+
+    if (hsrtx26np20260316Elements.secretCinemaOutput) {
+      hsrtx26np20260316Elements.secretCinemaOutput.innerHTML = secretCinemaList.length ? '<div class="hsrtx26np20260316-session-list">' + secretCinemaList.map(hsrtx26np20260316RenderSessionCard).join('') + '</div>' : hsrtx26np20260316RenderAreaEmptyState('No Secret Cinema sessions available', areaConfig, 'There are no Secret Cinema sessions listed for this research area yet.');
+    }
+
+    hsrtx26np20260316SyncRenderedJoinLinksWithOriginalButtons();
+  }
+
+  function hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, isVisible) {
+    if (!joinLinkNode) return;
+    if (isVisible) {
+      joinLinkNode.removeAttribute('hidden');
+      joinLinkNode.setAttribute('aria-hidden', 'false');
+      joinLinkNode.removeAttribute('tabindex');
+      joinLinkNode.style.display = '';
+      joinLinkNode.style.visibility = '';
+      joinLinkNode.style.opacity = '';
+      joinLinkNode.style.pointerEvents = '';
+      return;
+    }
+    joinLinkNode.setAttribute('hidden', 'hidden');
+    joinLinkNode.setAttribute('aria-hidden', 'true');
+    joinLinkNode.setAttribute('tabindex', '-1');
+    joinLinkNode.style.display = '';
+    joinLinkNode.style.visibility = '';
+    joinLinkNode.style.opacity = '';
+    joinLinkNode.style.pointerEvents = '';
+  }
+
+  function hsrtx26np20260316GetSessionCurrentSeconds(sessionCardNode) {
+    var storedSeconds = Number(sessionCardNode.getAttribute('data-hsrtx26np20260316-seconds-left') || 0);
+    var startTimestamp = Number(sessionCardNode.getAttribute('data-hsrtx26np20260316-start-time') || 0);
+    var currentSeconds = startTimestamp > 0 ? Math.floor((startTimestamp - Date.now()) / 1000) : storedSeconds;
+    if (Number.isNaN(currentSeconds)) currentSeconds = 0;
+    return Math.max(0, currentSeconds);
+  }
+
+  function hsrtx26np20260316GetSessionJoinBeforeSeconds(sessionCardNode) {
+    if (!sessionCardNode) return 0;
+    return Math.max(0, Number(sessionCardNode.getAttribute('data-hsrtx26np20260316-join-before-seconds') || 0) || 0);
+  }
+
+  function hsrtx26np20260316IsRenderedJoinLinkOpen(joinLinkNode, sessionCardNode) {
+    var webinarId;
+    var sourceAvailability;
+    var currentSeconds;
+    var joinBeforeSeconds;
+    var hasJoinTarget;
+    if (!joinLinkNode) return false;
+    if (hsrtx26np20260316ShouldForceJoinButtonsFromUrl()) return !!(joinLinkNode.getAttribute('data-webinar-id') || joinLinkNode.getAttribute('data-url'));
+    webinarId = joinLinkNode.getAttribute('data-webinar-id') || '';
+    sourceAvailability = hsrtx26np20260316GetOriginalPlayButtonAvailability(webinarId);
+    currentSeconds = sessionCardNode ? hsrtx26np20260316GetSessionCurrentSeconds(sessionCardNode) : 0;
+    joinBeforeSeconds = sessionCardNode ? hsrtx26np20260316GetSessionJoinBeforeSeconds(sessionCardNode) : 0;
+    hasJoinTarget = !!(joinLinkNode.getAttribute('data-webinar-id') || joinLinkNode.getAttribute('data-url'));
+    if (!hasJoinTarget) return false;
+    if (sourceAvailability === false) return false;
+    if (sessionCardNode && !hsrtx26np20260316IsJoinWindowOpen(currentSeconds, joinBeforeSeconds)) return false;
+    return true;
+  }
+
+  function hsrtx26np20260316SyncRenderedJoinLinksWithOriginalButtons() {
+    var joinLinkNodes = hsrtx26np20260316RootNode.querySelectorAll('[data-hsrtx26np20260316-role="join-link"]');
+    hsrtx26np20260316ToArray(joinLinkNodes).forEach(function syncJoinLink(joinLinkNode) {
+      var sessionCardNode = hsrtx26np20260316Closest(joinLinkNode, '[data-hsrtx26np20260316-role="session-card"]');
+      var canOpen;
+      hsrtx26np20260316ApplyOriginalPlayerDataToJoinLink(joinLinkNode);
+      canOpen = hsrtx26np20260316IsRenderedJoinLinkOpen(joinLinkNode, sessionCardNode);
+      hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, canOpen);
+      if (sessionCardNode) {
+        sessionCardNode.setAttribute('data-hsrtx26np20260316-join-window-open', String(canOpen));
+        sessionCardNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(!!(joinLinkNode.getAttribute('data-webinar-id') || joinLinkNode.getAttribute('data-url'))));
+      }
+    });
+  }
+
+  function hsrtx26np20260316ApplyForceJoinButtonsFromUrl() {
+    var sessionCardNodes;
+    if (!hsrtx26np20260316SyncForceJoinMode()) return false;
+    sessionCardNodes = hsrtx26np20260316RootNode.querySelectorAll('[data-hsrtx26np20260316-role="session-card"]');
+    hsrtx26np20260316ToArray(sessionCardNodes).forEach(function forceOneJoinButton(sessionCardNode) {
+      var countdownPillNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="countdown-pill"]');
+      var joinLinkNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="join-link"]');
+      var hasJoinTarget;
+      if (joinLinkNode) hsrtx26np20260316ApplyOriginalPlayerDataToJoinLink(joinLinkNode);
+      hasJoinTarget = !!(joinLinkNode && (joinLinkNode.getAttribute('data-webinar-id') || joinLinkNode.getAttribute('data-url')));
+      sessionCardNode.setAttribute('data-hsrtx26np20260316-seconds-left', '0');
+      sessionCardNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
+      sessionCardNode.setAttribute('data-hsrtx26np20260316-join-window-open', String(hasJoinTarget));
+      if (countdownPillNode) {
+        countdownPillNode.textContent = 'Live now';
+        countdownPillNode.classList.add('is-live');
+        countdownPillNode.removeAttribute('title');
+        countdownPillNode.hidden = !!hasJoinTarget;
+        countdownPillNode.setAttribute('aria-hidden', hasJoinTarget ? 'true' : 'false');
+      }
+      if (joinLinkNode) {
+        joinLinkNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
+        hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, hasJoinTarget);
+      }
+    });
+    return true;
+  }
+
+  function hsrtx26np20260316TickCountdowns() {
+    var sessionCardNodes;
+    if (hsrtx26np20260316ApplyForceJoinButtonsFromUrl()) return;
+    sessionCardNodes = hsrtx26np20260316RootNode.querySelectorAll('[data-hsrtx26np20260316-role="session-card"]');
+    hsrtx26np20260316ToArray(sessionCardNodes).forEach(function tickOneCountdown(sessionCardNode) {
+      var startTimestamp = Number(sessionCardNode.getAttribute('data-hsrtx26np20260316-start-time') || 0);
+      var currentSeconds = hsrtx26np20260316GetSessionCurrentSeconds(sessionCardNode);
+      var joinBeforeSeconds = hsrtx26np20260316GetSessionJoinBeforeSeconds(sessionCardNode);
+      var countdownPillNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="countdown-pill"]');
+      var joinLinkNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="join-link"]');
+      var webinarId = joinLinkNode ? joinLinkNode.getAttribute('data-webinar-id') || '' : '';
+      var sourceAvailability = hsrtx26np20260316GetOriginalPlayButtonAvailability(webinarId);
+      var hasJoinTarget;
+      var timeWindowOpen;
+      var shouldShowJoinLink;
+      var sessionHasStarted;
+      var countdownTitle;
+      if (joinLinkNode) hsrtx26np20260316ApplyOriginalPlayerDataToJoinLink(joinLinkNode);
+      hasJoinTarget = !!(joinLinkNode && (joinLinkNode.getAttribute('data-webinar-id') || joinLinkNode.getAttribute('data-url')));
+      timeWindowOpen = hsrtx26np20260316IsJoinWindowOpen(currentSeconds, joinBeforeSeconds);
+      shouldShowJoinLink = timeWindowOpen && sourceAvailability !== false && hasJoinTarget;
+      sessionHasStarted = hsrtx26np20260316HasSessionStarted(currentSeconds);
+      countdownTitle = hsrtx26np20260316GetCountdownTitle(currentSeconds);
+      sessionCardNode.setAttribute('data-hsrtx26np20260316-seconds-left', String(startTimestamp > 0 ? currentSeconds : Math.max(0, currentSeconds - 1)));
+      sessionCardNode.setAttribute('data-hsrtx26np20260316-join-window-open', String(shouldShowJoinLink));
+      sessionCardNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
+      if (joinLinkNode) joinLinkNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
+      if (countdownPillNode) {
+        countdownPillNode.hidden = false;
+        countdownPillNode.setAttribute('aria-hidden', 'false');
+        countdownPillNode.textContent = hsrtx26np20260316GetCountdownLabel(currentSeconds, sourceAvailability);
+        countdownPillNode.classList.toggle('is-live', sessionHasStarted && shouldShowJoinLink);
+        if (countdownTitle && !sessionHasStarted) countdownPillNode.setAttribute('title', countdownTitle);
+        else countdownPillNode.removeAttribute('title');
+      }
+      hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, shouldShowJoinLink);
+    });
+  }
+
+  function hsrtx26np20260316StartCountdowns() {
+    if (hsrtx26np20260316State.countdownTimerId) window.clearInterval(hsrtx26np20260316State.countdownTimerId);
+    hsrtx26np20260316TickCountdowns();
+    hsrtx26np20260316State.countdownTimerId = window.setInterval(hsrtx26np20260316TickCountdowns, 1000);
+  }
+
+  function hsrtx26np20260316BindJoinLinkGuard() {
+    hsrtx26np20260316RootNode.addEventListener('click', function onJoinLinkClickGuard(event) {
+      var joinLinkNode = hsrtx26np20260316Closest(event.target, '[data-hsrtx26np20260316-role="join-link"]');
+      var sessionCardNode;
+      var canOpen;
+      if (!joinLinkNode || !hsrtx26np20260316RootNode.contains(joinLinkNode)) return;
+      hsrtx26np20260316ApplyOriginalPlayerDataToJoinLink(joinLinkNode);
+      sessionCardNode = hsrtx26np20260316Closest(joinLinkNode, '[data-hsrtx26np20260316-role="session-card"]');
+      canOpen = hsrtx26np20260316IsRenderedJoinLinkOpen(joinLinkNode, sessionCardNode);
+      if (!canOpen) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, false);
+      }
+    }, true);
+  }
+
+  function hsrtx26np20260316ApplyAreaMeta(areaConfig) {
+    hsrtx26np20260316RootNode.setAttribute('data-hsrtx26np20260316-active-area', areaConfig.slug);
+    hsrtx26np20260316RootNode.setAttribute('data-hsrtx26np20260316-active-keyword', areaConfig.keyword);
+    if (hsrtx26np20260316Elements.hubTitle) hsrtx26np20260316Elements.hubTitle.textContent = areaConfig.label;
+    if (hsrtx26np20260316Elements.hubSubtitle) hsrtx26np20260316Elements.hubSubtitle.textContent = areaConfig.subtitle;
+    hsrtx26np20260316UpdateAreaButtonState(areaConfig.slug);
+  }
+
+  async function hsrtx26np20260316ActivateArea(areaConfig) {
+    var loadToken;
+    hsrtx26np20260316State.activeAreaSlug = areaConfig.slug;
+    hsrtx26np20260316ApplyAreaMeta(areaConfig);
+    hsrtx26np20260316RenderLoadingState();
+    hsrtx26np20260316CloseModal();
+    hsrtx26np20260316State.latestLoadToken += 1;
+    loadToken = hsrtx26np20260316State.latestLoadToken;
+    await hsrtx26np20260316LoadSessionsAndPostersForArea(areaConfig, loadToken);
+    if (loadToken === hsrtx26np20260316State.latestLoadToken) {
+      hsrtx26np20260316StartCountdowns();
+      hsrtx26np20260316QueueKeywordTablesForArea(areaConfig, loadToken);
+    }
+  }
+
+  function hsrtx26np20260316CleanPosterHallUrl() {
+    var cleanedUrl;
+    if (typeof window.URL === 'function') {
+      try {
+        cleanedUrl = new window.URL(window.location.href);
+        cleanedUrl.searchParams.delete('group');
+        cleanedUrl.searchParams.delete('poster');
+        cleanedUrl.hash = 'poster-hall';
+        window.history.replaceState({}, document.title, cleanedUrl.toString());
+        return;
+      } catch (urlError) {}
+    }
+    cleanedUrl = window.location.origin + window.location.pathname;
+    if (hsrtx26np20260316State.forceJoinMode) cleanedUrl += '?forceJoin=1';
+    cleanedUrl += '#poster-hall';
+    window.history.replaceState({}, document.title, cleanedUrl);
+  }
+
+  function hsrtx26np20260316OpenPosterGroupFromUrl() {
+    var targetGroup = hsrtx26np20260316GetQueryParamFromText(window.location.search, 'group');
+    var targetHash;
+    var attempts = 0;
+    if (!targetGroup || !/^\d+$/.test(targetGroup)) return;
+    targetHash = '#poster-list-' + targetGroup;
+    if (hsrtx26np20260316State.posterGroupPollTimerId) window.clearInterval(hsrtx26np20260316State.posterGroupPollTimerId);
+
+    function tryOpenTargetPosterGroup() {
+      var directLinkNode = document.querySelector('a[href="' + targetHash + '"]') || document.querySelector('#poster-group-' + targetGroup + ' a');
+      if (!directLinkNode) return false;
+      directLinkNode.click();
+      window.setTimeout(hsrtx26np20260316CleanPosterHallUrl, 300);
+      return true;
+    }
+
+    function ensurePosterHallIsOpen() {
+      var posterHallLinkNode = document.querySelector('a[href="#poster-hall"]') || document.querySelector('[onclick*="showPosterHall"]');
+      if (window.location.hash !== '#poster-hall') window.location.hash = '#poster-hall';
+      if (posterHallLinkNode) posterHallLinkNode.click();
+    }
+
+    hsrtx26np20260316State.posterGroupPollTimerId = window.setInterval(function pollPosterHall() {
+      attempts += 1;
+      ensurePosterHallIsOpen();
+      if (tryOpenTargetPosterGroup()) {
+        window.clearInterval(hsrtx26np20260316State.posterGroupPollTimerId);
+        hsrtx26np20260316State.posterGroupPollTimerId = null;
+        return;
+      }
+      if (attempts > 20) {
+        window.clearInterval(hsrtx26np20260316State.posterGroupPollTimerId);
+        hsrtx26np20260316State.posterGroupPollTimerId = null;
+        console.warn('[hsrtx26np20260316] Could not open poster group', targetGroup);
+      }
+    }, 500);
+  }
+
+  function hsrtx26np20260316PolishSecretCinemaPanel() {
+    var secretCinemaPanelNode = hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="panel-secret-cinema"]');
+    var observer;
+
+    if (!secretCinemaPanelNode) return;
+
+    function applySecretCinemaPolish() {
+      var countdownPillNodes = secretCinemaPanelNode.querySelectorAll('[data-hsrtx26np20260316-role="countdown-pill"], .hsrtx26np20260316-countdown-pill');
+      var joinLinkNodes = secretCinemaPanelNode.querySelectorAll('[data-hsrtx26np20260316-role="join-link"], .hsrtx26np20260316-join-link');
+
+      hsrtx26np20260316ToArray(countdownPillNodes).forEach(function hideSecretCinemaCountdown(countdownPillNode) {
+        if (!countdownPillNode.hidden) countdownPillNode.hidden = true;
+        if (countdownPillNode.getAttribute('aria-hidden') !== 'true') countdownPillNode.setAttribute('aria-hidden', 'true');
+        if (countdownPillNode.style.display !== 'none') countdownPillNode.style.display = 'none';
+      });
+
+      hsrtx26np20260316ToArray(joinLinkNodes).forEach(function renameSecretCinemaJoinButton(joinLinkNode) {
+        if (joinLinkNode.textContent !== 'Play') joinLinkNode.textContent = 'Play';
+        if (joinLinkNode.getAttribute('aria-label') !== 'Play Secret Cinema') joinLinkNode.setAttribute('aria-label', 'Play Secret Cinema');
+      });
+    }
+
+    applySecretCinemaPolish();
+
+    if (typeof window.MutationObserver === 'function') {
+      observer = new window.MutationObserver(applySecretCinemaPolish);
+      observer.observe(secretCinemaPanelNode, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['hidden', 'aria-hidden', 'style']
+      });
+      hsrtx26np20260316State.secretCinemaObserver = observer;
+    }
+  }
+
