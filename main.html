@@ -948,8 +948,8 @@
         Secret Cinema
         <span class="hsrtx26np20260316-count-pill" data-hsrtx26np20260316-role="secret-cinema-count">0</span>
       </button>
-      <a id="hsrtx26np20260316__poster_hall_cta" class="hsrtx26np20260316-tab-button" href="javascript:;" role="button" data-hsrtx26np20260316-role="poster-hall-cta" aria-label="Visit the Poster Hall">
-        Visit the Poster Hall
+      <a id="hsrtx26np20260316__poster_hall_cta" class="hsrtx26np20260316-tab-button" href="javascript:;" role="button" data-hsrtx26np20260316-role="poster-hall-cta" aria-label="Visit the Poster hall">
+        Visit the Poster hall →
       </a>
     </nav>
 
@@ -1414,8 +1414,8 @@
     if (!posterHallCtaNode) return;
     posterGroupId = Object.prototype.hasOwnProperty.call(hsrtx26np20260316PosterHallGroupByAreaSlug, areaConfig.slug) ? hsrtx26np20260316PosterHallGroupByAreaSlug[areaConfig.slug] : null;
     safeAreaLabel = hsrtx26np20260316GetAreaDisplayLabel(areaConfig);
-    posterHallCtaNode.setAttribute('title', 'Visit the Poster Hall for ' + safeAreaLabel);
-    posterHallCtaNode.setAttribute('aria-label', 'Visit the Poster Hall for ' + safeAreaLabel);
+    posterHallCtaNode.setAttribute('title', 'Visit the Poster hall for ' + safeAreaLabel);
+    posterHallCtaNode.setAttribute('aria-label', 'Visit the Poster hall for ' + safeAreaLabel);
     if (posterGroupId) {
       posterHallCtaNode.setAttribute('href', 'javascript:;');
       posterHallCtaNode.setAttribute('onclick', 'showPosterHall(' + String(posterGroupId) + ')');
