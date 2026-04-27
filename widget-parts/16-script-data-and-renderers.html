@@ -227,6 +227,15 @@
     return hsrtx26np20260316ValueToSearchableText(detail);
   }
 
+  function hsrtx26np20260316IsSecretCinemaSession(session) {
+    var keywords;
+    if (!session) return false;
+    keywords = String(session.keywords || '').toLowerCase().split(',').map(function normalizeKeyword(keywordValue) {
+      return keywordValue.trim();
+    });
+    return keywords.indexOf('secret') !== -1;
+  }
+
   function hsrtx26np20260316GetDetailType(detail) {
     var typeValue = hsrtx26np20260316ValueToSearchableText(hsrtx26np20260316PickFirst(detail, ['type', 'webinar_type', 'webinarType', 'content_type', 'session_type', 'presentation_type'])).toLowerCase();
     var isPosterValue = hsrtx26np20260316PickFirst(detail, ['is_poster', 'isPoster', 'poster']);
@@ -579,6 +588,7 @@
       dayLabel: dayMeta ? dayMeta.label : '',
       groupIds: groupIds,
       isSecretCinema: groupIds.indexOf(hsrtx26np20260316SecretCinemaGroupId) !== -1,
+      keywords: hsrtx26np20260316PickFirst(detail, ['keywords', 'keyword']) || '',
       joinUrl: hsrtx26np20260316PickFirst(detail, ['url', 'webinar_url', 'webinarUrl', 'join_url', 'joinUrl', 'live_url', 'video_url', 'embed_url', 'replay_url', 'recording_vimeo_url', 'c_url', 'link']) || '',
       speakers: speakersList.map(function buildSpeakerModel(rawSpeaker) {
         var firstName = hsrtx26np20260316PickFirst(rawSpeaker, ['first_name', 'firstName', 'firstname']) || '';
@@ -891,4 +901,3 @@
     tableWrapNode.appendChild(tableNode);
     outputNode.appendChild(tableWrapNode);
   }
-
