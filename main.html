@@ -1239,17 +1239,16 @@
 
   function hsrtx26np20260316GetCountdownLabel(seconds, sourceAvailability) {
     var safeSeconds = Math.max(0, Number(seconds) || 0);
-    if (hsrtx26np20260316ShouldForceJoinButtonsFromUrl()) return 'Live now';
-    if (sourceAvailability === false) return 'Upcoming';
-    if (safeSeconds <= 0) return 'Live now';
+    if (hsrtx26np20260316ShouldForceJoinButtonsFromUrl()) return '';
+    if (safeSeconds <= 0) return '';
     return hsrtx26np20260316FormatCountdown(safeSeconds);
   }
 
   function hsrtx26np20260316GetCountdownStatusLabel(seconds, sourceAvailability) {
     var safeSeconds = Math.max(0, Number(seconds) || 0);
-    if (hsrtx26np20260316ShouldForceJoinButtonsFromUrl()) return '';
-    if (sourceAvailability === false) return 'Upcoming';
-    if (safeSeconds <= 0) return 'Live now';
+    if (hsrtx26np20260316ShouldForceJoinButtonsFromUrl()) return 'Live';
+    if (sourceAvailability === false && safeSeconds > 0) return 'Upcoming';
+    if (safeSeconds <= 0) return 'Live';
     return 'Upcoming';
   }
 
@@ -2796,7 +2795,7 @@
       sessionCardNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       sessionCardNode.setAttribute('data-hsrtx26np20260316-join-window-open', String(hasJoinTarget));
       if (countdownPillNode) {
-        countdownPillNode.textContent = 'Live now';
+        countdownPillNode.textContent = 'Live';
         countdownPillNode.classList.add('is-live');
         countdownPillNode.removeAttribute('title');
         countdownPillNode.hidden = !!hasJoinTarget;
