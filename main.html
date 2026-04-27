@@ -477,20 +477,6 @@
     white-space: nowrap;
   }
 
-  .hsrtx26np20260316-session-pagination {
-    margin-top: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-  }
-
-  .hsrtx26np20260316-session-pagination-label {
-    color: var(--hsrtx26np20260316-text-muted);
-    font-size: 0.9rem;
-    font-weight: 700;
-  }
-
   .hsrtx26np20260316-session-day-link:hover,
   .hsrtx26np20260316-join-link:hover,
   .hsrtx26np20260316-poster-link:hover,
@@ -981,7 +967,6 @@
   var hsrtx26np20260316SecretCinemaGroupId = String(
     hsrtx26np20260316RootNode.getAttribute('data-hsrtx26np20260316-secret-cinema-group-id') || '17151'
   ).trim();
-  var hsrtx26np20260316SESSION_PAGE_SIZE = Math.max(1, Number(hsrtx26np20260316RootNode.getAttribute('data-hsrtx26np20260316-session-page-size') || 8) || 8);
 
   var hsrtx26np20260316ResearchAreaList = [
     { slug: 'human-translational', buttonHtml: 'Human &amp;<br>translational<br>research', label: 'Human & translational research', subtitle: 'Browse the content related to human & translational research below', keyword: 'HUMANTRANSLATIONALKEYWORD' },
@@ -1037,6 +1022,7 @@
     modalBody: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="modal-body"]'),
     modalClose: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="modal-close"]')
   };
+
   function hsrtx26np20260316ToArray(list) {
     return Array.prototype.slice.call(list || []);
   }
@@ -1471,6 +1457,11 @@
   }
 
   async function hsrtx26np20260316FetchJson(url) {
+    var textResponse = await hsrtx26np20260316FetchText(url);
+    if (!textResponse || !String(textResponse).trim()) return null;
+    return hsrtx26np20260316SafeJsonParse(textResponse);
+  }
+
   function hsrtx26np20260316GetConfiguredWebinarIds() {
     var idsAttribute = String(hsrtx26np20260316RootNode.getAttribute('data-hsrtx26np20260316-webinar-ids') || '').trim();
     if (!idsAttribute) return [];
@@ -1881,6 +1872,10 @@
     var explicitDurationSeconds = hsrtx26np20260316ParseSecondsValue(hsrtx26np20260316PickFirst(detail, ['duration', 'duration_seconds', 'durationSeconds', 'webinar_duration', 'duration_label', 'durationLabel', 'duration_text', 'durationText', 'webinar_duration_label']));
     if (explicitDurationSeconds > 0) return explicitDurationSeconds;
     return hsrtx26np20260316ParseSecondsValue(hsrtx26np20260316PickFirst(detail, ['tr_duration', 'tracking_duration', 'css_time_duration']));
+  }
+
+  function hsrtx26np20260316InvalidateOriginalPlayButtonCache() {
+    hsrtx26np20260316State.originalPlayButtonsById = null;
   }
 
   function hsrtx26np20260316GetOriginalPlayButton(webinarId) {
@@ -2388,6 +2383,7 @@
     tableWrapNode.appendChild(tableNode);
     outputNode.appendChild(tableWrapNode);
   }
+
   function hsrtx26np20260316RenderLoadingState() {
     if (hsrtx26np20260316Elements.sessionsOutput) hsrtx26np20260316Elements.sessionsOutput.innerHTML = '<div class="hsrtx26np20260316-empty-state">Loading sessions…</div>';
     if (hsrtx26np20260316Elements.postersOutput) hsrtx26np20260316Elements.postersOutput.innerHTML = '<div class="hsrtx26np20260316-empty-state">Loading posters…</div>';
@@ -2430,124 +2426,6 @@
     var activeAreaConfig = hsrtx26np20260316GetAreaConfigBySlug(hsrtx26np20260316State.activeAreaSlug);
     if (!activeAreaConfig) return;
     hsrtx26np20260316LoadKeywordTablesForArea(activeAreaConfig, hsrtx26np20260316State.latestLoadToken);
-  }
-
-  function hsrtx26np20260316GetSessionGroupKey(areaConfig) {
-    return String((areaConfig && areaConfig.slug) || hsrtx26np20260316State.activeAreaSlug || 'default-sessions-group');
-  }
-
-  function hsrtx26np20260316GetSessionSortValue(sessionModel) {
-    if (!sessionModel) return 0;
-    return Math.max(0, Number(sessionModel.sortTime) || 0);
-  }
-
-  function hsrtx26np20260316IsSessionModelEnded(sessionModel) {
-    if (!sessionModel) return false;
-    if (sessionModel.isSecretCinema) return false;
-    if (!(sessionModel.endTimestamp > 0)) return false;
-    return Date.now() >= sessionModel.endTimestamp;
-  }
-
-  function hsrtx26np20260316SortSessionModelsForRender(sessionModels) {
-    return hsrtx26np20260316ToArray(sessionModels).slice().sort(function sortSessionModels(firstSession, secondSession) {
-      var firstIsEnded = hsrtx26np20260316IsSessionModelEnded(firstSession);
-      var secondIsEnded = hsrtx26np20260316IsSessionModelEnded(secondSession);
-      if (firstIsEnded !== secondIsEnded) return firstIsEnded ? 1 : -1;
-      if (hsrtx26np20260316GetSessionSortValue(firstSession) && hsrtx26np20260316GetSessionSortValue(secondSession) && hsrtx26np20260316GetSessionSortValue(firstSession) !== hsrtx26np20260316GetSessionSortValue(secondSession)) {
-        return hsrtx26np20260316GetSessionSortValue(firstSession) - hsrtx26np20260316GetSessionSortValue(secondSession);
-      }
-      return String(firstSession && firstSession.title || '').localeCompare(String(secondSession && secondSession.title || ''));
-    });
-  }
-
-  function hsrtx26np20260316GetSessionGroupPage(groupKey, totalItems) {
-    var paginationState = hsrtx26np20260316State.sessionPaginationState[groupKey] || { page: 1 };
-    var totalPages = Math.max(1, Math.ceil(Math.max(0, Number(totalItems) || 0) / hsrtx26np20260316SESSION_PAGE_SIZE));
-    paginationState.page = Math.min(totalPages, Math.max(1, Number(paginationState.page) || 1));
-    hsrtx26np20260316State.sessionPaginationState[groupKey] = paginationState;
-    return { page: paginationState.page, totalPages: totalPages };
-  }
-
-  function hsrtx26np20260316RenderSessionPaginationControls(groupKey, pageInfo) {
-    if (!pageInfo || pageInfo.totalPages <= 1) return '';
-    return '<div class="hsrtx26np20260316-session-pagination" data-hsrtx26np20260316-role="session-pagination" data-hsrtx26np20260316-session-group-key="' + hsrtx26np20260316EscapeHtml(groupKey) + '">' +
-      '<button type="button" class="hsrtx26np20260316-session-day-link" data-hsrtx26np20260316-role="session-pagination-prev" data-hsrtx26np20260316-session-group-key="' + hsrtx26np20260316EscapeHtml(groupKey) + '"' + (pageInfo.page <= 1 ? ' disabled' : '') + '>Previous</button>' +
-      '<span class="hsrtx26np20260316-session-pagination-label">Page ' + pageInfo.page + ' of ' + pageInfo.totalPages + '</span>' +
-      '<button type="button" class="hsrtx26np20260316-session-day-link" data-hsrtx26np20260316-role="session-pagination-next" data-hsrtx26np20260316-session-group-key="' + hsrtx26np20260316EscapeHtml(groupKey) + '"' + (pageInfo.page >= pageInfo.totalPages ? ' disabled' : '') + '>Next</button>' +
-      '</div>';
-  }
-
-  function hsrtx26np20260316RenderSessionGroupPage(groupKey) {
-    var groupModel = hsrtx26np20260316State.sessionGroupsByKey[groupKey];
-    var sortedSessions;
-    var pageInfo;
-    var startIndex;
-    var pagedSessions;
-    if (!groupModel) return '';
-    sortedSessions = hsrtx26np20260316SortSessionModelsForRender(groupModel.sessions || []);
-    pageInfo = hsrtx26np20260316GetSessionGroupPage(groupKey, sortedSessions.length);
-    startIndex = (pageInfo.page - 1) * hsrtx26np20260316SESSION_PAGE_SIZE;
-    if (sortedSessions.length && startIndex >= sortedSessions.length) {
-      pageInfo = hsrtx26np20260316GetSessionGroupPage(groupKey, sortedSessions.length);
-      startIndex = (pageInfo.page - 1) * hsrtx26np20260316SESSION_PAGE_SIZE;
-    }
-    pagedSessions = sortedSessions.slice(startIndex, startIndex + hsrtx26np20260316SESSION_PAGE_SIZE);
-    return '<section class="hsrtx26np20260316-session-group" data-hsrtx26np20260316-role="session-group" data-hsrtx26np20260316-session-group-key="' + hsrtx26np20260316EscapeHtml(groupKey) + '">' +
-      '<div class="hsrtx26np20260316-session-list">' + pagedSessions.map(hsrtx26np20260316RenderSessionCard).join('') + '</div>' +
-      hsrtx26np20260316RenderSessionPaginationControls(groupKey, pageInfo) +
-      '</section>';
-  }
-
-  function hsrtx26np20260316RenderAllSessionGroups() {
-    var groupKeys = hsrtx26np20260316State.sessionGroupOrder || [];
-    if (!hsrtx26np20260316Elements.sessionsOutput) return;
-    hsrtx26np20260316Elements.sessionsOutput.innerHTML = groupKeys.length ? groupKeys.map(function renderSessionGroup(groupKey) {
-      return hsrtx26np20260316RenderSessionGroupPage(groupKey);
-    }).join('') : '<div class="hsrtx26np20260316-empty-state">No sessions available</div>';
-  }
-
-  function hsrtx26np20260316UpdateSessionGroupPaginationAfterStateChange() {
-    var groupKeys = hsrtx26np20260316State.sessionGroupOrder || [];
-    var hasGroups = false;
-    groupKeys.forEach(function updateOneGroup(groupKey) {
-      var groupModel = hsrtx26np20260316State.sessionGroupsByKey[groupKey];
-      var sortedSessions;
-      var pageInfo;
-      if (!groupModel) return;
-      hasGroups = true;
-      sortedSessions = hsrtx26np20260316SortSessionModelsForRender(groupModel.sessions || []);
-      pageInfo = hsrtx26np20260316GetSessionGroupPage(groupKey, sortedSessions.length);
-      if (sortedSessions.length && (pageInfo.page - 1) * hsrtx26np20260316SESSION_PAGE_SIZE >= sortedSessions.length) {
-        hsrtx26np20260316State.sessionPaginationState[groupKey].page = pageInfo.totalPages;
-      }
-    });
-    if (!hasGroups) return;
-    hsrtx26np20260316RenderAllSessionGroups();
-    hsrtx26np20260316SyncRenderedJoinLinksWithOriginalButtons();
-  }
-
-  function hsrtx26np20260316BindSessionPaginationClicks() {
-    hsrtx26np20260316RootNode.addEventListener('click', function onSessionPaginationClick(event) {
-      var targetButton = hsrtx26np20260316Closest(event.target, '[data-hsrtx26np20260316-role="session-pagination-prev"], [data-hsrtx26np20260316-role="session-pagination-next"]');
-      var groupKey;
-      var paginationState;
-      var isNext;
-      var groupNode;
-      if (!targetButton || !hsrtx26np20260316RootNode.contains(targetButton)) return;
-      groupKey = targetButton.getAttribute('data-hsrtx26np20260316-session-group-key') || '';
-      if (!groupKey) return;
-      event.preventDefault();
-      paginationState = hsrtx26np20260316State.sessionPaginationState[groupKey] || { page: 1 };
-      isNext = targetButton.getAttribute('data-hsrtx26np20260316-role') === 'session-pagination-next';
-      paginationState.page = Math.max(1, Number(paginationState.page) || 1) + (isNext ? 1 : -1);
-      hsrtx26np20260316State.sessionPaginationState[groupKey] = paginationState;
-      groupNode = hsrtx26np20260316ToArray(hsrtx26np20260316RootNode.querySelectorAll('[data-hsrtx26np20260316-role="session-group"]')).find(function matchSessionGroupNode(node) {
-        return node && node.getAttribute('data-hsrtx26np20260316-session-group-key') === groupKey;
-      }) || null;
-      if (groupNode) groupNode.outerHTML = hsrtx26np20260316RenderSessionGroupPage(groupKey);
-      hsrtx26np20260316SyncRenderedJoinLinksWithOriginalButtons();
-      hsrtx26np20260316TickCountdowns();
-    });
   }
 
   async function hsrtx26np20260316LoadKeywordTablesForArea(areaConfig, loadToken) {
@@ -2650,20 +2528,8 @@
     hsrtx26np20260316SetText(hsrtx26np20260316Elements.postersCount, posterList.length);
     hsrtx26np20260316SetText(hsrtx26np20260316Elements.secretCinemaCount, secretCinemaList.length);
 
-    hsrtx26np20260316State.sessionGroupsByKey = {};
-    hsrtx26np20260316State.sessionGroupOrder = [];
-    if (sessionList.length) {
-      var defaultGroupKey = hsrtx26np20260316GetSessionGroupKey(areaConfig);
-      hsrtx26np20260316State.sessionGroupsByKey[defaultGroupKey] = {
-        key: defaultGroupKey,
-        sessions: sessionList
-      };
-      hsrtx26np20260316State.sessionGroupOrder.push(defaultGroupKey);
-    }
-
     if (hsrtx26np20260316Elements.sessionsOutput) {
-      if (sessionList.length) hsrtx26np20260316RenderAllSessionGroups();
-      else hsrtx26np20260316Elements.sessionsOutput.innerHTML = hsrtx26np20260316RenderAreaEmptyState('No sessions available', areaConfig, 'There are no sessions listed for this research area yet.');
+      hsrtx26np20260316Elements.sessionsOutput.innerHTML = sessionList.length ? '<div class="hsrtx26np20260316-session-list">' + sessionList.map(hsrtx26np20260316RenderSessionCard).join('') + '</div>' : hsrtx26np20260316RenderAreaEmptyState('No sessions available', areaConfig, 'There are no sessions listed for this research area yet.');
     }
 
     if (hsrtx26np20260316Elements.postersOutput) {
@@ -2828,6 +2694,7 @@
       var countdownTitle;
       var isSecretCinema = sessionCardNode.getAttribute('data-hsrtx26np20260316-secret-cinema') === 'true';
       var isSessionEnded = !isSecretCinema && hsrtx26np20260316IsSessionEnded(sessionCardNode);
+      var previousEndedState = sessionCardNode.getAttribute('data-hsrtx26np20260316-session-ended') === 'true';
       var sessionEndedNoteNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="session-ended-note"]');
       if (joinLinkNode) hsrtx26np20260316ApplyOriginalPlayerDataToJoinLink(joinLinkNode);
       hasJoinTarget = !!(joinLinkNode && (joinLinkNode.getAttribute('data-webinar-id') || joinLinkNode.getAttribute('data-url')));
@@ -2841,6 +2708,7 @@
       sessionCardNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       sessionCardNode.setAttribute('data-hsrtx26np20260316-session-ended', String(isSessionEnded));
       sessionCardNode.classList.toggle('is-ended', isSessionEnded);
+      if (previousEndedState !== isSessionEnded) endedStateChanged = true;
       if (joinLinkNode) joinLinkNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       if (countdownPillNode) {
         countdownPillNode.hidden = isSessionEnded || isSecretCinema;
@@ -2855,7 +2723,7 @@
       if (sessionEndedNoteNode) sessionEndedNoteNode.hidden = !isSessionEnded;
       hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, shouldShowJoinLink);
     });
-    hsrtx26np20260316MoveEndedSessionsToBottom();
+    if (endedStateChanged) hsrtx26np20260316MoveEndedSessionsToBottom();
   }
 
   function hsrtx26np20260316StartCountdowns() {
@@ -2995,6 +2863,7 @@
       hsrtx26np20260316State.secretCinemaObserver = observer;
     }
   }
+
   function hsrtx26np20260316Init() {
     var initialAreaConfig = hsrtx26np20260316GetInitialAreaConfig();
     hsrtx26np20260316SyncForceJoinMode();
@@ -3003,7 +2872,6 @@
     hsrtx26np20260316BindTabClicks();
     hsrtx26np20260316BindModal();
     hsrtx26np20260316BindSessionDayClicks();
-    hsrtx26np20260316BindSessionPaginationClicks();
     hsrtx26np20260316BindSpeakerBioInteractions();
     hsrtx26np20260316BindJoinLinkGuard();
     hsrtx26np20260316PolishSecretCinemaPanel();
