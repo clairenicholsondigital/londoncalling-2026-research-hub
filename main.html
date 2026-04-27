@@ -1644,7 +1644,7 @@
       return;
     }
     if (typeof value === 'object') {
-      ['id', 'webinar_group_id', 'webinarGroupId', 'group_id', 'groupId', 'category_id', 'categoryId', 'location_id', 'locationId'].forEach(function appendGroupIdFromObjectKey(key) {
+      ['id', 'webinar_group_id', 'webinarGroupId', 'webinar_group_ids', 'webinarGroupIds', 'group_id', 'groupId', 'group_ids', 'groupIds', 'category_id', 'categoryId', 'location_id', 'locationId'].forEach(function appendGroupIdFromObjectKey(key) {
         if (value[key] != null) hsrtx26np20260316AppendGroupIdsFromValue(value[key], groupIdList);
       });
       return;
@@ -1657,7 +1657,7 @@
 
   function hsrtx26np20260316GetDetailGroupIds(detail) {
     var groupIdList = [];
-    ['webinar_group_id', 'webinarGroupId', 'webinar_group_ids', 'webinarGroupIds', 'group_id', 'groupId', 'group_ids', 'groupIds', 'category_id', 'categoryId', 'category_ids', 'categoryIds', 'location_id', 'locationId', 'location_ids', 'locationIds'].forEach(function collectDetailGroupId(key) {
+    ['webinar_group_id', 'webinarGroupId', 'webinar_group_ids', 'webinarGroupIds', 'webinar_group', 'webinarGroup', 'webinar_groups', 'webinarGroups', 'group_id', 'groupId', 'group_ids', 'groupIds', 'group', 'groups', 'category_id', 'categoryId', 'category_ids', 'categoryIds', 'location_id', 'locationId', 'location_ids', 'locationIds'].forEach(function collectDetailGroupId(key) {
       if (detail && detail[key] != null) hsrtx26np20260316AppendGroupIdsFromValue(detail[key], groupIdList);
     });
     return groupIdList;
