@@ -749,13 +749,20 @@
     return hsrtx26np20260316ValueToSearchableText(detail);
   }
 
+  function isSecretSession(session) {
+    if (!session || !session.keywords) return false;
+
+    return String(session.keywords)
+      .toLowerCase()
+      .split(',')
+      .map(function normalizeKeyword(keywordValue) {
+        return keywordValue.trim();
+      })
+      .includes('secret');
+  }
+
   function hsrtx26np20260316IsSecretCinemaSession(session) {
-    var keywords;
-    if (!session) return false;
-    keywords = String(session.keywords || '').toLowerCase().split(',').map(function normalizeKeyword(keywordValue) {
-      return keywordValue.trim();
-    });
-    return keywords.indexOf('secret') !== -1;
+    return isSecretSession(session);
   }
 
   function hsrtx26np20260316GetDetailType(detail) {
@@ -1507,7 +1514,7 @@
     var webinarType;
     var posterHallModel;
     var normalSessions;
-    var secretCinemaSessions;
+    var secretSessions;
 
     if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
 
@@ -1545,9 +1552,12 @@
       return !hsrtx26np20260316IsSecretCinemaSession(session);
     });
 
-    secretCinemaSessions = sessionList.filter(function keepSecretCinemaSession(session) {
+    secretSessions = sessionList.filter(function keepSecretCinemaSession(session) {
       return hsrtx26np20260316IsSecretCinemaSession(session);
     });
+
+    console.log("Secret sessions:", secretSessions.length);
+    console.log("Normal sessions:", normalSessions.length);
 
     posterList.sort(function sortPostersByTitle(firstPoster, secondPoster) {
       return String(firstPoster.title || '').localeCompare(String(secondPoster.title || ''));
@@ -1559,7 +1569,7 @@
 
     hsrtx26np20260316SetText(hsrtx26np20260316Elements.sessionsCount, normalSessions.length);
     hsrtx26np20260316SetText(hsrtx26np20260316Elements.postersCount, posterList.length);
-    hsrtx26np20260316SetText(hsrtx26np20260316Elements.secretCinemaCount, secretCinemaSessions.length);
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.secretCinemaCount, secretSessions.length);
 
     if (hsrtx26np20260316Elements.sessionsOutput) {
       hsrtx26np20260316Elements.sessionsOutput.innerHTML = normalSessions.length ? '<div class="hsrtx26np20260316-session-list">' + normalSessions.map(hsrtx26np20260316RenderSessionCard).join('') + '</div>' : hsrtx26np20260316RenderAreaEmptyState('No sessions available', areaConfig, 'There are no sessions listed for this research area yet.');
@@ -1570,7 +1580,7 @@
     }
 
     if (hsrtx26np20260316Elements.secretCinemaOutput) {
-      hsrtx26np20260316Elements.secretCinemaOutput.innerHTML = secretCinemaSessions.length ? '<div class="hsrtx26np20260316-session-list">' + secretCinemaSessions.map(hsrtx26np20260316RenderSessionCard).join('') + '</div>' : hsrtx26np20260316RenderAreaEmptyState('No Secret Cinema sessions available', areaConfig, 'There are no Secret Cinema sessions listed for this research area yet.');
+      hsrtx26np20260316Elements.secretCinemaOutput.innerHTML = secretSessions.length ? '<div class="hsrtx26np20260316-session-list">' + secretSessions.map(hsrtx26np20260316RenderSessionCard).join('') + '</div>' : hsrtx26np20260316RenderAreaEmptyState('No Secret Cinema sessions available', areaConfig, 'There are no Secret Cinema sessions listed for this research area yet.');
     }
 
     hsrtx26np20260316SyncRenderedJoinLinksWithOriginalButtons();
