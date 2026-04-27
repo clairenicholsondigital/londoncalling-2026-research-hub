@@ -26,7 +26,6 @@
   var hsrtx26np20260316SecretCinemaGroupId = String(
     hsrtx26np20260316RootNode.getAttribute('data-hsrtx26np20260316-secret-cinema-group-id') || '17151'
   ).trim();
-  var hsrtx26np20260316SESSION_PAGE_SIZE = Math.max(1, Number(hsrtx26np20260316RootNode.getAttribute('data-hsrtx26np20260316-session-page-size') || 8) || 8);
 
   var hsrtx26np20260316ResearchAreaList = [
     { slug: 'human-translational', buttonHtml: 'Human &amp;<br>translational<br>research', label: 'Human & translational research', subtitle: 'Browse the content related to human & translational research below', keyword: 'HUMANTRANSLATIONALKEYWORD' },
@@ -53,11 +52,7 @@
     modalIsOpen: false,
     previousBodyOverflow: '',
     posterGroupPollTimerId: null,
-    secretCinemaObserver: null,
-    originalPlayButtonsById: null,
-    sessionPaginationState: {},
-    sessionGroupsByKey: {},
-    sessionGroupOrder: []
+    secretCinemaObserver: null
   };
 
   var hsrtx26np20260316Elements = {
@@ -85,3 +80,4 @@
     modalBody: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="modal-body"]'),
     modalClose: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="modal-close"]')
   };
+
