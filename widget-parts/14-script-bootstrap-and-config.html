@@ -1,0 +1,87 @@
+<script>// <![CDATA[
+(function hsrtx26np20260316ResearchHubComponentIife() {
+  'use strict';
+
+  var hsrtx26np20260316Prefix = 'hsrtx26np20260316';
+  var hsrtx26np20260316RootNode = document.getElementById('hsrtx26np20260316__root');
+  var hsrtx26np20260316PosterHallBaseUrl = 'https://events.nanoporetech.com/en/hall';
+  var hsrtx26np20260316SessionDayGroupMap = {
+    '05-19': { webinarGroupId: 13230, label: '19 May' },
+    '05-20': { webinarGroupId: 13191, label: '20 May' },
+    '05-21': { webinarGroupId: 13199, label: '21 May' }
+  };
+
+  if (!hsrtx26np20260316RootNode) {
+    console.warn('[hsrtx26np20260316] Root node not found');
+    return;
+  }
+
+  if (hsrtx26np20260316RootNode.getAttribute('data-hsrtx26np20260316-initialised') === 'true') {
+    console.warn('[hsrtx26np20260316] Component already initialised. Skipping duplicate setup.');
+    return;
+  }
+
+  hsrtx26np20260316RootNode.setAttribute('data-hsrtx26np20260316-initialised', 'true');
+
+  var hsrtx26np20260316SecretCinemaGroupId = String(
+    hsrtx26np20260316RootNode.getAttribute('data-hsrtx26np20260316-secret-cinema-group-id') || '17151'
+  ).trim();
+  var hsrtx26np20260316SESSION_PAGE_SIZE = Math.max(1, Number(hsrtx26np20260316RootNode.getAttribute('data-hsrtx26np20260316-session-page-size') || 8) || 8);
+
+  var hsrtx26np20260316ResearchAreaList = [
+    { slug: 'human-translational', buttonHtml: 'Human &amp;<br>translational<br>research', label: 'Human & translational research', subtitle: 'Browse the content related to human & translational research below', keyword: 'HUMANTRANSLATIONALKEYWORD' },
+    { slug: 'clinical-research', buttonHtml: 'Clinical<br>research', label: 'Clinical research', subtitle: 'Browse the content related to clinical research below', keyword: 'CLINICALRESEARCHKEYWORD' },
+    { slug: 'oncology-cancer-research', buttonHtml: 'Oncology &amp;<br>cancer research', label: 'Oncology & cancer research', subtitle: 'Browse the content related to oncology & cancer research below', keyword: 'ONCOLOGYCANCERRESEARCHKEYWORD' },
+    { slug: 'microbiology-infectious-disease', buttonHtml: 'Microbiology &amp;<br>infectious disease', label: 'Microbiology & infectious disease', subtitle: 'Browse the content related to microbiology & infectious disease below', keyword: 'MICROBIOLOGYINFECTIOUSDISEASEKEYWORD' },
+    { slug: 'plant-animal-research', buttonHtml: 'Plant &amp; animal<br>research', label: 'Plant & animal research', subtitle: 'Browse the content related to plant & animal research below', keyword: 'PLANTANIMALRESEARCHKEYWORD' },
+    { slug: 'bioinformatics', buttonHtml: 'Bioinformatics', label: 'Bioinformatics', subtitle: 'Browse the content related to bioinformatics below', keyword: 'BIOINFORMATICSKEYWORD' },
+    { slug: 'biopharma', buttonHtml: 'Biopharma', label: 'Biopharma', subtitle: 'Browse the content related to biopharma below', keyword: 'BIOPHARMAKEYWORD' }
+  ];
+
+  var hsrtx26np20260316State = {
+    activeAreaSlug: '',
+    activeTabKind: 'sessions',
+    countdownTimerId: null,
+    latestLoadToken: 0,
+    agendaPromise: null,
+    agendaDetailsMap: null,
+    agendaDetailsList: [],
+    keywordHtmlCache: {},
+    keywordHtmlPromises: {},
+    forceJoinMode: false,
+    forceJoinModeWasConfigured: false,
+    modalIsOpen: false,
+    previousBodyOverflow: '',
+    posterGroupPollTimerId: null,
+    secretCinemaObserver: null,
+    originalPlayButtonsById: null,
+    sessionPaginationState: {},
+    sessionGroupsByKey: {},
+    sessionGroupOrder: []
+  };
+
+  var hsrtx26np20260316Elements = {
+    areaButtonBar: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="area-button-bar"]'),
+    hubTitle: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="hub-title"]'),
+    hubSubtitle: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="hub-subtitle"]'),
+    tabButtons: hsrtx26np20260316RootNode.querySelectorAll('[data-hsrtx26np20260316-role="tab-button"]'),
+    panelSessions: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="panel-sessions"]'),
+    panelPosters: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="panel-posters"]'),
+    panelDocuments: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="panel-documents"]'),
+    panelVideos: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="panel-videos"]'),
+    panelSecretCinema: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="panel-secret-cinema"]'),
+    sessionsOutput: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="sessions-output"]'),
+    postersOutput: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="posters-output"]'),
+    documentsOutput: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="documents-output"]'),
+    videosOutput: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="videos-output"]'),
+    secretCinemaOutput: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="secret-cinema-output"]'),
+    sessionsCount: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="sessions-count"]'),
+    postersCount: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="posters-count"]'),
+    documentsCount: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="documents-count"]'),
+    videosCount: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="videos-count"]'),
+    secretCinemaCount: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="secret-cinema-count"]'),
+    modal: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="modal"]'),
+    modalTitle: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="modal-title"]'),
+    modalBody: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="modal-body"]'),
+    modalClose: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="modal-close"]')
+  };

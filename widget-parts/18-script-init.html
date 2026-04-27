@@ -1,0 +1,24 @@
+  function hsrtx26np20260316Init() {
+    var initialAreaConfig = hsrtx26np20260316GetInitialAreaConfig();
+    hsrtx26np20260316SyncForceJoinMode();
+    hsrtx26np20260316RenderAreaButtons();
+    hsrtx26np20260316BindAreaButtonClicks();
+    hsrtx26np20260316BindTabClicks();
+    hsrtx26np20260316BindModal();
+    hsrtx26np20260316BindSessionDayClicks();
+    hsrtx26np20260316BindSessionPaginationClicks();
+    hsrtx26np20260316BindSpeakerBioInteractions();
+    hsrtx26np20260316BindJoinLinkGuard();
+    hsrtx26np20260316PolishSecretCinemaPanel();
+    hsrtx26np20260316SetActiveTab('sessions');
+    hsrtx26np20260316ActivateArea(initialAreaConfig);
+    hsrtx26np20260316OpenPosterGroupFromUrl();
+    window.addEventListener('hashchange', hsrtx26np20260316OpenPosterGroupFromUrl);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', hsrtx26np20260316Init);
+  } else {
+    hsrtx26np20260316Init();
+  }
+})();
