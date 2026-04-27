@@ -936,10 +936,6 @@
         Sessions
         <span class="hsrtx26np20260316-count-pill" data-hsrtx26np20260316-role="sessions-count">0</span>
       </button>
-      <button id="hsrtx26np20260316__tab_posters" class="hsrtx26np20260316-tab-button" type="button" role="tab" aria-selected="false" aria-controls="hsrtx26np20260316__panel_posters" data-hsrtx26np20260316-role="tab-button" data-hsrtx26np20260316-tab-kind="posters">
-        Posters
-        <span class="hsrtx26np20260316-count-pill" data-hsrtx26np20260316-role="posters-count">0</span>
-      </button>
       <button id="hsrtx26np20260316__tab_documents" class="hsrtx26np20260316-tab-button" type="button" role="tab" aria-selected="false" aria-controls="hsrtx26np20260316__panel_documents" data-hsrtx26np20260316-role="tab-button" data-hsrtx26np20260316-tab-kind="documents">
         Literature
         <span class="hsrtx26np20260316-count-pill" data-hsrtx26np20260316-role="documents-count">0</span>
@@ -952,6 +948,9 @@
         Secret Cinema
         <span class="hsrtx26np20260316-count-pill" data-hsrtx26np20260316-role="secret-cinema-count">0</span>
       </button>
+      <a id="hsrtx26np20260316__poster_hall_cta" class="hsrtx26np20260316-tab-button" href="javascript:;" role="button" data-hsrtx26np20260316-role="poster-hall-cta" aria-label="Visit the Poster Hall">
+        Visit the Poster Hall
+      </a>
     </nav>
 
     <section id="hsrtx26np20260316__panel_sessions" class="hsrtx26np20260316-panel" role="tabpanel" aria-labelledby="hsrtx26np20260316__tab_sessions" data-hsrtx26np20260316-role="panel-sessions">
@@ -1036,6 +1035,15 @@
     { slug: 'bioinformatics', buttonHtml: 'Bioinformatics', label: 'Bioinformatics', subtitle: 'Browse the content related to bioinformatics below', keyword: 'BIOINFORMATICSKEYWORD' },
     { slug: 'biopharma', buttonHtml: 'Biopharma', label: 'Biopharma', subtitle: 'Browse the content related to biopharma below', keyword: 'BIOPHARMAKEYWORD' }
   ];
+  var hsrtx26np20260316PosterHallGroupByAreaSlug = {
+    'human-translational': 13208,
+    'clinical-research': 14278,
+    'oncology-cancer-research': null,
+    'microbiology-infectious-disease': null,
+    'plant-animal-research': 13206,
+    'biopharma': 16932,
+    'bioinformatics': 14279
+  };
 
   var hsrtx26np20260316State = {
     activeAreaSlug: '',
@@ -1079,6 +1087,7 @@
     documentsCount: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="documents-count"]'),
     videosCount: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="videos-count"]'),
     secretCinemaCount: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="secret-cinema-count"]'),
+    posterHallCta: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="poster-hall-cta"]'),
     modal: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="modal"]'),
     modalTitle: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="modal-title"]'),
     modalBody: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="modal-body"]'),
@@ -1396,6 +1405,24 @@
       if (!areaConfig) return;
       hsrtx26np20260316ActivateArea(areaConfig);
     });
+  }
+
+  function hsrtx26np20260316UpdatePosterHallCta(areaConfig) {
+    var posterHallCtaNode = hsrtx26np20260316Elements.posterHallCta;
+    var posterGroupId;
+    var safeAreaLabel;
+    if (!posterHallCtaNode) return;
+    posterGroupId = Object.prototype.hasOwnProperty.call(hsrtx26np20260316PosterHallGroupByAreaSlug, areaConfig.slug) ? hsrtx26np20260316PosterHallGroupByAreaSlug[areaConfig.slug] : null;
+    safeAreaLabel = hsrtx26np20260316GetAreaDisplayLabel(areaConfig);
+    posterHallCtaNode.setAttribute('title', 'Visit the Poster Hall for ' + safeAreaLabel);
+    posterHallCtaNode.setAttribute('aria-label', 'Visit the Poster Hall for ' + safeAreaLabel);
+    if (posterGroupId) {
+      posterHallCtaNode.setAttribute('href', 'javascript:;');
+      posterHallCtaNode.setAttribute('onclick', 'showPosterHall(' + String(posterGroupId) + ')');
+    } else {
+      posterHallCtaNode.setAttribute('href', '#poster-hall');
+      posterHallCtaNode.setAttribute('onclick', 'showPosterHall();');
+    }
   }
 
   function hsrtx26np20260316GetSpeakerInitials(name) {
@@ -2905,6 +2932,7 @@
     if (hsrtx26np20260316Elements.hubTitle) hsrtx26np20260316Elements.hubTitle.textContent = areaConfig.label;
     if (hsrtx26np20260316Elements.hubSubtitle) hsrtx26np20260316Elements.hubSubtitle.textContent = areaConfig.subtitle;
     hsrtx26np20260316UpdateAreaButtonState(areaConfig.slug);
+    hsrtx26np20260316UpdatePosterHallCta(areaConfig);
   }
 
   async function hsrtx26np20260316ActivateArea(areaConfig) {
