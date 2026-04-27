@@ -1874,10 +1874,6 @@
     return hsrtx26np20260316ParseSecondsValue(hsrtx26np20260316PickFirst(detail, ['tr_duration', 'tracking_duration', 'css_time_duration']));
   }
 
-  function hsrtx26np20260316InvalidateOriginalPlayButtonCache() {
-    hsrtx26np20260316State.originalPlayButtonsById = null;
-  }
-
   function hsrtx26np20260316GetOriginalPlayButton(webinarId) {
     var targetWebinarId = String(webinarId || '').trim();
     var playButtonIndex;
@@ -2694,7 +2690,6 @@
       var countdownTitle;
       var isSecretCinema = sessionCardNode.getAttribute('data-hsrtx26np20260316-secret-cinema') === 'true';
       var isSessionEnded = !isSecretCinema && hsrtx26np20260316IsSessionEnded(sessionCardNode);
-      var previousEndedState = sessionCardNode.getAttribute('data-hsrtx26np20260316-session-ended') === 'true';
       var sessionEndedNoteNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="session-ended-note"]');
       if (joinLinkNode) hsrtx26np20260316ApplyOriginalPlayerDataToJoinLink(joinLinkNode);
       hasJoinTarget = !!(joinLinkNode && (joinLinkNode.getAttribute('data-webinar-id') || joinLinkNode.getAttribute('data-url')));
@@ -2708,7 +2703,6 @@
       sessionCardNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       sessionCardNode.setAttribute('data-hsrtx26np20260316-session-ended', String(isSessionEnded));
       sessionCardNode.classList.toggle('is-ended', isSessionEnded);
-      if (previousEndedState !== isSessionEnded) endedStateChanged = true;
       if (joinLinkNode) joinLinkNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       if (countdownPillNode) {
         countdownPillNode.hidden = isSessionEnded || isSecretCinema;
@@ -2723,7 +2717,7 @@
       if (sessionEndedNoteNode) sessionEndedNoteNode.hidden = !isSessionEnded;
       hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, shouldShowJoinLink);
     });
-    if (endedStateChanged) hsrtx26np20260316MoveEndedSessionsToBottom();
+    hsrtx26np20260316MoveEndedSessionsToBottom();
   }
 
   function hsrtx26np20260316StartCountdowns() {

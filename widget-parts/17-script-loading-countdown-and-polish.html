@@ -84,7 +84,6 @@
     var posterHallModel;
 
     if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
-    hsrtx26np20260316InvalidateOriginalPlayButtonCache();
 
     if (agendaIndex && agendaIndex.list && agendaIndex.list.length) {
       if (webinarIds.length) {
@@ -118,9 +117,6 @@
     }
 
     sessionList.sort(function sortSessionsByTimeThenTitle(firstSession, secondSession) {
-      var firstIsEnded = firstSession.endTimestamp > 0 && Date.now() >= firstSession.endTimestamp;
-      var secondIsEnded = secondSession.endTimestamp > 0 && Date.now() >= secondSession.endTimestamp;
-      if (firstIsEnded !== secondIsEnded) return firstIsEnded ? 1 : -1;
       if (firstSession.sortTime && secondSession.sortTime && firstSession.sortTime !== secondSession.sortTime) return firstSession.sortTime - secondSession.sortTime;
       return String(firstSession.title || '').localeCompare(String(secondSession.title || ''));
     });
@@ -191,44 +187,12 @@
     return Math.max(0, Number(sessionCardNode.getAttribute('data-hsrtx26np20260316-join-before-seconds') || 0) || 0);
   }
 
-  function hsrtx26np20260316GetSessionEndTimestamp(sessionCardNode) {
-    if (!sessionCardNode) return 0;
-    return Math.max(0, Number(sessionCardNode.getAttribute('data-hsrtx26np20260316-end-time') || 0) || 0);
-  }
-
-  function hsrtx26np20260316IsSessionEnded(sessionCardNode) {
-    var endTimestamp = hsrtx26np20260316GetSessionEndTimestamp(sessionCardNode);
-    if (endTimestamp <= 0) return false;
-    return Date.now() >= endTimestamp;
-  }
-
-  function hsrtx26np20260316MoveEndedSessionsToBottom() {
-    var sessionListNodes = hsrtx26np20260316RootNode.querySelectorAll('.hsrtx26np20260316-session-list');
-    hsrtx26np20260316ToArray(sessionListNodes).forEach(function reorderSessionList(sessionListNode) {
-      var sessionCardNodes = hsrtx26np20260316ToArray(sessionListNode.querySelectorAll('[data-hsrtx26np20260316-role="session-card"]'));
-      if (!sessionCardNodes.length) return;
-      sessionCardNodes.sort(function sortRenderedSessions(firstCardNode, secondCardNode) {
-        var firstIsEnded = firstCardNode.getAttribute('data-hsrtx26np20260316-session-ended') === 'true';
-        var secondIsEnded = secondCardNode.getAttribute('data-hsrtx26np20260316-session-ended') === 'true';
-        var firstSortTime = Number(firstCardNode.getAttribute('data-hsrtx26np20260316-sort-time') || 0);
-        var secondSortTime = Number(secondCardNode.getAttribute('data-hsrtx26np20260316-sort-time') || 0);
-        if (firstIsEnded !== secondIsEnded) return firstIsEnded ? 1 : -1;
-        if (firstSortTime && secondSortTime && firstSortTime !== secondSortTime) return firstSortTime - secondSortTime;
-        return 0;
-      });
-      sessionCardNodes.forEach(function appendSessionCardInOrder(sessionCardNode) {
-        sessionListNode.appendChild(sessionCardNode);
-      });
-    });
-  }
-
   function hsrtx26np20260316IsRenderedJoinLinkOpen(joinLinkNode, sessionCardNode) {
     var webinarId;
     var sourceAvailability;
     var currentSeconds;
     var joinBeforeSeconds;
     var hasJoinTarget;
-    var isSecretCinema;
     if (!joinLinkNode) return false;
     if (hsrtx26np20260316ShouldForceJoinButtonsFromUrl()) return !!(joinLinkNode.getAttribute('data-webinar-id') || joinLinkNode.getAttribute('data-url'));
     webinarId = joinLinkNode.getAttribute('data-webinar-id') || '';
@@ -236,11 +200,8 @@
     currentSeconds = sessionCardNode ? hsrtx26np20260316GetSessionCurrentSeconds(sessionCardNode) : 0;
     joinBeforeSeconds = sessionCardNode ? hsrtx26np20260316GetSessionJoinBeforeSeconds(sessionCardNode) : 0;
     hasJoinTarget = !!(joinLinkNode.getAttribute('data-webinar-id') || joinLinkNode.getAttribute('data-url'));
-    isSecretCinema = !!(sessionCardNode && sessionCardNode.getAttribute('data-hsrtx26np20260316-secret-cinema') === 'true');
     if (!hasJoinTarget) return false;
     if (sourceAvailability === false) return false;
-    if (sessionCardNode && !isSecretCinema && hsrtx26np20260316IsSessionEnded(sessionCardNode)) return false;
-    if (isSecretCinema) return true;
     if (sessionCardNode && !hsrtx26np20260316IsJoinWindowOpen(currentSeconds, joinBeforeSeconds)) return false;
     return true;
   }
@@ -290,7 +251,6 @@
 
   function hsrtx26np20260316TickCountdowns() {
     var sessionCardNodes;
-    var endedStateChanged = false;
     if (hsrtx26np20260316ApplyForceJoinButtonsFromUrl()) return;
     sessionCardNodes = hsrtx26np20260316RootNode.querySelectorAll('[data-hsrtx26np20260316-role="session-card"]');
     hsrtx26np20260316ToArray(sessionCardNodes).forEach(function tickOneCountdown(sessionCardNode) {
@@ -306,38 +266,26 @@
       var shouldShowJoinLink;
       var sessionHasStarted;
       var countdownTitle;
-      var isSecretCinema = sessionCardNode.getAttribute('data-hsrtx26np20260316-secret-cinema') === 'true';
-      var isSessionEnded = !isSecretCinema && hsrtx26np20260316IsSessionEnded(sessionCardNode);
-      var previousEndedState = sessionCardNode.getAttribute('data-hsrtx26np20260316-session-ended') === 'true';
-      var sessionEndedNoteNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="session-ended-note"]');
       if (joinLinkNode) hsrtx26np20260316ApplyOriginalPlayerDataToJoinLink(joinLinkNode);
       hasJoinTarget = !!(joinLinkNode && (joinLinkNode.getAttribute('data-webinar-id') || joinLinkNode.getAttribute('data-url')));
       timeWindowOpen = hsrtx26np20260316IsJoinWindowOpen(currentSeconds, joinBeforeSeconds);
-      shouldShowJoinLink = isSecretCinema ? (sourceAvailability !== false && hasJoinTarget) : (timeWindowOpen && sourceAvailability !== false && hasJoinTarget);
-      if (isSessionEnded) shouldShowJoinLink = false;
+      shouldShowJoinLink = timeWindowOpen && sourceAvailability !== false && hasJoinTarget;
       sessionHasStarted = hsrtx26np20260316HasSessionStarted(currentSeconds);
       countdownTitle = hsrtx26np20260316GetCountdownTitle(currentSeconds);
       sessionCardNode.setAttribute('data-hsrtx26np20260316-seconds-left', String(startTimestamp > 0 ? currentSeconds : Math.max(0, currentSeconds - 1)));
       sessionCardNode.setAttribute('data-hsrtx26np20260316-join-window-open', String(shouldShowJoinLink));
       sessionCardNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
-      sessionCardNode.setAttribute('data-hsrtx26np20260316-session-ended', String(isSessionEnded));
-      sessionCardNode.classList.toggle('is-ended', isSessionEnded);
-      if (previousEndedState !== isSessionEnded) endedStateChanged = true;
       if (joinLinkNode) joinLinkNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       if (countdownPillNode) {
-        countdownPillNode.hidden = isSessionEnded || isSecretCinema;
-        countdownPillNode.setAttribute('aria-hidden', isSessionEnded || isSecretCinema ? 'true' : 'false');
-        if (!isSessionEnded && !isSecretCinema) {
-          countdownPillNode.textContent = hsrtx26np20260316GetCountdownLabel(currentSeconds, sourceAvailability);
-          countdownPillNode.classList.toggle('is-live', sessionHasStarted && shouldShowJoinLink);
-          if (countdownTitle && !sessionHasStarted) countdownPillNode.setAttribute('title', countdownTitle);
-          else countdownPillNode.removeAttribute('title');
-        }
+        countdownPillNode.hidden = false;
+        countdownPillNode.setAttribute('aria-hidden', 'false');
+        countdownPillNode.textContent = hsrtx26np20260316GetCountdownLabel(currentSeconds, sourceAvailability);
+        countdownPillNode.classList.toggle('is-live', sessionHasStarted && shouldShowJoinLink);
+        if (countdownTitle && !sessionHasStarted) countdownPillNode.setAttribute('title', countdownTitle);
+        else countdownPillNode.removeAttribute('title');
       }
-      if (sessionEndedNoteNode) sessionEndedNoteNode.hidden = !isSessionEnded;
       hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, shouldShowJoinLink);
     });
-    if (endedStateChanged) hsrtx26np20260316MoveEndedSessionsToBottom();
   }
 
   function hsrtx26np20260316StartCountdowns() {
@@ -477,3 +425,4 @@
       hsrtx26np20260316State.secretCinemaObserver = observer;
     }
   }
+
