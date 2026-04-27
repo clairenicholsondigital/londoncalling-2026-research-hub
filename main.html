@@ -362,7 +362,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    align-items: flex-end;
+    align-items: center;
     justify-content: flex-end;
   }
 
@@ -401,6 +401,14 @@
     background: var(--hsrtx26np20260316-live-bg);
     border-color: rgba(29, 122, 78, 0.18);
     color: var(--hsrtx26np20260316-live-text);
+  }
+
+  .hsrtx26np20260316-countdown-status {
+    color: var(--hsrtx26np20260316-text-muted);
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
   }
 
   .hsrtx26np20260316-session-title,
@@ -1234,7 +1242,15 @@
     if (hsrtx26np20260316ShouldForceJoinButtonsFromUrl()) return 'Live now';
     if (sourceAvailability === false) return 'Upcoming';
     if (safeSeconds <= 0) return 'Live now';
-    return 'Upcoming · ' + hsrtx26np20260316FormatCountdown(safeSeconds);
+    return hsrtx26np20260316FormatCountdown(safeSeconds);
+  }
+
+  function hsrtx26np20260316GetCountdownStatusLabel(seconds, sourceAvailability) {
+    var safeSeconds = Math.max(0, Number(seconds) || 0);
+    if (hsrtx26np20260316ShouldForceJoinButtonsFromUrl()) return '';
+    if (sourceAvailability === false) return 'Upcoming';
+    if (safeSeconds <= 0) return 'Live now';
+    return 'Upcoming';
   }
 
   function hsrtx26np20260316GetCountdownTitle(seconds) {
@@ -2204,12 +2220,14 @@
     var hasJoinTarget = !!(joinPlayerData['data-webinar-id'] || joinPlayerData['data-url']);
     var shouldHideJoinLink = !isJoinWindowOpen || !hasJoinTarget;
     var countdownTitle = hsrtx26np20260316GetCountdownTitle(displaySecondsLeft);
+    var countdownLabel = hsrtx26np20260316GetCountdownLabel(displaySecondsLeft, sourceAvailability);
+    var countdownStatusLabel = hsrtx26np20260316GetCountdownStatusLabel(displaySecondsLeft, sourceAvailability);
     var isSecretCinema = !!sessionModel.isSecretCinema || hsrtx26np20260316DetailIsInWebinarGroup(sessionModel, hsrtx26np20260316SecretCinemaGroupId);
     var endTimestamp = Math.max(0, Number(sessionModel.endTimestamp) || 0);
     var isEnded = !isSecretCinema && endTimestamp > 0 && Date.now() >= endTimestamp;
     var shouldShowJoinLink = isSecretCinema ? (sourceAvailability !== false && hasJoinTarget) : (!shouldHideJoinLink && !isEnded);
     var titleHtml = '<h2 class="hsrtx26np20260316-session-title' + (isSecretCinema ? ' hsrtx26np20260316-session-title--inline' : '') + '">' + hsrtx26np20260316EscapeHtml(sessionModel.title || '') + '</h2>';
-    var actionsHtml = (isSecretCinema ? '' : '<div class="hsrtx26np20260316-countdown-pill" data-hsrtx26np20260316-role="countdown-pill" aria-hidden="false"' + (countdownTitle ? ' title="' + hsrtx26np20260316EscapeHtml(countdownTitle) + '"' : '') + '>' + hsrtx26np20260316EscapeHtml(hsrtx26np20260316GetCountdownLabel(displaySecondsLeft, sourceAvailability)) + '</div>') +
+    var actionsHtml = (isSecretCinema ? '' : '<span class="hsrtx26np20260316-countdown-status" data-hsrtx26np20260316-role="countdown-status"' + (countdownStatusLabel ? '' : ' hidden aria-hidden="true"') + '>' + hsrtx26np20260316EscapeHtml(countdownStatusLabel) + '</span><div class="hsrtx26np20260316-countdown-pill" data-hsrtx26np20260316-role="countdown-pill" aria-hidden="false"' + (countdownTitle ? ' title="' + hsrtx26np20260316EscapeHtml(countdownTitle) + '"' : '') + (countdownLabel ? '' : ' hidden') + '>' + hsrtx26np20260316EscapeHtml(countdownLabel) + '</div>') +
       '<a href="javascript:;" class="hsrtx26np20260316-join-link track-btn-click primary-btn btn-webinar-play play-webinar" data-hsrtx26np20260316-role="join-link"' + hsrtx26np20260316DataAttributesToHtml(joinPlayerData) + (shouldShowJoinLink ? '' : ' hidden') + '>' + (isSecretCinema ? 'Play' : 'Join') + '</a>' +
       '<span class="hsrtx26np20260316-session-ended-note" data-hsrtx26np20260316-role="session-ended-note"' + (isEnded ? '' : ' hidden') + '>On demand content coming soon</span>';
     var topHtml = isSecretCinema
@@ -2452,6 +2470,7 @@
     var pageSessions = sessionsForArea.slice(startIndex, startIndex + perPage);
     var listHtml;
     var paginationHtml = '';
+    var paginationTopHtml = '';
 
     hsrtx26np20260316State.sessionsCurrentPage = currentPage;
 
@@ -2470,9 +2489,10 @@
         '<button type="button" class="hsrtx26np20260316-pagination-button" data-hsrtx26np20260316-role="sessions-page-back"' + (currentPage <= 1 ? ' disabled' : '') + '>Back</button>' +
         '<button type="button" class="hsrtx26np20260316-pagination-button" data-hsrtx26np20260316-role="sessions-page-next"' + (currentPage >= totalPages ? ' disabled' : '') + '>Next</button>' +
         '</div></div>';
+      paginationTopHtml = paginationHtml;
     }
 
-    hsrtx26np20260316Elements.sessionsOutput.innerHTML = listHtml + paginationHtml;
+    hsrtx26np20260316Elements.sessionsOutput.innerHTML = paginationTopHtml + listHtml + paginationHtml;
   }
 
   function hsrtx26np20260316BindSessionsPagination() {
@@ -2767,6 +2787,7 @@
     hsrtx26np20260316ToArray(sessionCardNodes).forEach(function forceOneJoinButton(sessionCardNode) {
       if (!hsrtx26np20260316IsCardVisibleForCountdown(sessionCardNode)) return;
       var countdownPillNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="countdown-pill"]');
+      var countdownStatusNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="countdown-status"]');
       var joinLinkNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="join-link"]');
       var hasJoinTarget;
       if (joinLinkNode) hsrtx26np20260316ApplyOriginalPlayerDataToJoinLink(joinLinkNode);
@@ -2780,6 +2801,10 @@
         countdownPillNode.removeAttribute('title');
         countdownPillNode.hidden = !!hasJoinTarget;
         countdownPillNode.setAttribute('aria-hidden', hasJoinTarget ? 'true' : 'false');
+      }
+      if (countdownStatusNode) {
+        countdownStatusNode.hidden = true;
+        countdownStatusNode.setAttribute('aria-hidden', 'true');
       }
       if (joinLinkNode) {
         joinLinkNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
@@ -2800,6 +2825,7 @@
       var currentSeconds = hsrtx26np20260316GetSessionCurrentSeconds(sessionCardNode);
       var joinBeforeSeconds = hsrtx26np20260316GetSessionJoinBeforeSeconds(sessionCardNode);
       var countdownPillNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="countdown-pill"]');
+      var countdownStatusNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="countdown-status"]');
       var joinLinkNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="join-link"]');
       var webinarId = joinLinkNode ? joinLinkNode.getAttribute('data-webinar-id') || '' : '';
       var sourceAvailability = hsrtx26np20260316GetOriginalPlayButtonAvailability(webinarId);
@@ -2808,6 +2834,8 @@
       var shouldShowJoinLink;
       var sessionHasStarted;
       var countdownTitle;
+      var countdownLabel;
+      var countdownStatusLabel;
       var isSecretCinema = sessionCardNode.getAttribute('data-hsrtx26np20260316-secret-cinema') === 'true';
       var isSessionEnded = !isSecretCinema && hsrtx26np20260316IsSessionEnded(sessionCardNode);
       var previousEndedState = sessionCardNode.getAttribute('data-hsrtx26np20260316-session-ended') === 'true';
@@ -2819,6 +2847,8 @@
       if (isSessionEnded) shouldShowJoinLink = false;
       sessionHasStarted = hsrtx26np20260316HasSessionStarted(currentSeconds);
       countdownTitle = hsrtx26np20260316GetCountdownTitle(currentSeconds);
+      countdownLabel = hsrtx26np20260316GetCountdownLabel(currentSeconds, sourceAvailability);
+      countdownStatusLabel = hsrtx26np20260316GetCountdownStatusLabel(currentSeconds, sourceAvailability);
       sessionCardNode.setAttribute('data-hsrtx26np20260316-seconds-left', String(startTimestamp > 0 ? currentSeconds : Math.max(0, currentSeconds - 1)));
       sessionCardNode.setAttribute('data-hsrtx26np20260316-join-window-open', String(shouldShowJoinLink));
       sessionCardNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
@@ -2827,14 +2857,19 @@
       if (previousEndedState !== isSessionEnded) endedStateChanged = true;
       if (joinLinkNode) joinLinkNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       if (countdownPillNode) {
-        countdownPillNode.hidden = isSessionEnded || isSecretCinema;
-        countdownPillNode.setAttribute('aria-hidden', isSessionEnded || isSecretCinema ? 'true' : 'false');
+        countdownPillNode.hidden = isSessionEnded || isSecretCinema || !countdownLabel;
+        countdownPillNode.setAttribute('aria-hidden', isSessionEnded || isSecretCinema || !countdownLabel ? 'true' : 'false');
         if (!isSessionEnded && !isSecretCinema) {
-          countdownPillNode.textContent = hsrtx26np20260316GetCountdownLabel(currentSeconds, sourceAvailability);
+          countdownPillNode.textContent = countdownLabel;
           countdownPillNode.classList.toggle('is-live', sessionHasStarted && shouldShowJoinLink);
           if (countdownTitle && !sessionHasStarted) countdownPillNode.setAttribute('title', countdownTitle);
           else countdownPillNode.removeAttribute('title');
         }
+      }
+      if (countdownStatusNode) {
+        countdownStatusNode.hidden = isSessionEnded || isSecretCinema || !countdownStatusLabel;
+        countdownStatusNode.setAttribute('aria-hidden', isSessionEnded || isSecretCinema || !countdownStatusLabel ? 'true' : 'false');
+        if (!isSessionEnded && !isSecretCinema && countdownStatusLabel) countdownStatusNode.textContent = countdownStatusLabel;
       }
       if (sessionEndedNoteNode) sessionEndedNoteNode.hidden = !isSessionEnded;
       hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, shouldShowJoinLink);
