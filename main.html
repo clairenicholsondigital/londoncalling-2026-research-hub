@@ -578,6 +578,21 @@
     cursor: not-allowed;
   }
 
+  .hsrtx26np20260316-pagination-button--refresh {
+    width: 38px;
+    min-width: 38px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--hsrtx26np20260316-text-muted);
+  }
+
+  .hsrtx26np20260316-pagination-button--refresh span {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
   #hsrtx26np20260316__root[data-hsrtx26np20260316-force-join="true"]
   .hsrtx26np20260316-session-card[data-hsrtx26np20260316-force-join-ready="true"]
   .hsrtx26np20260316-countdown-pill {
@@ -2559,6 +2574,7 @@
       paginationHtml = '<div class="hsrtx26np20260316-pagination" data-hsrtx26np20260316-role="sessions-pagination">' +
         '<span class="hsrtx26np20260316-pagination-status">Showing ' + hsrtx26np20260316EscapeHtml(String(startIndex + 1)) + '–' + hsrtx26np20260316EscapeHtml(String(startIndex + pageSessions.length)) + ' of ' + hsrtx26np20260316EscapeHtml(String(totalSessions)) + '</span>' +
         '<div class="hsrtx26np20260316-pagination-actions">' +
+        '<button type="button" class="hsrtx26np20260316-pagination-button hsrtx26np20260316-pagination-button--refresh" data-hsrtx26np20260316-role="sessions-page-refresh" aria-label="Refresh page" title="Refresh page"><span aria-hidden="true">↻</span></button>' +
         '<button type="button" class="hsrtx26np20260316-pagination-button" data-hsrtx26np20260316-role="sessions-page-back"' + (currentPage <= 1 ? ' disabled' : '') + '>Back</button>' +
         '<button type="button" class="hsrtx26np20260316-pagination-button" data-hsrtx26np20260316-role="sessions-page-next"' + (currentPage >= totalPages ? ' disabled' : '') + '>Next</button>' +
         '</div></div>';
@@ -2572,9 +2588,14 @@
     hsrtx26np20260316RootNode.addEventListener('click', function onSessionsPaginationClick(event) {
       var nextButton = hsrtx26np20260316Closest(event.target, '[data-hsrtx26np20260316-role="sessions-page-next"]');
       var backButton = hsrtx26np20260316Closest(event.target, '[data-hsrtx26np20260316-role="sessions-page-back"]');
+      var refreshButton = hsrtx26np20260316Closest(event.target, '[data-hsrtx26np20260316-role="sessions-page-refresh"]');
       var areaConfig;
       var totalPages;
-      if (!nextButton && !backButton) return;
+      if (!nextButton && !backButton && !refreshButton) return;
+      if (refreshButton) {
+        window.location.reload();
+        return;
+      }
       areaConfig = hsrtx26np20260316GetAreaConfigBySlug(hsrtx26np20260316State.activeAreaSlug);
       if (!areaConfig) return;
       totalPages = Math.max(1, Math.ceil((hsrtx26np20260316State.sessionsForActiveArea || []).length / Math.max(1, Number(hsrtx26np20260316State.sessionsPerPage) || 10)));
