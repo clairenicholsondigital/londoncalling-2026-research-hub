@@ -578,12 +578,6 @@
     cursor: not-allowed;
   }
 
-  .hsrtx26np20260316-pagination-button--nav:not([disabled]) {
-    background: #7474c1;
-    border-color: #7474c1;
-    color: #ffffff;
-  }
-
   .hsrtx26np20260316-pagination-button--refresh {
     width: 38px;
     min-width: 38px;
@@ -2581,8 +2575,8 @@
         '<span class="hsrtx26np20260316-pagination-status">Showing ' + hsrtx26np20260316EscapeHtml(String(startIndex + 1)) + '–' + hsrtx26np20260316EscapeHtml(String(startIndex + pageSessions.length)) + ' of ' + hsrtx26np20260316EscapeHtml(String(totalSessions)) + '</span>' +
         '<div class="hsrtx26np20260316-pagination-actions">' +
         '<button type="button" class="hsrtx26np20260316-pagination-button hsrtx26np20260316-pagination-button--refresh" data-hsrtx26np20260316-role="sessions-page-refresh" aria-label="Refresh page" title="Refresh page"><span aria-hidden="true">↻</span></button>' +
-        '<button type="button" class="hsrtx26np20260316-pagination-button hsrtx26np20260316-pagination-button--nav" data-hsrtx26np20260316-role="sessions-page-back"' + (currentPage <= 1 ? ' disabled' : '') + '>Back</button>' +
-        '<button type="button" class="hsrtx26np20260316-pagination-button hsrtx26np20260316-pagination-button--nav" data-hsrtx26np20260316-role="sessions-page-next"' + (currentPage >= totalPages ? ' disabled' : '') + '>Next</button>' +
+        '<button type="button" class="hsrtx26np20260316-pagination-button" data-hsrtx26np20260316-role="sessions-page-back"' + (currentPage <= 1 ? ' disabled' : '') + '>Back</button>' +
+        '<button type="button" class="hsrtx26np20260316-pagination-button" data-hsrtx26np20260316-role="sessions-page-next"' + (currentPage >= totalPages ? ' disabled' : '') + '>Next</button>' +
         '</div></div>';
       paginationTopHtml = paginationHtml;
     }
