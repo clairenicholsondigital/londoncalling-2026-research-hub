@@ -1799,15 +1799,13 @@
   }
 
   function isSecretSession(session) {
-    if (!session || !session.keywords) return false;
-
-    return String(session.keywords)
-      .toLowerCase()
-      .split(',')
-      .map(function normalizeKeyword(keywordValue) {
-        return keywordValue.trim();
-      })
-      .includes('secret');
+    var groupIds;
+    if (!session) return false;
+    if (session.isSecretCinema === true) return true;
+    if (session.isSecretCinema === false) return false;
+    groupIds = Array.isArray(session.groupIds) ? session.groupIds : [];
+    if (groupIds.indexOf(hsrtx26np20260316SecretCinemaGroupId) !== -1) return true;
+    return String(session.title || '').toLowerCase().indexOf('secret cinema') !== -1;
   }
 
   function hsrtx26np20260316IsSecretCinemaSession(session) {
@@ -2716,9 +2714,6 @@
     secretSessions = sessionList.filter(function keepSecretCinemaSession(session) {
       return hsrtx26np20260316IsSecretCinemaSession(session);
     });
-
-    console.log("Secret sessions:", secretSessions.length);
-    console.log("Normal sessions:", normalSessions.length);
 
     secretSessions.sort(function sortSecretCinemaByTimeThenTitle(firstSession, secondSession) {
       if (firstSession.sortTime && secondSession.sortTime && firstSession.sortTime !== secondSession.sortTime) return firstSession.sortTime - secondSession.sortTime;
