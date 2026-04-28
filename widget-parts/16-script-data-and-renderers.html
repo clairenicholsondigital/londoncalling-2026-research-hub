@@ -227,13 +227,20 @@
     return hsrtx26np20260316ValueToSearchableText(detail);
   }
 
+  function isSecretSession(session) {
+    if (!session || !session.keywords) return false;
+
+    return String(session.keywords)
+      .toLowerCase()
+      .split(',')
+      .map(function normalizeKeyword(keywordValue) {
+        return keywordValue.trim();
+      })
+      .includes('secret');
+  }
+
   function hsrtx26np20260316IsSecretCinemaSession(session) {
-    var keywords;
-    if (!session) return false;
-    keywords = String(session.keywords || '').toLowerCase().split(',').map(function normalizeKeyword(keywordValue) {
-      return keywordValue.trim();
-    });
-    return keywords.indexOf('secret') !== -1;
+    return isSecretSession(session);
   }
 
   function hsrtx26np20260316GetDetailType(detail) {
