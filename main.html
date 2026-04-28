@@ -1792,6 +1792,25 @@
     return hsrtx26np20260316ValueToSearchableText(detail);
   }
 
+  function hsrtx26np20260316IsSecretCinemaSession(session) {
+    var rawKeywords;
+    var keywords;
+    if (!session) return false;
+    rawKeywords = session.keywords;
+    if (Array.isArray(rawKeywords)) keywords = rawKeywords;
+    else keywords = String(rawKeywords || '').split(/[,;|]/);
+    keywords = keywords.map(function normalizeKeyword(keywordValue) {
+      return String(keywordValue || '').toLowerCase().trim();
+    }).filter(function keepNonEmptyKeyword(keywordValue) {
+      return !!keywordValue;
+    });
+    return keywords.indexOf('secret') !== -1;
+  }
+
+  function hsrtx26np20260316GetSessionKeywordValue(detail) {
+    return hsrtx26np20260316PickFirst(detail, ['keywords', 'keyword', 'keyword_text', 'keywordText', 'keyword_names', 'keywordNames', 'tags', 'tag_names', 'category_keywords', 'search_keywords']) || '';
+  }
+
   function hsrtx26np20260316GetDetailType(detail) {
     var typeValue = hsrtx26np20260316ValueToSearchableText(hsrtx26np20260316PickFirst(detail, ['type', 'webinar_type', 'webinarType', 'content_type', 'session_type', 'presentation_type'])).toLowerCase();
     var isPosterValue = hsrtx26np20260316PickFirst(detail, ['is_poster', 'isPoster', 'poster']);
@@ -2168,6 +2187,7 @@
       dayLabel: dayMeta ? dayMeta.label : '',
       groupIds: groupIds,
       isSecretCinema: groupIds.indexOf(hsrtx26np20260316SecretCinemaGroupId) !== -1 || hsrtx26np20260316DetailLooksLikeSecretCinema(detail),
+      keywords: hsrtx26np20260316GetSessionKeywordValue(detail),
       joinUrl: hsrtx26np20260316PickFirst(detail, ['url', 'webinar_url', 'webinarUrl', 'join_url', 'joinUrl', 'live_url', 'video_url', 'embed_url', 'replay_url', 'recording_vimeo_url', 'c_url', 'link']) || '',
       speakers: speakersList.map(function buildSpeakerModel(rawSpeaker) {
         var firstName = hsrtx26np20260316PickFirst(rawSpeaker, ['first_name', 'firstName', 'firstname']) || '';
@@ -2619,15 +2639,15 @@
     var keywordLower = String(areaConfig.keyword || '').trim().toLowerCase();
     var sessionList = [];
     var posterList = [];
-    var secretCinemaList = [];
     var agendaIndex = await hsrtx26np20260316GetAgendaDetailsIndex();
     var candidateDetails = [];
     var detailIndex;
     var webinarDetail;
     var detailKeywordText;
     var webinarType;
-    var sessionModel;
     var posterHallModel;
+    var normalSessions;
+    var secretCinemaSessions;
 
     if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
     hsrtx26np20260316InvalidateOriginalPlayButtonCache();
@@ -2652,12 +2672,6 @@
       if (!webinarDetail || !hsrtx26np20260316PickFirst(webinarDetail, ['title', 'webinar_title', 'webinarTitle', 'session_title', 'name'])) continue;
       detailKeywordText = hsrtx26np20260316GetDetailKeywordText(webinarDetail).toLowerCase();
       if (keywordLower && detailKeywordText.indexOf(keywordLower) === -1) continue;
-      if (hsrtx26np20260316DetailIsInWebinarGroup(webinarDetail, hsrtx26np20260316SecretCinemaGroupId) || hsrtx26np20260316DetailLooksLikeSecretCinema(webinarDetail)) {
-        sessionModel = hsrtx26np20260316BuildSessionModel(webinarDetail);
-        sessionModel.isSecretCinema = true;
-        secretCinemaList.push(sessionModel);
-        continue;
-      }
       webinarType = hsrtx26np20260316GetDetailType(webinarDetail);
       if (webinarType === 'poster') posterList.push(hsrtx26np20260316BuildPosterModel(webinarDetail));
       else sessionList.push(hsrtx26np20260316BuildSessionModel(webinarDetail));
@@ -2671,7 +2685,15 @@
       return String(firstSession.title || '').localeCompare(String(secondSession.title || ''));
     });
 
-    secretCinemaList.sort(function sortSecretCinemaByTimeThenTitle(firstSession, secondSession) {
+    normalSessions = sessionList.filter(function keepNormalSession(session) {
+      return !hsrtx26np20260316IsSecretCinemaSession(session);
+    });
+
+    secretCinemaSessions = sessionList.filter(function keepSecretCinemaSession(session) {
+      return hsrtx26np20260316IsSecretCinemaSession(session);
+    });
+
+    secretCinemaSessions.sort(function sortSecretCinemaByTimeThenTitle(firstSession, secondSession) {
       if (firstSession.sortTime && secondSession.sortTime && firstSession.sortTime !== secondSession.sortTime) return firstSession.sortTime - secondSession.sortTime;
       return String(firstSession.title || '').localeCompare(String(secondSession.title || ''));
     });
@@ -2684,11 +2706,11 @@
 
     if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
 
-    hsrtx26np20260316SetText(hsrtx26np20260316Elements.sessionsCount, sessionList.length);
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.sessionsCount, normalSessions.length);
     hsrtx26np20260316SetText(hsrtx26np20260316Elements.postersCount, posterList.length);
-    hsrtx26np20260316SetText(hsrtx26np20260316Elements.secretCinemaCount, secretCinemaList.length);
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.secretCinemaCount, secretCinemaSessions.length);
 
-    hsrtx26np20260316State.sessionsForActiveArea = sessionList.slice();
+    hsrtx26np20260316State.sessionsForActiveArea = normalSessions.slice();
     hsrtx26np20260316State.sessionsCurrentPage = 1;
     hsrtx26np20260316RenderSessionsPage(areaConfig);
 
@@ -2697,7 +2719,7 @@
     }
 
     if (hsrtx26np20260316Elements.secretCinemaOutput) {
-      hsrtx26np20260316Elements.secretCinemaOutput.innerHTML = secretCinemaList.length ? '<div class="hsrtx26np20260316-session-list">' + secretCinemaList.map(hsrtx26np20260316RenderSessionCard).join('') + '</div>' : hsrtx26np20260316RenderAreaEmptyState('No Secret Cinema sessions available', areaConfig, 'There are no Secret Cinema sessions listed for this research area yet.');
+      hsrtx26np20260316Elements.secretCinemaOutput.innerHTML = secretCinemaSessions.length ? '<div class="hsrtx26np20260316-session-list">' + secretCinemaSessions.map(hsrtx26np20260316RenderSessionCard).join('') + '</div>' : hsrtx26np20260316RenderAreaEmptyState('No Secret Cinema sessions available', areaConfig, 'There are no Secret Cinema sessions listed for this research area yet.');
     }
 
     hsrtx26np20260316SyncRenderedJoinLinksWithOriginalButtons();
