@@ -2552,8 +2552,8 @@
     return hsrtx26np20260316ToArray(sessions).sort(function compareSessions(firstSession, secondSession) {
       var firstIsEnded = firstSession && firstSession.isEnded === true;
       var secondIsEnded = secondSession && secondSession.isEnded === true;
-      var firstTime = firstSession && firstSession.startTime ? new Date(firstSession.startTime).getTime() : 0;
-      var secondTime = secondSession && secondSession.startTime ? new Date(secondSession.startTime).getTime() : 0;
+      var firstTime = firstSession && Number(firstSession.sortTime || firstSession.startTimestamp || 0);
+      var secondTime = secondSession && Number(secondSession.sortTime || secondSession.startTimestamp || 0);
       var firstTitle = String(firstSession && firstSession.title ? firstSession.title : '');
       var secondTitle = String(secondSession && secondSession.title ? secondSession.title : '');
       if (Number.isNaN(firstTime)) firstTime = 0;
