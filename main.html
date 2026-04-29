@@ -2548,8 +2548,24 @@
     outputNode.appendChild(tableWrapNode);
   }
 
+  function hsrtx26np20260316SortSessions(sessions) {
+    return hsrtx26np20260316ToArray(sessions).sort(function compareSessions(firstSession, secondSession) {
+      var firstIsEnded = firstSession && firstSession.isEnded === true;
+      var secondIsEnded = secondSession && secondSession.isEnded === true;
+      var firstTime = firstSession && firstSession.startTime ? new Date(firstSession.startTime).getTime() : 0;
+      var secondTime = secondSession && secondSession.startTime ? new Date(secondSession.startTime).getTime() : 0;
+      var firstTitle = String(firstSession && firstSession.title ? firstSession.title : '');
+      var secondTitle = String(secondSession && secondSession.title ? secondSession.title : '');
+      if (Number.isNaN(firstTime)) firstTime = 0;
+      if (Number.isNaN(secondTime)) secondTime = 0;
+      if (firstIsEnded !== secondIsEnded) return firstIsEnded ? 1 : -1;
+      if (firstTime !== secondTime) return firstTime - secondTime;
+      return firstTitle.localeCompare(secondTitle);
+    });
+  }
+
   function hsrtx26np20260316RenderSessionsPage(areaConfig) {
-    var sessionsForArea = hsrtx26np20260316State.sessionsForActiveArea || [];
+    var sessionsForArea = hsrtx26np20260316SortSessions(hsrtx26np20260316State.sessionsForActiveArea || []);
     var perPage = Math.max(1, Number(hsrtx26np20260316State.sessionsPerPage) || 10);
     var totalSessions = sessionsForArea.length;
     var totalPages = Math.max(1, Math.ceil(totalSessions / perPage));
@@ -2720,13 +2736,7 @@
       else sessionList.push(hsrtx26np20260316BuildSessionModel(webinarDetail));
     }
 
-    sessionList.sort(function sortSessionsByTimeThenTitle(firstSession, secondSession) {
-      var firstIsEnded = !!firstSession.isEnded;
-      var secondIsEnded = !!secondSession.isEnded;
-      if (firstIsEnded !== secondIsEnded) return firstIsEnded ? 1 : -1;
-      if (firstSession.sortTime && secondSession.sortTime && firstSession.sortTime !== secondSession.sortTime) return firstSession.sortTime - secondSession.sortTime;
-      return String(firstSession.title || '').localeCompare(String(secondSession.title || ''));
-    });
+    sessionList = hsrtx26np20260316SortSessions(sessionList);
 
     normalSessions = sessionList.filter(function keepNormalSession(session) {
       return !hsrtx26np20260316IsSecretCinemaSession(session);
@@ -2753,7 +2763,7 @@
     hsrtx26np20260316SetText(hsrtx26np20260316Elements.postersCount, posterList.length);
     hsrtx26np20260316SetText(hsrtx26np20260316Elements.secretCinemaCount, secretSessions.length);
 
-    hsrtx26np20260316State.sessionsForActiveArea = normalSessions.slice();
+    hsrtx26np20260316State.sessionsForActiveArea = hsrtx26np20260316SortSessions(normalSessions);
     hsrtx26np20260316State.sessionsCurrentPage = 1;
     hsrtx26np20260316RenderSessionsPage(areaConfig);
 
@@ -2820,26 +2830,6 @@
   function hsrtx26np20260316IsCardVisibleForCountdown(sessionCardNode) {
     if (!sessionCardNode || sessionCardNode.hidden) return false;
     return !hsrtx26np20260316Closest(sessionCardNode, '[hidden]');
-  }
-
-  function hsrtx26np20260316MoveEndedSessionsToBottom() {
-    var sessionListNodes = hsrtx26np20260316RootNode.querySelectorAll('.hsrtx26np20260316-session-list');
-    hsrtx26np20260316ToArray(sessionListNodes).forEach(function reorderSessionList(sessionListNode) {
-      var sessionCardNodes = hsrtx26np20260316ToArray(sessionListNode.querySelectorAll('[data-hsrtx26np20260316-role="session-card"]'));
-      if (!sessionCardNodes.length) return;
-      sessionCardNodes.sort(function sortRenderedSessions(firstCardNode, secondCardNode) {
-        var firstIsEnded = firstCardNode.getAttribute('data-hsrtx26np20260316-session-ended') === 'true';
-        var secondIsEnded = secondCardNode.getAttribute('data-hsrtx26np20260316-session-ended') === 'true';
-        var firstSortTime = Number(firstCardNode.getAttribute('data-hsrtx26np20260316-sort-time') || 0);
-        var secondSortTime = Number(secondCardNode.getAttribute('data-hsrtx26np20260316-sort-time') || 0);
-        if (firstIsEnded !== secondIsEnded) return firstIsEnded ? 1 : -1;
-        if (firstSortTime && secondSortTime && firstSortTime !== secondSortTime) return firstSortTime - secondSortTime;
-        return 0;
-      });
-      sessionCardNodes.forEach(function appendSessionCardInOrder(sessionCardNode) {
-        sessionListNode.appendChild(sessionCardNode);
-      });
-    });
   }
 
   function hsrtx26np20260316IsRenderedJoinLinkOpen(joinLinkNode, sessionCardNode) {
@@ -2974,7 +2964,22 @@
       if (sessionEndedNoteNode) sessionEndedNoteNode.hidden = !isSessionEnded;
       hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, shouldShowJoinLink);
     });
-    if (endedStateChanged) hsrtx26np20260316MoveEndedSessionsToBottom();
+    if (endedStateChanged) {
+      var activeAreaConfig = hsrtx26np20260316GetAreaConfigBySlug(hsrtx26np20260316State.activeAreaSlug);
+      hsrtx26np20260316ToArray(sessionCardNodes).forEach(function syncEndedStateToSessionModel(sessionCardNode) {
+        var sessionId = sessionCardNode.getAttribute('data-hsrtx26np20260316-webinar-id') || '';
+        var matchingSessionModel = (hsrtx26np20260316State.sessionsForActiveArea || []).find(function findSessionModel(sessionModel) {
+          return String(sessionModel.id || '') === String(sessionId);
+        });
+        if (!matchingSessionModel) return;
+        matchingSessionModel.isEnded = sessionCardNode.getAttribute('data-hsrtx26np20260316-session-ended') === 'true';
+      });
+      hsrtx26np20260316State.sessionsForActiveArea = hsrtx26np20260316SortSessions(hsrtx26np20260316State.sessionsForActiveArea || []);
+      if (activeAreaConfig) {
+        hsrtx26np20260316RenderSessionsPage(activeAreaConfig);
+        hsrtx26np20260316SyncRenderedJoinLinksWithOriginalButtons();
+      }
+    }
   }
 
   function hsrtx26np20260316StartCountdowns() {
