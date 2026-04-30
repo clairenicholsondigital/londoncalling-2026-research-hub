@@ -1088,6 +1088,7 @@
     sessionsForActiveArea: [],
     vfairsSyncTimerId: null
   };
+  var hsrtx26np20260316DebugVfairsRows = false;
 
   var hsrtx26np20260316Elements = {
     areaButtonBar: hsrtx26np20260316RootNode.querySelector('[data-hsrtx26np20260316-role="area-button-bar"]'),
@@ -2196,36 +2197,101 @@
   }
 
   function hsrtx26np20260316CollectVfairsSessionRows() {
-    var rowNodes = document.querySelectorAll('[id^="webinar-row-"]');
-    return hsrtx26np20260316ToArray(rowNodes).filter(function keepVfairsWebinarRow(rowNode) {
-      if (!rowNode) return false;
-      if (hsrtx26np20260316RootNode && hsrtx26np20260316RootNode.contains(rowNode)) return false;
-      if (String(rowNode.id || '').indexOf('{ID}') !== -1) return false;
-      return String(rowNode.textContent || '').indexOf('{ID}') === -1;
+    var rowNodes = document.querySelectorAll('[id^="webinar-row-"], [data-webinar-id]');
+    var rowsByWebinarId = {};
+    var orderedRows = [];
+
+    function getJoinButton(rowNode) {
+      return rowNode ? (rowNode.querySelector('.play-webinar[data-webinar-id]') || rowNode.querySelector('.btn-webinar-play[data-webinar-id]') || rowNode.querySelector('a[data-webinar-id][data-url]')) : null;
+    }
+
+    function getWebinarId(rowNode, joinButtonNode) {
+      var rowId = rowNode ? String(rowNode.getAttribute('id') || '') : '';
+      return String((rowNode && rowNode.getAttribute('data-webinar-id')) || (joinButtonNode && joinButtonNode.getAttribute('data-webinar-id')) || rowId.replace(/^webinar-row-/, '') || '').trim();
+    }
+
+    hsrtx26np20260316ToArray(rowNodes).forEach(function keepVfairsWebinarRow(rowNode) {
+      var joinButtonNode;
+      var webinarId;
+      var existingRecord;
+      if (!rowNode) return;
+      if (hsrtx26np20260316RootNode && hsrtx26np20260316RootNode.contains(rowNode)) return;
+      if (String(rowNode.id || '').indexOf('{ID}') !== -1) return;
+      if (String(rowNode.textContent || '').indexOf('{ID}') !== -1) return;
+      joinButtonNode = getJoinButton(rowNode);
+      webinarId = getWebinarId(rowNode, joinButtonNode);
+      if (!webinarId || !/^\d+$/.test(webinarId)) return;
+      existingRecord = rowsByWebinarId[webinarId];
+      if (!existingRecord) {
+        rowsByWebinarId[webinarId] = { rowNode: rowNode, hasPlayableJoin: !!joinButtonNode };
+        orderedRows.push(webinarId);
+        return;
+      }
+      if (!existingRecord.hasPlayableJoin && !!joinButtonNode) rowsByWebinarId[webinarId] = { rowNode: rowNode, hasPlayableJoin: true };
     });
+    return orderedRows.map(function mapRow(webinarId) { return rowsByWebinarId[webinarId].rowNode; });
+  }
+
+  function hsrtx26np20260316BuildVfairsKeywordText(rowNode, joinButtonNode) {
+    var keywordKeys = ['data-keywords', 'data-keyword', 'data-tags', 'data-category', 'data-category-name', 'data-track', 'data-search', 'data-webinar-keywords', 'data-session-keywords', 'data-group-id', 'data-webinar-group-id', 'data-location-id', 'data-location-name', 'data-title'];
+    var parts = [];
+    function pushAttrFromNode(node) {
+      if (!node) return;
+      keywordKeys.forEach(function eachKey(attrName) {
+        var value = String(node.getAttribute(attrName) || '').trim();
+        if (value) parts.push(value);
+      });
+    }
+    pushAttrFromNode(rowNode);
+    pushAttrFromNode(joinButtonNode);
+    if (rowNode) hsrtx26np20260316ToArray(rowNode.querySelectorAll('input[type="hidden"], [hidden], [style*="display:none"], [style*="display: none"], [data-keywords], [data-keyword], [data-tags], [data-category], [data-category-name], [data-track], [data-search], [data-webinar-keywords], [data-session-keywords], [data-group-id], [data-webinar-group-id], [data-location-id], [data-location-name], [data-title], .play-webinar, .btn-webinar-play, a[data-webinar-id]')).forEach(function collectAttrsFromDescendant(node) {
+      pushAttrFromNode(node);
+    });
+    if (!parts.length && rowNode) parts.push(String(rowNode.textContent || '').trim());
+    return parts.join(' ');
   }
 
   function hsrtx26np20260316BuildSessionModelFromVfairsRow(rowNode) {
     var rowId = rowNode ? String(rowNode.getAttribute('id') || '') : '';
-    var rowWebinarId = rowNode ? String(rowNode.getAttribute('data-webinar-id') || rowId.replace(/^webinar-row-/, '')) : '';
-    var joinButtonNode = rowNode ? (rowNode.querySelector('.play-webinar') || rowNode.querySelector('.btn-webinar-play')) : null;
-    var rowTitleNode = rowNode ? (rowNode.querySelector('h2') || rowNode.querySelector('h3') || rowNode.querySelector('.webinar-title')) : null;
-    var groupIdValue = rowNode ? (rowNode.getAttribute('data-group-id') || rowNode.getAttribute('data-webinar-group-id') || (rowNode.parentElement ? (rowNode.parentElement.getAttribute('data-group-id') || rowNode.parentElement.getAttribute('data-webinar-group-id')) : '')) : '';
+    var joinButtonNode = rowNode ? (rowNode.querySelector('.play-webinar[data-webinar-id]') || rowNode.querySelector('.btn-webinar-play[data-webinar-id]') || rowNode.querySelector('a[data-webinar-id]') || rowNode.querySelector('.play-webinar') || rowNode.querySelector('.btn-webinar-play')) : null;
+    var rowWebinarId = String((rowNode && rowNode.getAttribute('data-webinar-id')) || (joinButtonNode && joinButtonNode.getAttribute('data-webinar-id')) || rowId.replace(/^webinar-row-/, '') || '').trim();
+    var rowTitleNode = rowNode ? (rowNode.querySelector('h2') || rowNode.querySelector('h3') || rowNode.querySelector('.webinar-title') || rowNode.querySelector('.session-title')) : null;
+    var rowTimeNode = rowNode ? (rowNode.querySelector('.webinar-date, .webinar-time, .session-date, .session-time, .date, .time, time[datetime]')) : null;
+    var rowTimeDatetime = rowNode ? rowNode.querySelector('time[datetime]') : null;
+    var ancestorNode = rowNode ? hsrtx26np20260316Closest(rowNode, '[data-group-id], [data-webinar-group-id], [data-location-id], [id*=\"group\"], [class*=\"group\"]') : null;
+    var keywordText = hsrtx26np20260316BuildVfairsKeywordText(rowNode, joinButtonNode);
+    var groupIdValue = String((rowNode && (rowNode.getAttribute('data-group-id') || rowNode.getAttribute('data-webinar-group-id') || rowNode.getAttribute('data-location-id') || rowNode.getAttribute('data-category-id'))) || (ancestorNode && (ancestorNode.getAttribute('data-group-id') || ancestorNode.getAttribute('data-webinar-group-id') || ancestorNode.getAttribute('data-location-id'))) || (joinButtonNode && (joinButtonNode.getAttribute('data-group-id') || joinButtonNode.getAttribute('data-webinar-group-id') || joinButtonNode.getAttribute('data-location-id'))) || '').trim();
+    var titleText = String((joinButtonNode && joinButtonNode.getAttribute('data-title')) || (rowNode && rowNode.getAttribute('data-title')) || (rowTitleNode && rowTitleNode.textContent) || '').trim();
+    if (!titleText && rowNode) titleText = hsrtx26np20260316StripHtml(String(rowNode.textContent || '').replace(/\s+/g, ' ')).trim();
     var detailLikeModel = {
       webinar_id: rowWebinarId,
       id: rowWebinarId,
-      title: (rowTitleNode && rowTitleNode.textContent) || (joinButtonNode ? joinButtonNode.getAttribute('data-title') : '') || '',
-      webinar_title: (rowTitleNode && rowTitleNode.textContent) || '',
-      keyword: rowNode ? (rowNode.getAttribute('data-keywords') || rowNode.textContent || '') : '',
-      keywords: rowNode ? (rowNode.getAttribute('data-keywords') || rowNode.textContent || '') : '',
+      title: titleText,
+      webinar_title: titleText,
+      keyword: keywordText,
+      keywords: keywordText,
       webinar_group_id: groupIdValue || '',
+      webinar_group_ids: groupIdValue ? [groupIdValue] : [],
       group_id: groupIdValue || '',
-      url: joinButtonNode ? (joinButtonNode.getAttribute('data-url') || joinButtonNode.getAttribute('data-tr_url') || joinButtonNode.getAttribute('data-href') || joinButtonNode.getAttribute('href') || '') : '',
-      start_date: rowNode ? (rowNode.getAttribute('data-start-date') || rowNode.getAttribute('data-start-time') || rowNode.getAttribute('data-start') || '') : '',
-      webinar_start_time: rowNode ? (rowNode.getAttribute('data-webinar-start-time') || rowNode.getAttribute('data-time') || '') : '',
-      session_time: rowNode ? (rowNode.getAttribute('data-time-display') || rowNode.getAttribute('data-display-time') || '') : '',
-      duration: rowNode ? (rowNode.getAttribute('data-duration') || '') : ''
+      group_ids: groupIdValue ? [groupIdValue] : [],
+      location_id: String((rowNode && rowNode.getAttribute('data-location-id')) || (joinButtonNode && joinButtonNode.getAttribute('data-location-id')) || '').trim(),
+      location_ids: [],
+      url: joinButtonNode ? (joinButtonNode.getAttribute('data-url') || joinButtonNode.getAttribute('href') || joinButtonNode.getAttribute('data-tr_url') || joinButtonNode.getAttribute('data-href') || '') : '',
+      scheduled_time: String((rowNode && rowNode.getAttribute('data-scheduled-time')) || (joinButtonNode && joinButtonNode.getAttribute('data-scheduled-time')) || '').trim(),
+      start_time: String((rowNode && (rowNode.getAttribute('data-start-time') || rowNode.getAttribute('data-start'))) || (joinButtonNode && joinButtonNode.getAttribute('data-start-time')) || '').trim(),
+      start_date: String((rowNode && rowNode.getAttribute('data-start-date')) || (joinButtonNode && joinButtonNode.getAttribute('data-start-date')) || (rowTimeDatetime && rowTimeDatetime.getAttribute('datetime')) || '').trim(),
+      date: String((rowTimeNode && rowTimeNode.textContent) || '').trim(),
+      time: String((rowNode && rowNode.getAttribute('data-time')) || (rowTimeNode && rowTimeNode.textContent) || '').trim(),
+      display_time: String((rowNode && rowNode.getAttribute('data-display-time')) || '').trim(),
+      webinar_time: String((rowNode && rowNode.getAttribute('data-webinar-start-time')) || (joinButtonNode && joinButtonNode.getAttribute('data-webinar-start-time')) || '').trim(),
+      session_time: String((rowNode && rowNode.getAttribute('data-time-display')) || '').trim(),
+      duration: String((joinButtonNode && (joinButtonNode.getAttribute('data-duration') || joinButtonNode.getAttribute('data-tr_duration'))) || (rowNode && rowNode.getAttribute('data-duration')) || '').trim()
     };
+    if (detailLikeModel.location_id) detailLikeModel.location_ids = [detailLikeModel.location_id];
+    if (rowNode) {
+      var endedRaw = rowNode.getAttribute('data-is-ended') || rowNode.getAttribute('data-ended') || rowNode.getAttribute('data-webinar-ended') || rowNode.getAttribute('is_ended') || (joinButtonNode && (joinButtonNode.getAttribute('data-is-ended') || joinButtonNode.getAttribute('data-ended') || joinButtonNode.getAttribute('data-webinar-ended') || joinButtonNode.getAttribute('is_ended'))) || '';
+      if (String(endedRaw).trim() !== '') detailLikeModel.is_ended = endedRaw;
+    }
     return hsrtx26np20260316BuildSessionModel(detailLikeModel);
   }
 
@@ -2746,6 +2812,8 @@
     var posterHallModel;
     var normalSessions;
     var secretSessions;
+    var skippedMissingIdOrTitle = 0;
+    var skippedKeyword = 0;
 
     if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
     hsrtx26np20260316InvalidateOriginalPlayButtonCache();
@@ -2754,9 +2822,15 @@
       var vfairsSessionModel;
       if (!rowNode) return;
       vfairsSessionModel = hsrtx26np20260316BuildSessionModelFromVfairsRow(rowNode);
-      if (!vfairsSessionModel || !vfairsSessionModel.id || !vfairsSessionModel.title) return;
-      detailKeywordText = hsrtx26np20260316GetDetailKeywordText({ keywords: rowNode.getAttribute('data-keywords') || rowNode.textContent || '' }).toLowerCase();
-      if (keywordLower && detailKeywordText.indexOf(keywordLower) === -1) return;
+      if (!vfairsSessionModel || !vfairsSessionModel.id || !vfairsSessionModel.title) {
+        skippedMissingIdOrTitle += 1;
+        return;
+      }
+      detailKeywordText = hsrtx26np20260316GetDetailKeywordText({ keywords: hsrtx26np20260316BuildVfairsKeywordText(rowNode, rowNode.querySelector('.play-webinar, .btn-webinar-play, a[data-webinar-id]')) }).toLowerCase();
+      if (keywordLower && detailKeywordText.indexOf(keywordLower) === -1) {
+        skippedKeyword += 1;
+        return;
+      }
       sessionList.push(vfairsSessionModel);
       hasVfairsSessions = true;
     });
@@ -2819,6 +2893,12 @@
     hsrtx26np20260316State.sessionsForActiveArea = hsrtx26np20260316SortSessions(normalSessions);
     hsrtx26np20260316State.sessionsCurrentPage = 1;
     hsrtx26np20260316RenderSessionsPage(areaConfig);
+    if (hsrtx26np20260316DebugVfairsRows) {
+      console.log('[hsrtx26np20260316] vFairs rows collected:', vfairsRows.length);
+      console.log('[hsrtx26np20260316] vFairs rows after keyword filter:', sessionList.length);
+      console.log('[hsrtx26np20260316] normal sessions:', normalSessions.length, 'secret cinema:', secretSessions.length);
+      console.log('[hsrtx26np20260316] skipped rows (missing id/title):', skippedMissingIdOrTitle, 'skipped rows (keyword):', skippedKeyword);
+    }
 
     if (hsrtx26np20260316Elements.postersOutput) {
       hsrtx26np20260316Elements.postersOutput.innerHTML = posterHallModel ? '<div class="hsrtx26np20260316-poster-grid hsrtx26np20260316-poster-grid--single">' + hsrtx26np20260316RenderPosterHallCard(posterHallModel) + '</div>' : hsrtx26np20260316RenderAreaEmptyState('No poster hall available', areaConfig, 'There are no posters listed for this research area yet.');
@@ -3181,6 +3261,10 @@
     var sessionList = [];
     var normalSessions;
     var secretSessions;
+    var skippedMissingIdOrTitle = 0;
+    var skippedKeyword = 0;
+    var totalPages;
+    var currentPage;
     if (!areaConfig) return;
     keywordLower = String(areaConfig.keyword || '').trim().toLowerCase();
     vfairsRows = hsrtx26np20260316CollectVfairsSessionRows();
@@ -3189,9 +3273,15 @@
       var detailKeywordText;
       if (!rowNode) return;
       sessionModel = hsrtx26np20260316BuildSessionModelFromVfairsRow(rowNode);
-      if (!sessionModel || !sessionModel.id || !sessionModel.title) return;
-      detailKeywordText = hsrtx26np20260316GetDetailKeywordText({ keywords: rowNode.getAttribute('data-keywords') || rowNode.textContent || '' }).toLowerCase();
-      if (keywordLower && detailKeywordText.indexOf(keywordLower) === -1) return;
+      if (!sessionModel || !sessionModel.id || !sessionModel.title) {
+        skippedMissingIdOrTitle += 1;
+        return;
+      }
+      detailKeywordText = hsrtx26np20260316GetDetailKeywordText({ keywords: hsrtx26np20260316BuildVfairsKeywordText(rowNode, rowNode.querySelector('.play-webinar, .btn-webinar-play, a[data-webinar-id]')) }).toLowerCase();
+      if (keywordLower && detailKeywordText.indexOf(keywordLower) === -1) {
+        skippedKeyword += 1;
+        return;
+      }
       sessionList.push(sessionModel);
     });
     if (!sessionList.length) return;
@@ -3205,9 +3295,18 @@
     hsrtx26np20260316SetText(hsrtx26np20260316Elements.sessionsCount, normalSessions.length);
     hsrtx26np20260316SetText(hsrtx26np20260316Elements.secretCinemaCount, secretSessions.length);
     hsrtx26np20260316State.sessionsForActiveArea = hsrtx26np20260316SortSessions(normalSessions);
+    currentPage = Math.max(1, Number(hsrtx26np20260316State.sessionsCurrentPage) || 1);
+    totalPages = Math.max(1, Math.ceil(hsrtx26np20260316State.sessionsForActiveArea.length / hsrtx26np20260316State.sessionsPerPage));
+    hsrtx26np20260316State.sessionsCurrentPage = Math.min(currentPage, totalPages);
     hsrtx26np20260316RenderSessionsPage(areaConfig);
     if (hsrtx26np20260316Elements.secretCinemaOutput) hsrtx26np20260316Elements.secretCinemaOutput.innerHTML = secretSessions.length ? '<div class="hsrtx26np20260316-session-list">' + secretSessions.map(hsrtx26np20260316RenderSessionCard).join('') + '</div>' : hsrtx26np20260316RenderAreaEmptyState('No Secret Cinema sessions available', areaConfig, 'There are no Secret Cinema sessions listed for this research area yet.');
     hsrtx26np20260316SyncRenderedJoinLinksWithOriginalButtons();
+    if (hsrtx26np20260316DebugVfairsRows) {
+      console.log('[hsrtx26np20260316] vFairs rows collected:', vfairsRows.length);
+      console.log('[hsrtx26np20260316] vFairs rows after keyword filter:', sessionList.length);
+      console.log('[hsrtx26np20260316] normal sessions:', normalSessions.length, 'secret cinema:', secretSessions.length);
+      console.log('[hsrtx26np20260316] skipped rows (missing id/title):', skippedMissingIdOrTitle, 'skipped rows (keyword):', skippedKeyword);
+    }
   }
 
   function hsrtx26np20260316StartVfairsSessionSync() {
