@@ -2003,7 +2003,21 @@
   }
 
   function hsrtx26np20260316BuildJoinBeforeSeconds(detail) {
-    return hsrtx26np20260316ParseSecondsValue(hsrtx26np20260316PickFirst(detail, ['join_before_time', 'joinBeforeTime', 'join_before_seconds', 'joinBeforeSeconds']));
+    var joinBeforeRawValue = hsrtx26np20260316PickFirst(detail, ['join_before_seconds', 'joinBeforeSeconds', 'join_before_time', 'joinBeforeTime', 'join_before', 'joinBefore', 'join_window', 'joinWindow', 'join_open_before', 'joinOpenBefore', 'join_open_before_time', 'joinOpenBeforeTime']);
+    var parsedSeconds = hsrtx26np20260316ParseSecondsValue(joinBeforeRawValue);
+    var rawText = String(hsrtx26np20260316NormaliseValue(joinBeforeRawValue) || '').trim().toLowerCase();
+    var numericMatch;
+    if (!parsedSeconds && rawText) {
+      numericMatch = rawText.match(/(\d+(?:\.\d+)?)/);
+      if (numericMatch) {
+        if (rawText.indexOf('hour') !== -1 || rawText.indexOf('hr') !== -1) parsedSeconds = Math.floor(Number(numericMatch[1]) * 3600);
+        else if (rawText.indexOf('min') !== -1) parsedSeconds = Math.floor(Number(numericMatch[1]) * 60);
+      }
+    }
+    if (parsedSeconds > 0) {
+      console.log('[hsrtx26np20260316] Join-before window found:', parsedSeconds, 'seconds for webinar:', hsrtx26np20260316GetWebinarId(detail), 'raw:', joinBeforeRawValue);
+    }
+    return Math.max(0, parsedSeconds || 0);
   }
 
   function hsrtx26np20260316FormatDurationCandidate(rawValue) {
