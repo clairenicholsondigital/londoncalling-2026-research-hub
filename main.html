@@ -1081,6 +1081,8 @@
     posterGroupPollTimerId: null,
     secretCinemaObserver: null,
     originalPlayButtonsById: null,
+    wasInWebinarDetail: false,
+    lastHubViewSnapshot: null,
     sessionsPerPage: 10,
     sessionsCurrentPage: 1,
     sessionsForActiveArea: []
@@ -1404,6 +1406,10 @@
     if ((safeTabKind === 'documents' || safeTabKind === 'videos') && hsrtx26np20260316State.activeAreaSlug) {
       hsrtx26np20260316EnsureKeywordTablesForActiveArea();
     }
+    hsrtx26np20260316State.lastHubViewSnapshot = {
+      areaSlug: hsrtx26np20260316State.activeAreaSlug,
+      tabKind: hsrtx26np20260316State.activeTabKind
+    };
   }
 
   function hsrtx26np20260316BindTabClicks() {
@@ -3033,6 +3039,44 @@
     }, true);
   }
 
+  function hsrtx26np20260316BindJoinLinkHistorySnapshot() {
+    hsrtx26np20260316RootNode.addEventListener('click', function onJoinLinkSnapshot(event) {
+      var joinLinkNode = hsrtx26np20260316Closest(event.target, '[data-hsrtx26np20260316-role="join-link"]');
+      if (!joinLinkNode || !hsrtx26np20260316RootNode.contains(joinLinkNode)) return;
+      hsrtx26np20260316State.lastHubViewSnapshot = {
+        areaSlug: hsrtx26np20260316State.activeAreaSlug,
+        tabKind: hsrtx26np20260316State.activeTabKind
+      };
+    }, true);
+  }
+
+  function hsrtx26np20260316IsWebinarDetailHash() {
+    return String(window.location.hash || '').toLowerCase().indexOf('vf-webinar-detail') !== -1;
+  }
+
+  function hsrtx26np20260316RestoreHubViewAfterWebinarDetail() {
+    var snapshot = hsrtx26np20260316State.lastHubViewSnapshot;
+    var areaConfig;
+    if (!snapshot || !snapshot.areaSlug) return;
+    areaConfig = hsrtx26np20260316GetAreaConfigBySlug(snapshot.areaSlug);
+    if (!areaConfig) return;
+    hsrtx26np20260316ActivateArea(areaConfig).then(function applyRestoredTab() {
+      hsrtx26np20260316SetActiveTab(snapshot.tabKind || 'sessions');
+    });
+  }
+
+  function hsrtx26np20260316HandleWebinarDetailHistoryChange() {
+    var inWebinarDetail = hsrtx26np20260316IsWebinarDetailHash();
+    if (inWebinarDetail) {
+      hsrtx26np20260316State.wasInWebinarDetail = true;
+      return;
+    }
+    if (hsrtx26np20260316State.wasInWebinarDetail) {
+      hsrtx26np20260316State.wasInWebinarDetail = false;
+      hsrtx26np20260316RestoreHubViewAfterWebinarDetail();
+    }
+  }
+
   function hsrtx26np20260316ApplyAreaMeta(areaConfig) {
     hsrtx26np20260316RootNode.setAttribute('data-hsrtx26np20260316-active-area', areaConfig.slug);
     hsrtx26np20260316RootNode.setAttribute('data-hsrtx26np20260316-active-keyword', areaConfig.keyword);
@@ -3183,12 +3227,16 @@
     hsrtx26np20260316BindSessionDayClicks();
     hsrtx26np20260316BindSpeakerBioInteractions();
     hsrtx26np20260316BindJoinLinkGuard();
+    hsrtx26np20260316BindJoinLinkHistorySnapshot();
     hsrtx26np20260316BindSessionsPagination();
     hsrtx26np20260316PolishSecretCinemaPanel();
     hsrtx26np20260316SetActiveTab('sessions');
     hsrtx26np20260316ActivateArea(initialAreaConfig);
     hsrtx26np20260316OpenPosterGroupFromUrl();
     window.addEventListener('hashchange', hsrtx26np20260316OpenPosterGroupFromUrl);
+    window.addEventListener('hashchange', hsrtx26np20260316HandleWebinarDetailHistoryChange);
+    window.addEventListener('popstate', hsrtx26np20260316HandleWebinarDetailHistoryChange);
+    hsrtx26np20260316HandleWebinarDetailHistoryChange();
   }
 
   if (document.readyState === 'loading') {
