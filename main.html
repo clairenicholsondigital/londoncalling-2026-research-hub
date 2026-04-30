@@ -2214,11 +2214,19 @@
       var joinButtonNode;
       var webinarId;
       var existingRecord;
+      var rowWebinarIdRaw;
+      var joinWebinarIdRaw;
+      var rowText;
       if (!rowNode) return;
       if (hsrtx26np20260316RootNode && hsrtx26np20260316RootNode.contains(rowNode)) return;
-      if (String(rowNode.id || '').indexOf('{ID}') !== -1) return;
-      if (String(rowNode.textContent || '').indexOf('{ID}') !== -1) return;
+      rowWebinarIdRaw = String(rowNode.getAttribute('data-webinar-id') || '');
+      rowText = String(rowNode.textContent || '');
+      if (String(rowNode.id || '').indexOf('{ID}') !== -1 || String(rowNode.id || '').indexOf('{WEBINAR_ID}') !== -1) return;
+      if (rowWebinarIdRaw.indexOf('{ID}') !== -1 || rowWebinarIdRaw.indexOf('{WEBINAR_ID}') !== -1) return;
+      if (rowText.indexOf('{ID}') !== -1 || rowText.indexOf('{WEBINAR_ID}') !== -1) return;
       joinButtonNode = getJoinButton(rowNode);
+      joinWebinarIdRaw = String((joinButtonNode && joinButtonNode.getAttribute('data-webinar-id')) || '');
+      if (joinWebinarIdRaw.indexOf('{ID}') !== -1 || joinWebinarIdRaw.indexOf('{WEBINAR_ID}') !== -1) return;
       webinarId = getWebinarId(rowNode, joinButtonNode);
       if (!webinarId || !/^\d+$/.test(webinarId)) return;
       existingRecord = rowsByWebinarId[webinarId];
@@ -2251,6 +2259,27 @@
     return parts.join(' ');
   }
 
+  function hsrtx26np20260316ParseVfairsDateTimeFromText(text) {
+    var sourceText = String(text || '').replace(/\s+/g, ' ').trim();
+    var matchedParts;
+    var monthMap = { january: '01', february: '02', march: '03', april: '04', may: '05', june: '06', july: '07', august: '08', september: '09', october: '10', november: '11', december: '12' };
+    var day;
+    var month;
+    var year;
+    var hour;
+    var minute;
+    if (!sourceText) return null;
+    matchedParts = sourceText.match(/\b(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December),\s*(\d{4})\s+(\d{1,2}):(\d{2})\s*-\s*\d{1,2}:\d{2}(?:\s*[A-Z]{2,5})?\b/i);
+    if (!matchedParts) return null;
+    day = String(matchedParts[1] || '').padStart(2, '0');
+    month = monthMap[String(matchedParts[2] || '').toLowerCase()];
+    year = String(matchedParts[3] || '');
+    hour = String(matchedParts[4] || '').padStart(2, '0');
+    minute = String(matchedParts[5] || '').padStart(2, '0');
+    if (!month || !year) return null;
+    return { raw: matchedParts[0], iso: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':00' };
+  }
+
   function hsrtx26np20260316BuildSessionModelFromVfairsRow(rowNode) {
     var rowId = rowNode ? String(rowNode.getAttribute('id') || '') : '';
     var joinButtonNode = rowNode ? (rowNode.querySelector('.play-webinar[data-webinar-id]') || rowNode.querySelector('.btn-webinar-play[data-webinar-id]') || rowNode.querySelector('a[data-webinar-id]') || rowNode.querySelector('.play-webinar') || rowNode.querySelector('.btn-webinar-play')) : null;
@@ -2260,6 +2289,8 @@
     var rowTimeDatetime = rowNode ? rowNode.querySelector('time[datetime]') : null;
     var ancestorNode = rowNode ? hsrtx26np20260316Closest(rowNode, '[data-group-id], [data-webinar-group-id], [data-location-id], [id*=\"group\"], [class*=\"group\"]') : null;
     var keywordText = hsrtx26np20260316BuildVfairsKeywordText(rowNode, joinButtonNode);
+    var sessionStart = String((rowNode && (rowNode.getAttribute('data-session-start') || (rowNode.dataset && rowNode.dataset.sessionStart))) || (joinButtonNode && (joinButtonNode.getAttribute('data-session-start') || (joinButtonNode.dataset && joinButtonNode.dataset.sessionStart))) || '').trim();
+    var parsedDateTimeFromText = null;
     var groupIdValue = String((rowNode && (rowNode.getAttribute('data-group-id') || rowNode.getAttribute('data-webinar-group-id') || rowNode.getAttribute('data-location-id') || rowNode.getAttribute('data-category-id'))) || (ancestorNode && (ancestorNode.getAttribute('data-group-id') || ancestorNode.getAttribute('data-webinar-group-id') || ancestorNode.getAttribute('data-location-id'))) || (joinButtonNode && (joinButtonNode.getAttribute('data-group-id') || joinButtonNode.getAttribute('data-webinar-group-id') || joinButtonNode.getAttribute('data-location-id'))) || '').trim();
     var titleText = String((joinButtonNode && joinButtonNode.getAttribute('data-title')) || (rowNode && rowNode.getAttribute('data-title')) || (rowTitleNode && rowTitleNode.textContent) || '').trim();
     if (!titleText && rowNode) titleText = hsrtx26np20260316StripHtml(String(rowNode.textContent || '').replace(/\s+/g, ' ')).trim();
@@ -2287,6 +2318,21 @@
       session_time: String((rowNode && rowNode.getAttribute('data-time-display')) || '').trim(),
       duration: String((joinButtonNode && (joinButtonNode.getAttribute('data-duration') || joinButtonNode.getAttribute('data-tr_duration'))) || (rowNode && rowNode.getAttribute('data-duration')) || '').trim()
     };
+    if (sessionStart) {
+      detailLikeModel.scheduled_time = sessionStart;
+      detailLikeModel.start_time = sessionStart;
+      detailLikeModel.start_date = sessionStart;
+      detailLikeModel.display_time = sessionStart;
+    } else {
+      parsedDateTimeFromText = hsrtx26np20260316ParseVfairsDateTimeFromText(rowNode && rowNode.textContent);
+      if (parsedDateTimeFromText && parsedDateTimeFromText.iso) {
+        detailLikeModel.scheduled_time = parsedDateTimeFromText.iso;
+        detailLikeModel.start_time = parsedDateTimeFromText.iso;
+        detailLikeModel.start_date = parsedDateTimeFromText.iso;
+        detailLikeModel.display_time = parsedDateTimeFromText.iso;
+        detailLikeModel.time = parsedDateTimeFromText.iso.slice(11);
+      }
+    }
     if (detailLikeModel.location_id) detailLikeModel.location_ids = [detailLikeModel.location_id];
     if (rowNode) {
       var endedRaw = rowNode.getAttribute('data-is-ended') || rowNode.getAttribute('data-ended') || rowNode.getAttribute('data-webinar-ended') || rowNode.getAttribute('is_ended') || (joinButtonNode && (joinButtonNode.getAttribute('data-is-ended') || joinButtonNode.getAttribute('data-ended') || joinButtonNode.getAttribute('data-webinar-ended') || joinButtonNode.getAttribute('is_ended'))) || '';
