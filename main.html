@@ -1085,7 +1085,8 @@
     originalPlayButtonsById: null,
     sessionsPerPage: 10,
     sessionsCurrentPage: 1,
-    sessionsForActiveArea: []
+    sessionsForActiveArea: [],
+    vfairsSyncTimerId: null
   };
 
   var hsrtx26np20260316Elements = {
@@ -2194,6 +2195,40 @@
     });
   }
 
+  function hsrtx26np20260316CollectVfairsSessionRows() {
+    var rowNodes = document.querySelectorAll('[id^="webinar-row-"]');
+    return hsrtx26np20260316ToArray(rowNodes).filter(function keepVfairsWebinarRow(rowNode) {
+      if (!rowNode) return false;
+      if (hsrtx26np20260316RootNode && hsrtx26np20260316RootNode.contains(rowNode)) return false;
+      if (String(rowNode.id || '').indexOf('{ID}') !== -1) return false;
+      return String(rowNode.textContent || '').indexOf('{ID}') === -1;
+    });
+  }
+
+  function hsrtx26np20260316BuildSessionModelFromVfairsRow(rowNode) {
+    var rowId = rowNode ? String(rowNode.getAttribute('id') || '') : '';
+    var rowWebinarId = rowNode ? String(rowNode.getAttribute('data-webinar-id') || rowId.replace(/^webinar-row-/, '')) : '';
+    var joinButtonNode = rowNode ? (rowNode.querySelector('.play-webinar') || rowNode.querySelector('.btn-webinar-play')) : null;
+    var rowTitleNode = rowNode ? (rowNode.querySelector('h2') || rowNode.querySelector('h3') || rowNode.querySelector('.webinar-title')) : null;
+    var groupIdValue = rowNode ? (rowNode.getAttribute('data-group-id') || rowNode.getAttribute('data-webinar-group-id') || (rowNode.parentElement ? (rowNode.parentElement.getAttribute('data-group-id') || rowNode.parentElement.getAttribute('data-webinar-group-id')) : '')) : '';
+    var detailLikeModel = {
+      webinar_id: rowWebinarId,
+      id: rowWebinarId,
+      title: (rowTitleNode && rowTitleNode.textContent) || (joinButtonNode ? joinButtonNode.getAttribute('data-title') : '') || '',
+      webinar_title: (rowTitleNode && rowTitleNode.textContent) || '',
+      keyword: rowNode ? (rowNode.getAttribute('data-keywords') || rowNode.textContent || '') : '',
+      keywords: rowNode ? (rowNode.getAttribute('data-keywords') || rowNode.textContent || '') : '',
+      webinar_group_id: groupIdValue || '',
+      group_id: groupIdValue || '',
+      url: joinButtonNode ? (joinButtonNode.getAttribute('data-url') || joinButtonNode.getAttribute('data-tr_url') || joinButtonNode.getAttribute('data-href') || joinButtonNode.getAttribute('href') || '') : '',
+      start_date: rowNode ? (rowNode.getAttribute('data-start-date') || rowNode.getAttribute('data-start-time') || rowNode.getAttribute('data-start') || '') : '',
+      webinar_start_time: rowNode ? (rowNode.getAttribute('data-webinar-start-time') || rowNode.getAttribute('data-time') || '') : '',
+      session_time: rowNode ? (rowNode.getAttribute('data-time-display') || rowNode.getAttribute('data-display-time') || '') : '',
+      duration: rowNode ? (rowNode.getAttribute('data-duration') || '') : ''
+    };
+    return hsrtx26np20260316BuildSessionModel(detailLikeModel);
+  }
+
   function hsrtx26np20260316BuildSessionModel(detail) {
     var speakersList = hsrtx26np20260316GetSpeakersList(detail);
     var startDate = hsrtx26np20260316ParseStartDate(detail);
@@ -2700,7 +2735,9 @@
     var keywordLower = String(areaConfig.keyword || '').trim().toLowerCase();
     var sessionList = [];
     var posterList = [];
-    var agendaIndex = await hsrtx26np20260316GetAgendaDetailsIndex();
+    var vfairsRows = hsrtx26np20260316CollectVfairsSessionRows();
+    var hasVfairsSessions = false;
+    var agendaIndex = null;
     var candidateDetails = [];
     var detailIndex;
     var webinarDetail;
@@ -2713,29 +2750,43 @@
     if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
     hsrtx26np20260316InvalidateOriginalPlayButtonCache();
 
-    if (agendaIndex && agendaIndex.list && agendaIndex.list.length) {
-      if (webinarIds.length) {
-        webinarIds.forEach(function appendAgendaDetailById(webinarId) {
-          if (agendaIndex.map[webinarId]) candidateDetails.push(agendaIndex.map[webinarId]);
-        });
-      } else {
-        candidateDetails = agendaIndex.list.slice();
-      }
-    } else {
-      webinarIds = webinarIds.length ? webinarIds : await hsrtx26np20260316CollectWebinarIdsWhenReady(8, 200);
-      if (!webinarIds.length) console.warn('[hsrtx26np20260316] No webinar IDs found and the bulk agenda endpoint did not return usable data. If needed, set data-hsrtx26np20260316-webinar-ids or data-hsrtx26np20260316-app-id.');
-      candidateDetails = await hsrtx26np20260316FetchWebinarDetailsFallback(webinarIds, loadToken);
-    }
+    hsrtx26np20260316ToArray(vfairsRows).forEach(function buildSessionFromVfairsRow(rowNode) {
+      var vfairsSessionModel;
+      if (!rowNode) return;
+      vfairsSessionModel = hsrtx26np20260316BuildSessionModelFromVfairsRow(rowNode);
+      if (!vfairsSessionModel || !vfairsSessionModel.id || !vfairsSessionModel.title) return;
+      detailKeywordText = hsrtx26np20260316GetDetailKeywordText({ keywords: rowNode.getAttribute('data-keywords') || rowNode.textContent || '' }).toLowerCase();
+      if (keywordLower && detailKeywordText.indexOf(keywordLower) === -1) return;
+      sessionList.push(vfairsSessionModel);
+      hasVfairsSessions = true;
+    });
 
-    for (detailIndex = 0; detailIndex < candidateDetails.length; detailIndex += 1) {
-      webinarDetail = candidateDetails[detailIndex];
-      if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
-      if (!webinarDetail || !hsrtx26np20260316PickFirst(webinarDetail, ['title', 'webinar_title', 'webinarTitle', 'session_title', 'name'])) continue;
-      detailKeywordText = hsrtx26np20260316GetDetailKeywordText(webinarDetail).toLowerCase();
-      if (keywordLower && detailKeywordText.indexOf(keywordLower) === -1) continue;
-      webinarType = hsrtx26np20260316GetDetailType(webinarDetail);
-      if (webinarType === 'poster') posterList.push(hsrtx26np20260316BuildPosterModel(webinarDetail));
-      else sessionList.push(hsrtx26np20260316BuildSessionModel(webinarDetail));
+    if (!hasVfairsSessions) {
+      agendaIndex = await hsrtx26np20260316GetAgendaDetailsIndex();
+      if (agendaIndex && agendaIndex.list && agendaIndex.list.length) {
+        if (webinarIds.length) {
+          webinarIds.forEach(function appendAgendaDetailById(webinarId) {
+            if (agendaIndex.map[webinarId]) candidateDetails.push(agendaIndex.map[webinarId]);
+          });
+        } else {
+          candidateDetails = agendaIndex.list.slice();
+        }
+      } else {
+        webinarIds = webinarIds.length ? webinarIds : await hsrtx26np20260316CollectWebinarIdsWhenReady(8, 200);
+        if (!webinarIds.length) console.warn('[hsrtx26np20260316] No webinar IDs found and the bulk agenda endpoint did not return usable data. If needed, set data-hsrtx26np20260316-webinar-ids or data-hsrtx26np20260316-app-id.');
+        candidateDetails = await hsrtx26np20260316FetchWebinarDetailsFallback(webinarIds, loadToken);
+      }
+
+      for (detailIndex = 0; detailIndex < candidateDetails.length; detailIndex += 1) {
+        webinarDetail = candidateDetails[detailIndex];
+        if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
+        if (!webinarDetail || !hsrtx26np20260316PickFirst(webinarDetail, ['title', 'webinar_title', 'webinarTitle', 'session_title', 'name'])) continue;
+        detailKeywordText = hsrtx26np20260316GetDetailKeywordText(webinarDetail).toLowerCase();
+        if (keywordLower && detailKeywordText.indexOf(keywordLower) === -1) continue;
+        webinarType = hsrtx26np20260316GetDetailType(webinarDetail);
+        if (webinarType === 'poster') posterList.push(hsrtx26np20260316BuildPosterModel(webinarDetail));
+        else sessionList.push(hsrtx26np20260316BuildSessionModel(webinarDetail));
+      }
     }
 
     sessionList = hsrtx26np20260316SortSessions(sessionList);
@@ -3123,6 +3174,47 @@
     }
   }
 
+  function hsrtx26np20260316SyncSessionsFromVfairs() {
+    var areaConfig = hsrtx26np20260316GetAreaConfigBySlug(hsrtx26np20260316State.activeAreaSlug);
+    var keywordLower;
+    var vfairsRows;
+    var sessionList = [];
+    var normalSessions;
+    var secretSessions;
+    if (!areaConfig) return;
+    keywordLower = String(areaConfig.keyword || '').trim().toLowerCase();
+    vfairsRows = hsrtx26np20260316CollectVfairsSessionRows();
+    hsrtx26np20260316ToArray(vfairsRows).forEach(function refreshSessionFromVfairsRow(rowNode) {
+      var sessionModel;
+      var detailKeywordText;
+      if (!rowNode) return;
+      sessionModel = hsrtx26np20260316BuildSessionModelFromVfairsRow(rowNode);
+      if (!sessionModel || !sessionModel.id || !sessionModel.title) return;
+      detailKeywordText = hsrtx26np20260316GetDetailKeywordText({ keywords: rowNode.getAttribute('data-keywords') || rowNode.textContent || '' }).toLowerCase();
+      if (keywordLower && detailKeywordText.indexOf(keywordLower) === -1) return;
+      sessionList.push(sessionModel);
+    });
+    if (!sessionList.length) return;
+    sessionList = hsrtx26np20260316SortSessions(sessionList);
+    normalSessions = sessionList.filter(function keepNormalSession(session) { return !hsrtx26np20260316IsSecretCinemaSession(session); });
+    secretSessions = sessionList.filter(function keepSecretCinemaSession(session) { return hsrtx26np20260316IsSecretCinemaSession(session); });
+    secretSessions.sort(function sortSecretCinemaByTimeThenTitle(firstSession, secondSession) {
+      if (firstSession.sortTime && secondSession.sortTime && firstSession.sortTime !== secondSession.sortTime) return firstSession.sortTime - secondSession.sortTime;
+      return String(firstSession.title || '').localeCompare(String(secondSession.title || ''));
+    });
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.sessionsCount, normalSessions.length);
+    hsrtx26np20260316SetText(hsrtx26np20260316Elements.secretCinemaCount, secretSessions.length);
+    hsrtx26np20260316State.sessionsForActiveArea = hsrtx26np20260316SortSessions(normalSessions);
+    hsrtx26np20260316RenderSessionsPage(areaConfig);
+    if (hsrtx26np20260316Elements.secretCinemaOutput) hsrtx26np20260316Elements.secretCinemaOutput.innerHTML = secretSessions.length ? '<div class="hsrtx26np20260316-session-list">' + secretSessions.map(hsrtx26np20260316RenderSessionCard).join('') + '</div>' : hsrtx26np20260316RenderAreaEmptyState('No Secret Cinema sessions available', areaConfig, 'There are no Secret Cinema sessions listed for this research area yet.');
+    hsrtx26np20260316SyncRenderedJoinLinksWithOriginalButtons();
+  }
+
+  function hsrtx26np20260316StartVfairsSessionSync() {
+    if (hsrtx26np20260316State.vfairsSyncTimerId) window.clearInterval(hsrtx26np20260316State.vfairsSyncTimerId);
+    hsrtx26np20260316State.vfairsSyncTimerId = window.setInterval(hsrtx26np20260316SyncSessionsFromVfairs, 65000);
+  }
+
   function hsrtx26np20260316Init() {
     var initialAreaConfig = hsrtx26np20260316GetInitialAreaConfig();
     hsrtx26np20260316SyncForceJoinMode();
@@ -3137,6 +3229,7 @@
     hsrtx26np20260316PolishSecretCinemaPanel();
     hsrtx26np20260316SetActiveTab('sessions');
     hsrtx26np20260316ActivateArea(initialAreaConfig);
+    hsrtx26np20260316StartVfairsSessionSync();
     hsrtx26np20260316OpenPosterGroupFromUrl();
     window.addEventListener('hashchange', hsrtx26np20260316OpenPosterGroupFromUrl);
   }
