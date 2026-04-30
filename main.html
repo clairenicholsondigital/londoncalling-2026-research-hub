@@ -2620,7 +2620,7 @@
       if (refreshButton) {
         areaConfig = hsrtx26np20260316GetAreaConfigBySlug(hsrtx26np20260316State.activeAreaSlug);
         if (!areaConfig) return;
-        hsrtx26np20260316ActivateArea(areaConfig);
+        hsrtx26np20260316ActivateArea(areaConfig, { forceRefresh: true });
         return;
       }
       areaConfig = hsrtx26np20260316GetAreaConfigBySlug(hsrtx26np20260316State.activeAreaSlug);
@@ -2704,8 +2704,10 @@
     hsrtx26np20260316SetText(hsrtx26np20260316Elements.videosCount, hsrtx26np20260316CountDataRows(videosTableNode));
   }
 
-  async function hsrtx26np20260316LoadSessionsAndPostersForArea(areaConfig, loadToken) {
+  async function hsrtx26np20260316LoadSessionsAndPostersForArea(areaConfig, loadToken, options) {
     var webinarIds = hsrtx26np20260316CollectWebinarIds();
+    var loadOptions = options || {};
+    var forceRefresh = !!loadOptions.forceRefresh;
     var keywordLower = String(areaConfig.keyword || '').trim().toLowerCase();
     var sessionList = [];
     var posterList = [];
@@ -3049,6 +3051,7 @@
 
   async function hsrtx26np20260316ActivateArea(areaConfig) {
     var loadToken;
+    var activateOptions = options || {};
     hsrtx26np20260316State.activeAreaSlug = areaConfig.slug;
     hsrtx26np20260316ApplyAreaMeta(areaConfig);
     hsrtx26np20260316StopAreaRefreshPolling();
@@ -3056,7 +3059,7 @@
     hsrtx26np20260316CloseModal();
     hsrtx26np20260316State.latestLoadToken += 1;
     loadToken = hsrtx26np20260316State.latestLoadToken;
-    await hsrtx26np20260316LoadSessionsAndPostersForArea(areaConfig, loadToken);
+    await hsrtx26np20260316LoadSessionsAndPostersForArea(areaConfig, loadToken, activateOptions);
     if (loadToken === hsrtx26np20260316State.latestLoadToken) {
       hsrtx26np20260316StartCountdowns();
       hsrtx26np20260316StartAreaRefreshPolling();
