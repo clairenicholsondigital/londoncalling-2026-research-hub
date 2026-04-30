@@ -1071,9 +1071,7 @@
     activeTabKind: 'sessions',
     countdownTimerId: null,
     latestLoadToken: 0,
-    agendaPromise: null,
-    agendaDetailsMap: null,
-    agendaDetailsList: [],
+    areaRefreshTimerId: null,
     keywordHtmlCache: {},
     keywordHtmlPromises: {},
     forceJoinMode: false,
@@ -1786,25 +1784,41 @@
     return { map: detailMap, list: orderedDetails };
   }
 
-  async function hsrtx26np20260316GetAgendaDetailsIndex() {
+  function hsrtx26np20260316LooksKeywordFiltered(agendaList, keywordLower) {
+    if (!keywordLower || !agendaList || !agendaList.length) return false;
+    return agendaList.every(function detailMatchesKeyword(detail) {
+      return hsrtx26np20260316GetDetailKeywordText(detail).toLowerCase().indexOf(keywordLower) !== -1;
+    });
+  }
+
+  async function hsrtx26np20260316GetAgendaDetailsIndex(keyword) {
     var appId;
     var rawAgendaData;
     var indexedAgendaData;
-    if (hsrtx26np20260316State.agendaDetailsMap) return { map: hsrtx26np20260316State.agendaDetailsMap, list: hsrtx26np20260316State.agendaDetailsList };
-    if (hsrtx26np20260316State.agendaPromise) return hsrtx26np20260316State.agendaPromise;
-    hsrtx26np20260316State.agendaPromise = (async function fetchAgendaOnce() {
-      appId = hsrtx26np20260316GetGlobalAppId();
-      if (!appId) {
-        console.warn('[hsrtx26np20260316] app_id was not found. Falling back to individual webinar-detail requests.');
-        return { map: {}, list: [] };
-      }
-      rawAgendaData = await hsrtx26np20260316PostJson(window.location.origin + '/en/getWebinarAgendaWithDates/', { app_id: appId });
+    var keywordText = String(keyword || '').trim();
+    var keywordLower = keywordText.toLowerCase();
+    appId = hsrtx26np20260316GetGlobalAppId();
+    if (!appId) {
+      console.warn('[hsrtx26np20260316] app_id was not found. Falling back to individual webinar-detail requests.');
+      return { map: {}, list: [], supportsKeywordParam: false };
+    }
+    if (keywordText) {
+      console.log('[hsrtx26np20260316] Fetching agenda for active keyword:', keywordText);
+      rawAgendaData = await hsrtx26np20260316PostJson(window.location.origin + '/en/getWebinarAgendaWithDates/', { app_id: appId, keyword: keywordText });
       indexedAgendaData = hsrtx26np20260316BuildAgendaDetailsIndex(rawAgendaData);
-      hsrtx26np20260316State.agendaDetailsMap = indexedAgendaData.map;
-      hsrtx26np20260316State.agendaDetailsList = indexedAgendaData.list;
-      return indexedAgendaData;
-    })();
-    return hsrtx26np20260316State.agendaPromise;
+      if (hsrtx26np20260316LooksKeywordFiltered(indexedAgendaData.list, keywordLower)) {
+        console.log('[hsrtx26np20260316] Received keyword-filtered agenda rows:', indexedAgendaData.list.length, 'keyword:', keywordText);
+        indexedAgendaData.supportsKeywordParam = true;
+        return indexedAgendaData;
+      }
+      console.log('[hsrtx26np20260316] Keyword param not honored by endpoint; falling back to full agenda for keyword:', keywordText);
+    }
+    console.log('[hsrtx26np20260316] Fetching full agenda fallback for keyword:', keywordText || '(none)');
+    rawAgendaData = await hsrtx26np20260316PostJson(window.location.origin + '/en/getWebinarAgendaWithDates/', { app_id: appId });
+    indexedAgendaData = hsrtx26np20260316BuildAgendaDetailsIndex(rawAgendaData);
+    console.log('[hsrtx26np20260316] Received full agenda rows:', indexedAgendaData.list.length);
+    indexedAgendaData.supportsKeywordParam = false;
+    return indexedAgendaData;
   }
 
   function hsrtx26np20260316GetDetailKeywordText(detail) {
@@ -2700,7 +2714,7 @@
     var keywordLower = String(areaConfig.keyword || '').trim().toLowerCase();
     var sessionList = [];
     var posterList = [];
-    var agendaIndex = await hsrtx26np20260316GetAgendaDetailsIndex();
+    var agendaIndex = await hsrtx26np20260316GetAgendaDetailsIndex(areaConfig.keyword);
     var candidateDetails = [];
     var detailIndex;
     var webinarDetail;
@@ -2710,7 +2724,8 @@
     var normalSessions;
     var secretSessions;
 
-    if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
+    console.log('[hsrtx26np20260316] Loading sessions for area:', areaConfig.slug, 'keyword:', areaConfig.keyword, 'token:', loadToken);
+    if (loadToken !== hsrtx26np20260316State.latestLoadToken || areaConfig.slug !== hsrtx26np20260316State.activeAreaSlug) return;
     hsrtx26np20260316InvalidateOriginalPlayButtonCache();
 
     if (agendaIndex && agendaIndex.list && agendaIndex.list.length) {
@@ -2729,7 +2744,7 @@
 
     for (detailIndex = 0; detailIndex < candidateDetails.length; detailIndex += 1) {
       webinarDetail = candidateDetails[detailIndex];
-      if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
+      if (loadToken !== hsrtx26np20260316State.latestLoadToken || areaConfig.slug !== hsrtx26np20260316State.activeAreaSlug) return;
       if (!webinarDetail || !hsrtx26np20260316PickFirst(webinarDetail, ['title', 'webinar_title', 'webinarTitle', 'session_title', 'name'])) continue;
       detailKeywordText = hsrtx26np20260316GetDetailKeywordText(webinarDetail).toLowerCase();
       if (keywordLower && detailKeywordText.indexOf(keywordLower) === -1) continue;
@@ -2759,7 +2774,7 @@
 
     posterHallModel = hsrtx26np20260316BuildPosterHallModel(areaConfig, posterList);
 
-    if (loadToken !== hsrtx26np20260316State.latestLoadToken) return;
+    if (loadToken !== hsrtx26np20260316State.latestLoadToken || areaConfig.slug !== hsrtx26np20260316State.activeAreaSlug) return;
 
     hsrtx26np20260316SetText(hsrtx26np20260316Elements.sessionsCount, normalSessions.length);
     hsrtx26np20260316SetText(hsrtx26np20260316Elements.postersCount, posterList.length);
@@ -2778,6 +2793,7 @@
     }
 
     hsrtx26np20260316SyncRenderedJoinLinksWithOriginalButtons();
+    console.log('[hsrtx26np20260316] Rendered area data:', areaConfig.slug, 'sessions:', normalSessions.length, 'posters:', posterList.length, 'secretCinema:', secretSessions.length, 'token:', loadToken);
   }
 
   function hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, isVisible) {
@@ -3016,10 +3032,35 @@
     hsrtx26np20260316UpdatePosterHallCta(areaConfig);
   }
 
+  function hsrtx26np20260316StopAreaRefreshPolling() {
+    if (!hsrtx26np20260316State.areaRefreshTimerId) return;
+    window.clearInterval(hsrtx26np20260316State.areaRefreshTimerId);
+    hsrtx26np20260316State.areaRefreshTimerId = null;
+  }
+
+  function hsrtx26np20260316StartAreaRefreshPolling() {
+    hsrtx26np20260316StopAreaRefreshPolling();
+    console.log('[hsrtx26np20260316] Started 30s area refresh polling for active area updates.');
+    hsrtx26np20260316State.areaRefreshTimerId = window.setInterval(async function pollActiveArea() {
+      var activeAreaConfig = hsrtx26np20260316GetAreaConfigBySlug(hsrtx26np20260316State.activeAreaSlug);
+      var refreshLoadToken;
+      if (!activeAreaConfig) return;
+      hsrtx26np20260316State.latestLoadToken += 1;
+      refreshLoadToken = hsrtx26np20260316State.latestLoadToken;
+      console.log('[hsrtx26np20260316] Poll refresh fetch started for area:', activeAreaConfig.slug, 'keyword:', activeAreaConfig.keyword, 'token:', refreshLoadToken);
+      await hsrtx26np20260316LoadSessionsAndPostersForArea(activeAreaConfig, refreshLoadToken);
+      if (refreshLoadToken === hsrtx26np20260316State.latestLoadToken && activeAreaConfig.slug === hsrtx26np20260316State.activeAreaSlug) {
+        console.log('[hsrtx26np20260316] Poll refresh applied for area:', activeAreaConfig.slug, 'token:', refreshLoadToken);
+        hsrtx26np20260316StartCountdowns();
+      }
+    }, 30000);
+  }
+
   async function hsrtx26np20260316ActivateArea(areaConfig) {
     var loadToken;
     hsrtx26np20260316State.activeAreaSlug = areaConfig.slug;
     hsrtx26np20260316ApplyAreaMeta(areaConfig);
+    hsrtx26np20260316StopAreaRefreshPolling();
     hsrtx26np20260316RenderLoadingState();
     hsrtx26np20260316CloseModal();
     hsrtx26np20260316State.latestLoadToken += 1;
@@ -3027,6 +3068,7 @@
     await hsrtx26np20260316LoadSessionsAndPostersForArea(areaConfig, loadToken);
     if (loadToken === hsrtx26np20260316State.latestLoadToken) {
       hsrtx26np20260316StartCountdowns();
+      hsrtx26np20260316StartAreaRefreshPolling();
       hsrtx26np20260316QueueKeywordTablesForArea(areaConfig, loadToken);
     }
   }
