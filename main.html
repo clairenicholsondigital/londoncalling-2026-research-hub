@@ -1803,20 +1803,15 @@
       return { map: {}, list: [], supportsKeywordParam: false };
     }
     if (keywordText) {
-      console.log('[hsrtx26np20260316] Fetching agenda for active keyword:', keywordText);
       rawAgendaData = await hsrtx26np20260316PostJson(window.location.origin + '/en/getWebinarAgendaWithDates/', { app_id: appId, keyword: keywordText });
       indexedAgendaData = hsrtx26np20260316BuildAgendaDetailsIndex(rawAgendaData);
       if (hsrtx26np20260316LooksKeywordFiltered(indexedAgendaData.list, keywordLower)) {
-        console.log('[hsrtx26np20260316] Received keyword-filtered agenda rows:', indexedAgendaData.list.length, 'keyword:', keywordText);
         indexedAgendaData.supportsKeywordParam = true;
         return indexedAgendaData;
       }
-      console.log('[hsrtx26np20260316] Keyword param not honored by endpoint; falling back to full agenda for keyword:', keywordText);
     }
-    console.log('[hsrtx26np20260316] Fetching full agenda fallback for keyword:', keywordText || '(none)');
     rawAgendaData = await hsrtx26np20260316PostJson(window.location.origin + '/en/getWebinarAgendaWithDates/', { app_id: appId });
     indexedAgendaData = hsrtx26np20260316BuildAgendaDetailsIndex(rawAgendaData);
-    console.log('[hsrtx26np20260316] Received full agenda rows:', indexedAgendaData.list.length);
     indexedAgendaData.supportsKeywordParam = false;
     return indexedAgendaData;
   }
@@ -2724,7 +2719,6 @@
     var normalSessions;
     var secretSessions;
 
-    console.log('[hsrtx26np20260316] Loading sessions for area:', areaConfig.slug, 'keyword:', areaConfig.keyword, 'token:', loadToken);
     if (loadToken !== hsrtx26np20260316State.latestLoadToken || areaConfig.slug !== hsrtx26np20260316State.activeAreaSlug) return;
     hsrtx26np20260316InvalidateOriginalPlayButtonCache();
 
@@ -3040,17 +3034,14 @@
 
   function hsrtx26np20260316StartAreaRefreshPolling() {
     hsrtx26np20260316StopAreaRefreshPolling();
-    console.log('[hsrtx26np20260316] Started 30s area refresh polling for active area updates.');
     hsrtx26np20260316State.areaRefreshTimerId = window.setInterval(async function pollActiveArea() {
       var activeAreaConfig = hsrtx26np20260316GetAreaConfigBySlug(hsrtx26np20260316State.activeAreaSlug);
       var refreshLoadToken;
       if (!activeAreaConfig) return;
       hsrtx26np20260316State.latestLoadToken += 1;
       refreshLoadToken = hsrtx26np20260316State.latestLoadToken;
-      console.log('[hsrtx26np20260316] Poll refresh fetch started for area:', activeAreaConfig.slug, 'keyword:', activeAreaConfig.keyword, 'token:', refreshLoadToken);
       await hsrtx26np20260316LoadSessionsAndPostersForArea(activeAreaConfig, refreshLoadToken);
       if (refreshLoadToken === hsrtx26np20260316State.latestLoadToken && activeAreaConfig.slug === hsrtx26np20260316State.activeAreaSlug) {
-        console.log('[hsrtx26np20260316] Poll refresh applied for area:', activeAreaConfig.slug, 'token:', refreshLoadToken);
         hsrtx26np20260316StartCountdowns();
       }
     }, 30000);
