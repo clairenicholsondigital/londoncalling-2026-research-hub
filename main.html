@@ -2052,7 +2052,7 @@
   }
 
   function hsrtx26np20260316BuildDurationLabel(detail) {
-    return hsrtx26np20260316FormatDurationCandidate(hsrtx26np20260316PickFirst(detail, ['duration', 'duration_seconds', 'durationSeconds', 'webinar_duration', 'duration_label', 'durationLabel', 'duration_text', 'durationText', 'webinar_duration_label']));
+    return hsrtx26np20260316FormatDurationCandidate(hsrtx26np20260316PickFirst(detail, ['duration', 'duration_seconds', 'durationSeconds', 'webinar_duration', 'duration_label', 'durationLabel', 'duration_text', 'durationText', 'webinar_duration_label', 'end_time', 'endTime', 'session_end_time', 'sessionEndTime']));
   }
 
   function hsrtx26np20260316BuildTrackingDurationLabel(detail) {
@@ -2060,7 +2060,7 @@
   }
 
   function hsrtx26np20260316BuildDurationSeconds(detail) {
-    var explicitDurationSeconds = hsrtx26np20260316ParseSecondsValue(hsrtx26np20260316PickFirst(detail, ['duration', 'duration_seconds', 'durationSeconds', 'webinar_duration', 'duration_label', 'durationLabel', 'duration_text', 'durationText', 'webinar_duration_label']));
+    var explicitDurationSeconds = hsrtx26np20260316ParseSecondsValue(hsrtx26np20260316PickFirst(detail, ['duration', 'duration_seconds', 'durationSeconds', 'webinar_duration', 'duration_label', 'durationLabel', 'duration_text', 'durationText', 'webinar_duration_label', 'end_time', 'endTime', 'session_end_time', 'sessionEndTime']));
     if (explicitDurationSeconds > 0) return explicitDurationSeconds;
     return hsrtx26np20260316ParseSecondsValue(hsrtx26np20260316PickFirst(detail, ['tr_duration', 'tracking_duration', 'css_time_duration']));
   }
@@ -3043,7 +3043,7 @@
   function hsrtx26np20260316StartCountdowns() {
     if (hsrtx26np20260316State.countdownTimerId) window.clearInterval(hsrtx26np20260316State.countdownTimerId);
     hsrtx26np20260316TickCountdowns();
-    hsrtx26np20260316State.countdownTimerId = window.setInterval(hsrtx26np20260316TickCountdowns, 1000);
+    hsrtx26np20260316State.countdownTimerId = window.setInterval(hsrtx26np20260316TickCountdowns, 30000);
   }
 
   function hsrtx26np20260316BindJoinLinkGuard() {
