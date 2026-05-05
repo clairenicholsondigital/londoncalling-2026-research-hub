@@ -2581,11 +2581,6 @@
 
   function hsrtx26np20260316SortSessions(sessions) {
     return hsrtx26np20260316ToArray(sessions).sort(function compareSessions(firstSession, secondSession) {
-      var nowTimestamp = Date.now();
-      var firstEndTimestamp = firstSession && Number(firstSession.endTimestamp || 0);
-      var secondEndTimestamp = secondSession && Number(secondSession.endTimestamp || 0);
-      var firstIsEnded = firstSession && firstSession.isSecretCinema !== true && firstEndTimestamp > 0 && firstEndTimestamp <= nowTimestamp;
-      var secondIsEnded = secondSession && secondSession.isSecretCinema !== true && secondEndTimestamp > 0 && secondEndTimestamp <= nowTimestamp;
       var firstTime = firstSession && Number(firstSession.sortTime || firstSession.startTimestamp || 0);
       var secondTime = secondSession && Number(secondSession.sortTime || secondSession.startTimestamp || 0);
       var firstTitle = String(firstSession && firstSession.title ? firstSession.title : '');
@@ -2594,7 +2589,6 @@
       if (Number.isNaN(secondEndTimestamp)) secondEndTimestamp = 0;
       if (Number.isNaN(firstTime)) firstTime = 0;
       if (Number.isNaN(secondTime)) secondTime = 0;
-      if (firstIsEnded !== secondIsEnded) return firstIsEnded ? 1 : -1;
       if (firstTime !== secondTime) return firstTime - secondTime;
       return firstTitle.localeCompare(secondTitle);
     });
@@ -2943,7 +2937,6 @@
 
   function hsrtx26np20260316TickCountdowns() {
     var sessionCardNodes;
-    var endedStateChanged = false;
     if (hsrtx26np20260316ApplyForceJoinButtonsFromUrl()) return;
     sessionCardNodes = hsrtx26np20260316RootNode.querySelectorAll('[data-hsrtx26np20260316-role="session-card"]');
     hsrtx26np20260316ToArray(sessionCardNodes).forEach(function tickOneCountdown(sessionCardNode) {
@@ -2965,7 +2958,6 @@
       var countdownStatusLabel;
       var isSecretCinema = sessionCardNode.getAttribute('data-hsrtx26np20260316-secret-cinema') === 'true';
       var isSessionEnded = !isSecretCinema && hsrtx26np20260316IsSessionEnded(sessionCardNode);
-      var previousEndedState = sessionCardNode.getAttribute('data-hsrtx26np20260316-session-ended') === 'true';
       var sessionEndedNoteNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="session-ended-note"]');
       if (joinLinkNode) hsrtx26np20260316ApplyOriginalPlayerDataToJoinLink(joinLinkNode);
       hasJoinTarget = !!(joinLinkNode && (joinLinkNode.getAttribute('data-webinar-id') || joinLinkNode.getAttribute('data-url')));
@@ -2981,7 +2973,6 @@
       sessionCardNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       sessionCardNode.setAttribute('data-hsrtx26np20260316-session-ended', String(isSessionEnded));
       sessionCardNode.classList.toggle('is-ended', isSessionEnded);
-      if (previousEndedState !== isSessionEnded) endedStateChanged = true;
       if (joinLinkNode) joinLinkNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       if (countdownPillNode) {
         countdownPillNode.hidden = isSessionEnded || isSecretCinema || !countdownLabel;
@@ -3001,22 +2992,6 @@
       if (sessionEndedNoteNode) sessionEndedNoteNode.hidden = !isSessionEnded;
       hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, shouldShowJoinLink);
     });
-    if (endedStateChanged) {
-      var activeAreaConfig = hsrtx26np20260316GetAreaConfigBySlug(hsrtx26np20260316State.activeAreaSlug);
-      hsrtx26np20260316ToArray(sessionCardNodes).forEach(function syncEndedStateToSessionModel(sessionCardNode) {
-        var sessionId = sessionCardNode.getAttribute('data-hsrtx26np20260316-webinar-id') || '';
-        var matchingSessionModel = (hsrtx26np20260316State.sessionsForActiveArea || []).find(function findSessionModel(sessionModel) {
-          return String(sessionModel.id || '') === String(sessionId);
-        });
-        if (!matchingSessionModel) return;
-        matchingSessionModel.isEnded = sessionCardNode.getAttribute('data-hsrtx26np20260316-session-ended') === 'true';
-      });
-      hsrtx26np20260316State.sessionsForActiveArea = hsrtx26np20260316SortSessions(hsrtx26np20260316State.sessionsForActiveArea || []);
-      if (activeAreaConfig) {
-        hsrtx26np20260316RenderSessionsPage(activeAreaConfig);
-        hsrtx26np20260316SyncRenderedJoinLinksWithOriginalButtons();
-      }
-    }
   }
 
   function hsrtx26np20260316StartCountdowns() {
