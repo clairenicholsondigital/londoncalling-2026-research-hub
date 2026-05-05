@@ -187,6 +187,33 @@
     return Math.max(0, Number(sessionCardNode.getAttribute('data-hsrtx26np20260316-join-before-seconds') || 0) || 0);
   }
 
+  function hsrtx26np20260316GetSessionEndTimestamp(sessionCardNode) {
+    if (!sessionCardNode) return 0;
+    return Math.max(0, Number(sessionCardNode.getAttribute('data-hsrtx26np20260316-end-time') || 0) || 0);
+  }
+
+  function hsrtx26np20260316HasSessionEndedByDuration(sessionCardNode) {
+    var endTimestamp = hsrtx26np20260316GetSessionEndTimestamp(sessionCardNode);
+    return endTimestamp > 0 && Date.now() >= endTimestamp;
+  }
+
+  function hsrtx26np20260316UpdateOnDemandState(sessionCardNode, hasEndedByDuration) {
+    var countdownPillNode;
+    if (!sessionCardNode) return;
+    sessionCardNode.setAttribute('data-hsrtx26np20260316-on-demand', hasEndedByDuration ? 'true' : 'false');
+    countdownPillNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="countdown-pill"]');
+    if (!countdownPillNode) return;
+    if (hasEndedByDuration) {
+      countdownPillNode.hidden = false;
+      countdownPillNode.setAttribute('aria-hidden', 'false');
+      countdownPillNode.textContent = 'On demand content coming soon';
+      countdownPillNode.classList.remove('is-live');
+      countdownPillNode.removeAttribute('title');
+      return;
+    }
+    countdownPillNode.textContent = hsrtx26np20260316GetCountdownLabel(hsrtx26np20260316GetSessionCurrentSeconds(sessionCardNode), null);
+  }
+
   function hsrtx26np20260316IsRenderedJoinLinkOpen(joinLinkNode, sessionCardNode) {
     var webinarId;
     var sourceAvailability;
@@ -257,6 +284,7 @@
       var startTimestamp = Number(sessionCardNode.getAttribute('data-hsrtx26np20260316-start-time') || 0);
       var currentSeconds = hsrtx26np20260316GetSessionCurrentSeconds(sessionCardNode);
       var joinBeforeSeconds = hsrtx26np20260316GetSessionJoinBeforeSeconds(sessionCardNode);
+      var hasEndedByDuration = hsrtx26np20260316HasSessionEndedByDuration(sessionCardNode);
       var countdownPillNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="countdown-pill"]');
       var joinLinkNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="join-link"]');
       var webinarId = joinLinkNode ? joinLinkNode.getAttribute('data-webinar-id') || '' : '';
@@ -269,7 +297,7 @@
       if (joinLinkNode) hsrtx26np20260316ApplyOriginalPlayerDataToJoinLink(joinLinkNode);
       hasJoinTarget = !!(joinLinkNode && (joinLinkNode.getAttribute('data-webinar-id') || joinLinkNode.getAttribute('data-url')));
       timeWindowOpen = hsrtx26np20260316IsJoinWindowOpen(currentSeconds, joinBeforeSeconds);
-      shouldShowJoinLink = timeWindowOpen && sourceAvailability !== false && hasJoinTarget;
+      shouldShowJoinLink = !hasEndedByDuration && timeWindowOpen && sourceAvailability !== false && hasJoinTarget;
       sessionHasStarted = hsrtx26np20260316HasSessionStarted(currentSeconds);
       countdownTitle = hsrtx26np20260316GetCountdownTitle(currentSeconds);
       sessionCardNode.setAttribute('data-hsrtx26np20260316-seconds-left', String(startTimestamp > 0 ? currentSeconds : Math.max(0, currentSeconds - 1)));
@@ -277,12 +305,17 @@
       sessionCardNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       if (joinLinkNode) joinLinkNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       if (countdownPillNode) {
-        countdownPillNode.hidden = false;
-        countdownPillNode.setAttribute('aria-hidden', 'false');
-        countdownPillNode.textContent = hsrtx26np20260316GetCountdownLabel(currentSeconds, sourceAvailability);
-        countdownPillNode.classList.toggle('is-live', sessionHasStarted && shouldShowJoinLink);
-        if (countdownTitle && !sessionHasStarted) countdownPillNode.setAttribute('title', countdownTitle);
-        else countdownPillNode.removeAttribute('title');
+        if (hasEndedByDuration) {
+          hsrtx26np20260316UpdateOnDemandState(sessionCardNode, true);
+        } else {
+          hsrtx26np20260316UpdateOnDemandState(sessionCardNode, false);
+          countdownPillNode.hidden = false;
+          countdownPillNode.setAttribute('aria-hidden', 'false');
+          countdownPillNode.textContent = hsrtx26np20260316GetCountdownLabel(currentSeconds, sourceAvailability);
+          countdownPillNode.classList.toggle('is-live', sessionHasStarted && shouldShowJoinLink);
+          if (countdownTitle && !sessionHasStarted) countdownPillNode.setAttribute('title', countdownTitle);
+          else countdownPillNode.removeAttribute('title');
+        }
       }
       hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, shouldShowJoinLink);
     });
