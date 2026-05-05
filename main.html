@@ -2126,7 +2126,7 @@
     playerData['data-title'] = playerData['data-title'] || sessionModel.title || '';
     playerData['data-chatroom'] = playerData['data-chatroom'] || '0';
     playerData['data-chatlink-text'] = playerData['data-chatlink-text'] || 'Click here for live Q&A';
-    playerData['data-webinar-type'] = playerData['data-webinar-type'] || 'PREC';
+    playerData['data-webinar-type'] = playerData['data-webinar-type'] || sessionModel.webinarType || 'PREC';
     playerData['data-duration'] = playerData['data-duration'] || sessionModel.durationLabel || '';
     playerData['data-tr_duration'] = playerData['data-tr_duration'] || sessionModel.trackingDurationLabel || '00:00:00';
     playerData['data-checkpoint_duration'] = playerData['data-checkpoint_duration'] || '';
@@ -2230,15 +2230,17 @@
     var webinarId = hsrtx26np20260316GetWebinarId(detail);
     var groupIds = hsrtx26np20260316GetDetailGroupIds(detail);
     var sessionTitle = hsrtx26np20260316StripHtml(hsrtx26np20260316PickFirst(detail, ['title', 'webinar_title', 'webinarTitle', 'session_title', 'sessionTitle', 'webinar_name', 'event_title', 'name']) || 'Untitled session');
+    var webinarType = String(hsrtx26np20260316PickFirst(detail, ['webinar_type', 'webinarType', 'type', 'content_type', 'session_type', 'presentation_type']) || 'PREC').trim().toUpperCase();
     var durationSeconds = hsrtx26np20260316BuildDurationSeconds(detail);
     var startTimestamp = startDate ? startDate.getTime() : 0;
     var endTimestamp = startTimestamp > 0 && durationSeconds > 0 ? startTimestamp + durationSeconds * 1000 : 0;
     var explicitEndedState = hsrtx26np20260316BuildExplicitEndedState(detail);
     var isSecretCinema = groupIds.indexOf(hsrtx26np20260316SecretCinemaGroupId) !== -1 || hsrtx26np20260316DetailLooksLikeSecretCinema(detail);
-    var isEnded = !isSecretCinema && (explicitEndedState == null ? (endTimestamp > 0 && Date.now() >= endTimestamp) : explicitEndedState);
+    var isEnded = !isSecretCinema && endTimestamp > 0 && Date.now() >= endTimestamp;
     return {
       id: webinarId,
       title: sessionTitle,
+      webinarType: webinarType || 'PREC',
       displayTime: hsrtx26np20260316BuildSessionDisplayTime(detail, startDate),
       durationLabel: hsrtx26np20260316BuildDurationLabel(detail),
       trackingDurationLabel: hsrtx26np20260316BuildTrackingDurationLabel(detail),
@@ -2579,15 +2581,12 @@
 
   function hsrtx26np20260316SortSessions(sessions) {
     return hsrtx26np20260316ToArray(sessions).sort(function compareSessions(firstSession, secondSession) {
-      var firstIsEnded = firstSession && firstSession.isEnded === true;
-      var secondIsEnded = secondSession && secondSession.isEnded === true;
       var firstTime = firstSession && Number(firstSession.sortTime || firstSession.startTimestamp || 0);
       var secondTime = secondSession && Number(secondSession.sortTime || secondSession.startTimestamp || 0);
       var firstTitle = String(firstSession && firstSession.title ? firstSession.title : '');
       var secondTitle = String(secondSession && secondSession.title ? secondSession.title : '');
       if (Number.isNaN(firstTime)) firstTime = 0;
       if (Number.isNaN(secondTime)) secondTime = 0;
-      if (firstIsEnded !== secondIsEnded) return firstIsEnded ? 1 : -1;
       if (firstTime !== secondTime) return firstTime - secondTime;
       return firstTitle.localeCompare(secondTitle);
     });
@@ -2852,11 +2851,7 @@
   }
 
   function hsrtx26np20260316IsSessionEnded(sessionCardNode) {
-    var explicitEndedState;
     var endTimestamp = hsrtx26np20260316GetSessionEndTimestamp(sessionCardNode);
-    explicitEndedState = sessionCardNode ? sessionCardNode.getAttribute('data-hsrtx26np20260316-explicit-ended-state') : '';
-    if (explicitEndedState === 'true') return true;
-    if (explicitEndedState === 'false') return false;
     if (endTimestamp <= 0) return false;
     return Date.now() >= endTimestamp;
   }
@@ -2940,7 +2935,6 @@
 
   function hsrtx26np20260316TickCountdowns() {
     var sessionCardNodes;
-    var endedStateChanged = false;
     if (hsrtx26np20260316ApplyForceJoinButtonsFromUrl()) return;
     sessionCardNodes = hsrtx26np20260316RootNode.querySelectorAll('[data-hsrtx26np20260316-role="session-card"]');
     hsrtx26np20260316ToArray(sessionCardNodes).forEach(function tickOneCountdown(sessionCardNode) {
@@ -2962,7 +2956,6 @@
       var countdownStatusLabel;
       var isSecretCinema = sessionCardNode.getAttribute('data-hsrtx26np20260316-secret-cinema') === 'true';
       var isSessionEnded = !isSecretCinema && hsrtx26np20260316IsSessionEnded(sessionCardNode);
-      var previousEndedState = sessionCardNode.getAttribute('data-hsrtx26np20260316-session-ended') === 'true';
       var sessionEndedNoteNode = sessionCardNode.querySelector('[data-hsrtx26np20260316-role="session-ended-note"]');
       if (joinLinkNode) hsrtx26np20260316ApplyOriginalPlayerDataToJoinLink(joinLinkNode);
       hasJoinTarget = !!(joinLinkNode && (joinLinkNode.getAttribute('data-webinar-id') || joinLinkNode.getAttribute('data-url')));
@@ -2978,7 +2971,6 @@
       sessionCardNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       sessionCardNode.setAttribute('data-hsrtx26np20260316-session-ended', String(isSessionEnded));
       sessionCardNode.classList.toggle('is-ended', isSessionEnded);
-      if (previousEndedState !== isSessionEnded) endedStateChanged = true;
       if (joinLinkNode) joinLinkNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       if (countdownPillNode) {
         countdownPillNode.hidden = isSessionEnded || isSecretCinema || !countdownLabel;
@@ -2998,22 +2990,6 @@
       if (sessionEndedNoteNode) sessionEndedNoteNode.hidden = !isSessionEnded;
       hsrtx26np20260316SetJoinLinkVisibility(joinLinkNode, shouldShowJoinLink);
     });
-    if (endedStateChanged) {
-      var activeAreaConfig = hsrtx26np20260316GetAreaConfigBySlug(hsrtx26np20260316State.activeAreaSlug);
-      hsrtx26np20260316ToArray(sessionCardNodes).forEach(function syncEndedStateToSessionModel(sessionCardNode) {
-        var sessionId = sessionCardNode.getAttribute('data-hsrtx26np20260316-webinar-id') || '';
-        var matchingSessionModel = (hsrtx26np20260316State.sessionsForActiveArea || []).find(function findSessionModel(sessionModel) {
-          return String(sessionModel.id || '') === String(sessionId);
-        });
-        if (!matchingSessionModel) return;
-        matchingSessionModel.isEnded = sessionCardNode.getAttribute('data-hsrtx26np20260316-session-ended') === 'true';
-      });
-      hsrtx26np20260316State.sessionsForActiveArea = hsrtx26np20260316SortSessions(hsrtx26np20260316State.sessionsForActiveArea || []);
-      if (activeAreaConfig) {
-        hsrtx26np20260316RenderSessionsPage(activeAreaConfig);
-        hsrtx26np20260316SyncRenderedJoinLinksWithOriginalButtons();
-      }
-    }
   }
 
   function hsrtx26np20260316StartCountdowns() {
