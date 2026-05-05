@@ -2126,7 +2126,7 @@
     playerData['data-title'] = playerData['data-title'] || sessionModel.title || '';
     playerData['data-chatroom'] = playerData['data-chatroom'] || '0';
     playerData['data-chatlink-text'] = playerData['data-chatlink-text'] || 'Click here for live Q&A';
-    playerData['data-webinar-type'] = playerData['data-webinar-type'] || 'PREC';
+    playerData['data-webinar-type'] = playerData['data-webinar-type'] || sessionModel.webinarType || 'PREC';
     playerData['data-duration'] = playerData['data-duration'] || sessionModel.durationLabel || '';
     playerData['data-tr_duration'] = playerData['data-tr_duration'] || sessionModel.trackingDurationLabel || '00:00:00';
     playerData['data-checkpoint_duration'] = playerData['data-checkpoint_duration'] || '';
@@ -2230,6 +2230,7 @@
     var webinarId = hsrtx26np20260316GetWebinarId(detail);
     var groupIds = hsrtx26np20260316GetDetailGroupIds(detail);
     var sessionTitle = hsrtx26np20260316StripHtml(hsrtx26np20260316PickFirst(detail, ['title', 'webinar_title', 'webinarTitle', 'session_title', 'sessionTitle', 'webinar_name', 'event_title', 'name']) || 'Untitled session');
+    var webinarType = String(hsrtx26np20260316PickFirst(detail, ['webinar_type', 'webinarType', 'type', 'content_type', 'session_type', 'presentation_type']) || 'PREC').trim().toUpperCase();
     var durationSeconds = hsrtx26np20260316BuildDurationSeconds(detail);
     var startTimestamp = startDate ? startDate.getTime() : 0;
     var endTimestamp = startTimestamp > 0 && durationSeconds > 0 ? startTimestamp + durationSeconds * 1000 : 0;
@@ -2239,6 +2240,7 @@
     return {
       id: webinarId,
       title: sessionTitle,
+      webinarType: webinarType || 'PREC',
       displayTime: hsrtx26np20260316BuildSessionDisplayTime(detail, startDate),
       durationLabel: hsrtx26np20260316BuildDurationLabel(detail),
       trackingDurationLabel: hsrtx26np20260316BuildTrackingDurationLabel(detail),
