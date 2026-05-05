@@ -2756,6 +2756,7 @@
     var webinarIds = hsrtx26np20260316CollectWebinarIds();
     var loadOptions = options || {};
     var forceRefresh = !!loadOptions.forceRefresh;
+    var preserveCurrentPage = !!loadOptions.preserveCurrentPage;
     var keywordLower = String(areaConfig.keyword || '').trim().toLowerCase();
     var sessionList = [];
     var posterList = [];
@@ -2825,7 +2826,7 @@
     hsrtx26np20260316SetText(hsrtx26np20260316Elements.secretCinemaCount, secretSessions.length);
 
     hsrtx26np20260316State.sessionsForActiveArea = hsrtx26np20260316SortSessions(normalSessions);
-    hsrtx26np20260316State.sessionsCurrentPage = 1;
+    if (!preserveCurrentPage || forceRefresh) hsrtx26np20260316State.sessionsCurrentPage = 1;
     hsrtx26np20260316RenderSessionsPage(areaConfig);
 
     if (hsrtx26np20260316Elements.postersOutput) {
@@ -3124,7 +3125,7 @@
       if (!activeAreaConfig) return;
       hsrtx26np20260316State.latestLoadToken += 1;
       refreshLoadToken = hsrtx26np20260316State.latestLoadToken;
-      await hsrtx26np20260316LoadSessionsAndPostersForArea(activeAreaConfig, refreshLoadToken);
+      await hsrtx26np20260316LoadSessionsAndPostersForArea(activeAreaConfig, refreshLoadToken, { preserveCurrentPage: true });
       if (refreshLoadToken === hsrtx26np20260316State.latestLoadToken && activeAreaConfig.slug === hsrtx26np20260316State.activeAreaSlug) {
         hsrtx26np20260316StartCountdowns();
       }
