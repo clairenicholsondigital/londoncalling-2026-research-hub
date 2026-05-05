@@ -1992,6 +1992,7 @@
     var normalisedValue = hsrtx26np20260316NormaliseValue(rawValue);
     var stringValue;
     var hmsMatch;
+    var unitMatch;
     var numericValue;
     if (normalisedValue == null) return 0;
     if (typeof normalisedValue === 'number') return Math.max(0, Math.floor(normalisedValue));
@@ -2001,6 +2002,14 @@
     if (hmsMatch) {
       if (hmsMatch[3] != null) return Number(hmsMatch[1]) * 3600 + Number(hmsMatch[2]) * 60 + Number(hmsMatch[3]);
       return Number(hmsMatch[1]) * 60 + Number(hmsMatch[2]);
+    }
+    unitMatch = stringValue.toLowerCase().match(/(\d+(?:\.\d+)?)\s*(hours?|hrs?|hr|h|minutes?|mins?|min|m|seconds?|secs?|sec|s)\b/);
+    if (unitMatch) {
+      numericValue = Number(unitMatch[1]);
+      if (Number.isNaN(numericValue)) return 0;
+      if (unitMatch[2].indexOf('h') === 0) return Math.max(0, Math.floor(numericValue * 3600));
+      if (unitMatch[2].indexOf('m') === 0) return Math.max(0, Math.floor(numericValue * 60));
+      return Math.max(0, Math.floor(numericValue));
     }
     if (!Number.isNaN(Number(stringValue))) return Math.max(0, Math.floor(Number(stringValue)));
     numericValue = parseFloat(stringValue);
@@ -2043,7 +2052,7 @@
   }
 
   function hsrtx26np20260316BuildDurationLabel(detail) {
-    return hsrtx26np20260316FormatDurationCandidate(hsrtx26np20260316PickFirst(detail, ['duration', 'duration_seconds', 'durationSeconds', 'webinar_duration', 'duration_label', 'durationLabel', 'duration_text', 'durationText', 'webinar_duration_label']));
+    return hsrtx26np20260316FormatDurationCandidate(hsrtx26np20260316PickFirst(detail, ['duration', 'duration_seconds', 'durationSeconds', 'webinar_duration', 'duration_label', 'durationLabel', 'duration_text', 'durationText', 'webinar_duration_label', 'end_time', 'endTime', 'session_end_time', 'sessionEndTime']));
   }
 
   function hsrtx26np20260316BuildTrackingDurationLabel(detail) {
@@ -2051,9 +2060,17 @@
   }
 
   function hsrtx26np20260316BuildDurationSeconds(detail) {
-    var explicitDurationSeconds = hsrtx26np20260316ParseSecondsValue(hsrtx26np20260316PickFirst(detail, ['duration', 'duration_seconds', 'durationSeconds', 'webinar_duration', 'duration_label', 'durationLabel', 'duration_text', 'durationText', 'webinar_duration_label']));
+    var explicitDurationSeconds = hsrtx26np20260316ParseSecondsValue(hsrtx26np20260316PickFirst(detail, ['duration', 'duration_seconds', 'durationSeconds', 'webinar_duration', 'duration_label', 'durationLabel', 'duration_text', 'durationText', 'webinar_duration_label', 'end_time', 'endTime', 'session_end_time', 'sessionEndTime']));
     if (explicitDurationSeconds > 0) return explicitDurationSeconds;
     return hsrtx26np20260316ParseSecondsValue(hsrtx26np20260316PickFirst(detail, ['tr_duration', 'tracking_duration', 'css_time_duration']));
+  }
+
+  function hsrtx26np20260316BuildSessionEndTimestamp(startTimestamp, durationSeconds) {
+    var safeStartTimestamp = Number(startTimestamp || 0);
+    var safeDurationSeconds = Number(durationSeconds || 0);
+    if (Number.isNaN(safeStartTimestamp) || safeStartTimestamp <= 0) return 0;
+    if (Number.isNaN(safeDurationSeconds) || safeDurationSeconds <= 0) return 0;
+    return safeStartTimestamp + safeDurationSeconds * 1000;
   }
 
   function hsrtx26np20260316InvalidateOriginalPlayButtonCache() {
@@ -2233,7 +2250,7 @@
     var webinarType = String(hsrtx26np20260316PickFirst(detail, ['webinar_type', 'webinarType', 'type', 'content_type', 'session_type', 'presentation_type']) || 'PREC').trim().toUpperCase();
     var durationSeconds = hsrtx26np20260316BuildDurationSeconds(detail);
     var startTimestamp = startDate ? startDate.getTime() : 0;
-    var endTimestamp = startTimestamp > 0 && durationSeconds > 0 ? startTimestamp + durationSeconds * 1000 : 0;
+    var endTimestamp = hsrtx26np20260316BuildSessionEndTimestamp(startTimestamp, durationSeconds);
     var explicitEndedState = hsrtx26np20260316BuildExplicitEndedState(detail);
     var isSecretCinema = groupIds.indexOf(hsrtx26np20260316SecretCinemaGroupId) !== -1 || hsrtx26np20260316DetailLooksLikeSecretCinema(detail);
     var isEnded = !isSecretCinema && endTimestamp > 0 && Date.now() >= endTimestamp;
@@ -2582,8 +2599,12 @@
   function hsrtx26np20260316SortSessions(sessions) {
     return hsrtx26np20260316ToArray(sessions).sort(function compareSessions(firstSession, secondSession) {
       var nowTimestamp = Date.now();
-      var firstEndTimestamp = firstSession && Number(firstSession.endTimestamp || 0);
-      var secondEndTimestamp = secondSession && Number(secondSession.endTimestamp || 0);
+      var firstStartTimestamp = firstSession && Number(firstSession.startTimestamp || firstSession.sortTime || 0);
+      var secondStartTimestamp = secondSession && Number(secondSession.startTimestamp || secondSession.sortTime || 0);
+      var firstDurationSeconds = firstSession && Number(firstSession.durationSeconds || 0);
+      var secondDurationSeconds = secondSession && Number(secondSession.durationSeconds || 0);
+      var firstEndTimestamp = firstSession && Number(firstSession.endTimestamp || hsrtx26np20260316BuildSessionEndTimestamp(firstStartTimestamp, firstDurationSeconds) || 0);
+      var secondEndTimestamp = secondSession && Number(secondSession.endTimestamp || hsrtx26np20260316BuildSessionEndTimestamp(secondStartTimestamp, secondDurationSeconds) || 0);
       var firstIsEnded = firstSession && firstSession.isSecretCinema !== true && firstEndTimestamp > 0 && firstEndTimestamp <= nowTimestamp;
       var secondIsEnded = secondSession && secondSession.isSecretCinema !== true && secondEndTimestamp > 0 && secondEndTimestamp <= nowTimestamp;
       var firstTime = firstSession && Number(firstSession.sortTime || firstSession.startTimestamp || 0);
@@ -3022,7 +3043,7 @@
   function hsrtx26np20260316StartCountdowns() {
     if (hsrtx26np20260316State.countdownTimerId) window.clearInterval(hsrtx26np20260316State.countdownTimerId);
     hsrtx26np20260316TickCountdowns();
-    hsrtx26np20260316State.countdownTimerId = window.setInterval(hsrtx26np20260316TickCountdowns, 1000);
+    hsrtx26np20260316State.countdownTimerId = window.setInterval(hsrtx26np20260316TickCountdowns, 30000);
   }
 
   function hsrtx26np20260316BindJoinLinkGuard() {
