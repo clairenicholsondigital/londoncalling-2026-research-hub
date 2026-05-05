@@ -2981,8 +2981,8 @@
       if (previousEndedState !== isSessionEnded) endedStateChanged = true;
       if (joinLinkNode) joinLinkNode.setAttribute('data-hsrtx26np20260316-force-join-ready', String(hasJoinTarget));
       if (countdownPillNode) {
-        countdownPillNode.hidden = isSessionEnded || isSecretCinema || !countdownLabel;
-        countdownPillNode.setAttribute('aria-hidden', isSessionEnded || isSecretCinema || !countdownLabel ? 'true' : 'false');
+        countdownPillNode.hidden = isSessionEnded || isSecretCinema || shouldShowJoinLink || !countdownLabel;
+        countdownPillNode.setAttribute('aria-hidden', isSessionEnded || isSecretCinema || shouldShowJoinLink || !countdownLabel ? 'true' : 'false');
         if (!isSessionEnded && !isSecretCinema) {
           countdownPillNode.textContent = countdownLabel;
           countdownPillNode.classList.toggle('is-live', sessionHasStarted && shouldShowJoinLink);
