@@ -1546,8 +1546,10 @@
 
   function hsrtx26np20260316OpenDocumentViewer(documentUrl, title) {
     var safeUrl = hsrtx26np20260316GetSafeUrl(documentUrl);
+    var viewerUrl;
     if (!safeUrl) return;
-    hsrtx26np20260316OpenModal(title || 'Document viewer', '<div class="hsrtx26np20260316-frame-wrap"><iframe src="' + hsrtx26np20260316EscapeHtml(safeUrl) + '"></iframe></div>', 'document');
+    viewerUrl = /\.pdf(\?|#|$)/i.test(safeUrl) ? safeUrl + (safeUrl.indexOf('#') === -1 ? '#toolbar=0&navpanes=0' : '&toolbar=0&navpanes=0') : safeUrl;
+    hsrtx26np20260316OpenModal(title || 'Document viewer', '<div class="hsrtx26np20260316-frame-wrap"><iframe src="' + hsrtx26np20260316EscapeHtml(viewerUrl) + '"></iframe></div>', 'document');
   }
 
   async function hsrtx26np20260316FetchText(url) {
