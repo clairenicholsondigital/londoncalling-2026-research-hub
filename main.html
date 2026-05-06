@@ -2533,10 +2533,9 @@ function hsrtx26np20260316AllowSafeInlineHtml(value) {
       swagButtonNode.className = 'btn btn-default not-added hsrtx26np20260316-swag-bag-button virtualbag swagbag-btn';
       swagButtonNode.value = '+ Swag bag';
       swagButtonNode.setAttribute('aria-label', '+ Swag bag');
-      if (boothId) {
-        swagButtonNode.setAttribute('data-booth-id', boothId);
-        swagButtonNode.setAttribute('data-booth', boothId);
-      }
+      if (!boothId) boothId = '0000';
+      swagButtonNode.setAttribute('data-booth-id', boothId);
+      swagButtonNode.setAttribute('data-booth', boothId);
       if (contentId) {
         swagButtonNode.setAttribute('data-content-id', contentId);
         swagButtonNode.setAttribute('data-id', contentId);
