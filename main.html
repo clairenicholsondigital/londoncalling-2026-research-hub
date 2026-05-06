@@ -1376,9 +1376,27 @@ function hsrtx26np20260316AllowSafeInlineHtml(value) {
       return areaConfig.slug === areaSlug;
     }) || null;
   }
+  function hsrtx26np20260316GetAreaConfigFromHash() {
+    var hashSlug = String(window.location.hash || '').replace(/^#/, '').trim();
+    if (!hashSlug || hashSlug === 'poster-hall' || hashSlug.indexOf('vf-webinar-detail') !== -1) return null;
+    return hsrtx26np20260316GetAreaConfigBySlug(hashSlug);
+  }
 
+  function hsrtx26np20260316UpdateAreaHash(areaSlug) {
+    if (!areaSlug || window.location.hash === '#' + areaSlug) return;
+    if (window.history && typeof window.history.replaceState === 'function') {
+      window.history.replaceState({}, document.title, '#' + areaSlug);
+    } else {
+      window.location.hash = areaSlug;
+    }
+  }
   function hsrtx26np20260316GetInitialAreaConfig() {
-    var defaultAreaSlug = String(hsrtx26np20260316RootNode.getAttribute('data-hsrtx26np20260316-default-area') || hsrtx26np20260316ResearchAreaList[0].slug).trim();
+    var hashAreaConfig = hsrtx26np20260316GetAreaConfigFromHash();
+    var defaultAreaSlug;
+
+    if (hashAreaConfig) return hashAreaConfig;
+
+    defaultAreaSlug = String(hsrtx26np20260316RootNode.getAttribute('data-hsrtx26np20260316-default-area') || hsrtx26np20260316ResearchAreaList[0].slug).trim();
     return hsrtx26np20260316GetAreaConfigBySlug(defaultAreaSlug) || hsrtx26np20260316ResearchAreaList[0];
   }
 
@@ -3182,6 +3200,7 @@ async function hsrtx26np20260316ActivateArea(areaConfig, options) {
     var loadToken;
     var activateOptions = options || {};
     hsrtx26np20260316State.activeAreaSlug = areaConfig.slug;
+    if (!activateOptions.skipHashUpdate) hsrtx26np20260316UpdateAreaHash(areaConfig.slug);
     hsrtx26np20260316ApplyAreaMeta(areaConfig);
     hsrtx26np20260316StopAreaRefreshPolling();
     hsrtx26np20260316RenderLoadingState();
@@ -3287,7 +3306,11 @@ async function hsrtx26np20260316ActivateArea(areaConfig, options) {
       hsrtx26np20260316State.secretCinemaObserver = observer;
     }
   }
-
+  function hsrtx26np20260316HandleResearchAreaHashChange() {
+    var hashAreaConfig = hsrtx26np20260316GetAreaConfigFromHash();
+    if (!hashAreaConfig || hashAreaConfig.slug === hsrtx26np20260316State.activeAreaSlug) return;
+    hsrtx26np20260316ActivateArea(hashAreaConfig, { skipHashUpdate: true });
+  }
   function hsrtx26np20260316Init() {
     var initialAreaConfig = hsrtx26np20260316GetInitialAreaConfig();
     hsrtx26np20260316SyncForceJoinMode();
@@ -3302,11 +3325,12 @@ async function hsrtx26np20260316ActivateArea(areaConfig, options) {
     hsrtx26np20260316BindSessionsPagination();
     hsrtx26np20260316PolishSecretCinemaPanel();
     hsrtx26np20260316SetActiveTab('sessions');
-    hsrtx26np20260316ActivateArea(initialAreaConfig);
+    hsrtx26np20260316ActivateArea(initialAreaConfig, { skipHashUpdate: true });
     hsrtx26np20260316OpenPosterGroupFromUrl();
     window.addEventListener('hashchange', hsrtx26np20260316OpenPosterGroupFromUrl);
     window.addEventListener('hashchange', hsrtx26np20260316HandleWebinarDetailHistoryChange);
     window.addEventListener('popstate', hsrtx26np20260316HandleWebinarDetailHistoryChange);
+    window.addEventListener('hashchange', hsrtx26np20260316HandleResearchAreaHashChange);
     hsrtx26np20260316HandleWebinarDetailHistoryChange();
   }
 
