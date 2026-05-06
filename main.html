@@ -1167,18 +1167,43 @@
       .trim();
   }
 
-  function hsrtx26np20260316AllowSafeInlineHtml(value) {
-    return hsrtx26np20260316CleanHiddenSpaces(value)
-      .replace(/<(\/?)(em|i|strong|b|sup|sub|br)\b[^>]*>/gi, function(match, slash, tagName) {
-        tagName = String(tagName || '').toLowerCase();
-        return tagName === 'br'
-          ? '<br>'
-          : '<' + slash + tagName + '>';
-      })
-      .replace(/<[^>]*>/g, '')
-      .replace(/&amp;nbsp;/gi, ' ')
-      .replace(/&nbsp;/gi, ' ');
-  }
+function hsrtx26np20260316AllowSafeInlineHtml(value) {
+  var cleaned = hsrtx26np20260316CleanHiddenSpaces(value);
+
+  cleaned = cleaned
+    .replace(/<br\s*\/?>/gi, '___HS_BR___')
+    .replace(/<em>/gi, '___HS_EM_OPEN___')
+    .replace(/<\/em>/gi, '___HS_EM_CLOSE___')
+    .replace(/<i>/gi, '___HS_I_OPEN___')
+    .replace(/<\/i>/gi, '___HS_I_CLOSE___')
+    .replace(/<strong>/gi, '___HS_STRONG_OPEN___')
+    .replace(/<\/strong>/gi, '___HS_STRONG_CLOSE___')
+    .replace(/<b>/gi, '___HS_B_OPEN___')
+    .replace(/<\/b>/gi, '___HS_B_CLOSE___')
+    .replace(/<sup>/gi, '___HS_SUP_OPEN___')
+    .replace(/<\/sup>/gi, '___HS_SUP_CLOSE___')
+    .replace(/<sub>/gi, '___HS_SUB_OPEN___')
+    .replace(/<\/sub>/gi, '___HS_SUB_CLOSE___');
+
+  cleaned = cleaned.replace(/<[^>]*>/g, '');
+
+  cleaned = cleaned
+    .replace(/___HS_BR___/g, '<br>')
+    .replace(/___HS_EM_OPEN___/g, '<em>')
+    .replace(/___HS_EM_CLOSE___/g, '</em>')
+    .replace(/___HS_I_OPEN___/g, '<i>')
+    .replace(/___HS_I_CLOSE___/g, '</i>')
+    .replace(/___HS_STRONG_OPEN___/g, '<strong>')
+    .replace(/___HS_STRONG_CLOSE___/g, '</strong>')
+    .replace(/___HS_B_OPEN___/g, '<b>')
+    .replace(/___HS_B_CLOSE___/g, '</b>')
+    .replace(/___HS_SUP_OPEN___/g, '<sup>')
+    .replace(/___HS_SUP_CLOSE___/g, '</sup>')
+    .replace(/___HS_SUB_OPEN___/g, '<sub>')
+    .replace(/___HS_SUB_CLOSE___/g, '</sub>');
+
+  return cleaned;
+} 
 
   function hsrtx26np20260316Pad2(value) {
     value = String(value);
