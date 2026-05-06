@@ -2364,7 +2364,7 @@
     var endTimestamp = Math.max(0, Number(sessionModel.endTimestamp) || 0);
     var isEnded = !isSecretCinema && !!sessionModel.isEnded;
     var shouldShowJoinLink = isSecretCinema ? (sourceAvailability !== false && hasJoinTarget) : (!shouldHideJoinLink && !isEnded);
-    var titleHtml = '<h2 class="hsrtx26np20260316-session-title' + (isSecretCinema ? ' hsrtx26np20260316-session-title--inline' : '') + '">' + hsrtx26np20260316EscapeHtml(sessionModel.title || '') + '</h2>';
+    var titleHtml = '<h2 class="hsrtx26np20260316-session-title' + (isSecretCinema ? ' hsrtx26np20260316-session-title--inline' : '') + '">' + String(sessionModel.title || '') + '</h2>';
     var actionsHtml = (isSecretCinema ? '' : '<span class="hsrtx26np20260316-countdown-status" data-hsrtx26np20260316-role="countdown-status"' + (countdownStatusLabel ? '' : ' hidden aria-hidden="true"') + '>' + hsrtx26np20260316EscapeHtml(countdownStatusLabel) + '</span><div class="hsrtx26np20260316-countdown-pill" data-hsrtx26np20260316-role="countdown-pill" aria-hidden="false"' + (countdownTitle ? ' title="' + hsrtx26np20260316EscapeHtml(countdownTitle) + '"' : '') + (countdownLabel ? '' : ' hidden') + '>' + hsrtx26np20260316EscapeHtml(countdownLabel) + '</div>') +
       '<a href="javascript:;" class="hsrtx26np20260316-join-link track-btn-click primary-btn btn-webinar-play play-webinar" data-hsrtx26np20260316-role="join-link"' + hsrtx26np20260316DataAttributesToHtml(joinPlayerData) + (shouldShowJoinLink ? '' : ' hidden') + '>' + (isSecretCinema ? 'Play' : 'Join') + '</a>' +
       '<span class="hsrtx26np20260316-session-ended-note" data-hsrtx26np20260316-role="session-ended-note"' + (isEnded ? '' : ' hidden') + '>On demand content coming soon</span>';
