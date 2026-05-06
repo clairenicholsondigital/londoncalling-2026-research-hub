@@ -2519,6 +2519,8 @@ function hsrtx26np20260316AllowSafeInlineHtml(value) {
       var dataUrl = primaryButtonNode.getAttribute('data-url') || '';
       var parsedUrl;
       var boothId = '';
+      var numericBoothId;
+      var numericContentId;
       var existingSibling = primaryButtonNode.nextElementSibling;
       var swagButtonNode;
       if (existingSibling && existingSibling.classList.contains('hsrtx26np20260316-swag-bag-button')) return;
@@ -2531,13 +2533,17 @@ function hsrtx26np20260316AllowSafeInlineHtml(value) {
       swagButtonNode.className = 'btn btn-default not-added hsrtx26np20260316-swag-bag-button virtualbag swagbag-btn';
       swagButtonNode.value = '+ Swag bag';
       swagButtonNode.setAttribute('aria-label', '+ Swag bag');
-      if (boothId) {
-        swagButtonNode.setAttribute('data-booth-id', boothId);
-        swagButtonNode.setAttribute('data-booth', boothId);
-      }
+      if (!boothId) boothId = '0000';
+      swagButtonNode.setAttribute('data-booth-id', boothId);
+      swagButtonNode.setAttribute('data-booth', boothId);
       if (contentId) {
         swagButtonNode.setAttribute('data-content-id', contentId);
         swagButtonNode.setAttribute('data-id', contentId);
+      }
+      numericBoothId = parseInt(boothId, 10);
+      numericContentId = parseInt(contentId, 10);
+      if (!Number.isNaN(numericBoothId) && !Number.isNaN(numericContentId)) {
+        swagButtonNode.setAttribute('onclick', "addToBriefcase(this, " + numericBoothId + ", " + numericContentId + ", 'btn-default')");
       }
       primaryButtonNode.insertAdjacentElement('afterend', swagButtonNode);
     });
