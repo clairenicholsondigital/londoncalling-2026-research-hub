@@ -1167,6 +1167,19 @@
       .trim();
   }
 
+  function hsrtx26np20260316AllowSafeInlineHtml(value) {
+    return hsrtx26np20260316CleanHiddenSpaces(value)
+      .replace(/<(\/?)(em|i|strong|b|sup|sub|br)\b[^>]*>/gi, function(match, slash, tagName) {
+        tagName = String(tagName || '').toLowerCase();
+        return tagName === 'br'
+          ? '<br>'
+          : '<' + slash + tagName + '>';
+      })
+      .replace(/<[^>]*>/g, '')
+      .replace(/&amp;nbsp;/gi, ' ')
+      .replace(/&nbsp;/gi, ' ');
+  }
+
   function hsrtx26np20260316Pad2(value) {
     value = String(value);
     return value.length < 2 ? '0' + value : value;
@@ -2248,7 +2261,7 @@
     var dayMeta = hsrtx26np20260316GetSessionDayMetaFromDate(startDate);
     var webinarId = hsrtx26np20260316GetWebinarId(detail);
     var groupIds = hsrtx26np20260316GetDetailGroupIds(detail);
-    var sessionTitle = hsrtx26np20260316StripHtml(hsrtx26np20260316PickFirst(detail, ['title', 'webinar_title', 'webinarTitle', 'session_title', 'sessionTitle', 'webinar_name', 'event_title', 'name']) || 'Untitled session');
+    var sessionTitle = hsrtx26np20260316AllowSafeInlineHtml(hsrtx26np20260316PickFirst(detail, ['title', 'webinar_title', 'webinarTitle', 'session_title', 'sessionTitle', 'webinar_name', 'event_title', 'name']) || 'Untitled session');
     var webinarType = String(hsrtx26np20260316PickFirst(detail, ['webinar_type', 'webinarType', 'type', 'content_type', 'session_type', 'presentation_type']) || 'PREC').trim().toUpperCase();
     var durationSeconds = hsrtx26np20260316BuildDurationSeconds(detail);
     var startTimestamp = startDate ? startDate.getTime() : 0;
