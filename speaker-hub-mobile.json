@@ -142,21 +142,7 @@
                     "title": "Pathogen surveillance from in-house to in the field"
                 }
             ]
-        },
-        {
-            "index": 11,
-            "name": "Anna Maria Niewiadomska",
-            "organisation": "",
-            "talkTitle": "",
-            "image": "https://euimg.vfairs.com/uploads/vjfnew/236331/content/images/1776088209anna-niewiadomska-jpeg1776088209.jpeg",
-            "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Knowledge Exchange_bacterial and fungal isolate sequencing with NOMISS info FINAL V3_1777652789074.pdf",
-            "sessions": [
-                {
-                    "time": "2026-05-20 12:00:00 PM (BST)",
-                    "title": "Knowledge exchange: bacterial and fungal isolate sequencing with NO-MISS"
-                }
-            ]
-        },
+        }
         {
             "index": 12,
             "name": "Anna Maria Niewiadomska",
