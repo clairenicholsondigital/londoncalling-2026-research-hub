@@ -1,202 +1,1018 @@
 [
     {
         "index": 1,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1775723193adam-giess-jpeg1775723193.jpeg",
-        "speakerName": "Adam Giess",
+        "name": "Adam Giess",
         "organisation": "Genomics England, UK",
-        "talkTitle": "Long-read sequencing at Genomics England",
-        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1775723207lc2026-adam-giess-info-final-pdf1775723207.pdf"
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1775723193adam-giess-jpeg1775723193.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1775723207lc2026-adam-giess-info-final-pdf1775723207.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 11:40:01 AM (BST)",
+                "title": "Pipelines to enable clinical scientists"
+            }
+        ]
     },
     {
         "index": 2,
-        "profilePic": "https://data-eu.vfairs.com/V2/10000225/users/1776086958adela-alcolea-medina-jpg1776086958_1777328203986.jpg",
-        "speakerName": "Adela Alcolea-Medina",
+        "name": "Adela Alcolea-Medina",
         "organisation": "Synnovis, Guy’s and St Thomas’ NHS Foundation Trust, UK",
         "talkTitle": "",
-        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Adela%20Alcolea-Medina%20info%20FINAL%20(1)_1777495269316.pdf"
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/1776086958adela-alcolea-medina-jpg1776086958_1777328203986.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Adela Alcolea-Medina info FINAL (1)_1777495269316.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 11:20:00 AM (BST)",
+                "title": "Embedding clinical metagenomics into NHS diagnostic pathways"
+            }
+        ]
     },
     {
         "index": 3,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1776944939alberto-magi-jpg1776944939.jpg",
-        "speakerName": "Alberto Magi",
+        "name": "Alberto Magi",
         "organisation": "University of Florence, Italy",
-        "talkTitle": "Third-generation homozygosity analysis",
-        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1776944943lc2026-alberto-magi-info-final-pdf1776944943.pdf"
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1776944939alberto-magi-jpg1776944939.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1776944943lc2026-alberto-magi-info-final-pdf1776944943.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 11:40:01 AM (BST)",
+                "title": "Pipelines to enable clinical scientists"
+            }
+        ]
     },
     {
         "index": 4,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776770505alessandra-renieri-jpeg1776770505.jpeg",
-        "speakerName": "Alessandra Renieri",
+        "name": "Alessandra Renieri",
         "organisation": "University of Siena, Italy",
         "talkTitle": "",
-        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776770508lc2026-alessandra-renieri-info-final-pdf1776770508.pdf"
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776770505alessandra-renieri-jpeg1776770505.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776770508lc2026-alessandra-renieri-info-final-pdf1776770508.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-19 09:45:00 AM (BST)",
+                "title": "App only speakers"
+            }
+        ]
     },
     {
         "index": 5,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132593alfredo-hidalgo-miranda-jpg1775132593.jpg",
-        "speakerName": "Alfredo Hidalgo-Miranda",
+        "name": "Alfredo Hidalgo-Miranda",
         "organisation": "National Institute of Genomic Medicine, Mexico",
-        "talkTitle": "Assembly of an almost complete T2T Mexican Mestizo genome using long and ultra-long nanopore sequencing",
-        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132605lc2026-alfredo-hidalgo-miranda-info-final-pdf1775132605.pdf"
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132593alfredo-hidalgo-miranda-jpg1775132593.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132605lc2026-alfredo-hidalgo-miranda-info-final-pdf1775132605.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 01:15:02 PM (BST)",
+                "title": "Population data and human diversity"
+            }
+        ]
     },
     {
         "index": 6,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775726627alice-osmaston-jpg1775726627.jpg",
-        "speakerName": "Alice Osmaston",
+        "name": "Alice Osmaston",
         "organisation": "University College London, UK",
-        "talkTitle": "A low-cost Mycobacterium tuberculosis complete genome using nanopore sequencing",
-        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775726631lc2026-alice-osmaston-info-final-pdf1775726631.pdf"
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775726627alice-osmaston-jpg1775726627.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775726631lc2026-alice-osmaston-info-final-pdf1775726631.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 11:40:01 AM (BST)",
+                "title": "Pathogen surveillance from in-house to in the field"
+            }
+        ]
     },
     {
         "index": 7,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/197009/content/images/1775133813alvin-ng-jpeg1775133813.jpeg",
-        "speakerName": "Alvin Ng",
+        "name": "Alvin Ng",
         "organisation": "Nanyang Technological University, Singapore",
-        "talkTitle": "Building a multiomic homologous recombination deficiency clinical test using Adaptive Sampling",
-        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/197009/content/images/1775133817lc2026-alvin-ng-info-final-pdf1775133817.pdf"
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/197009/content/images/1775133813alvin-ng-jpeg1775133813.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/197009/content/images/1775133817lc2026-alvin-ng-info-final-pdf1775133817.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 01:15:03 PM (BST)",
+                "title": "Bioinformatic tools and insights for cancer research"
+            }
+        ]
     },
     {
         "index": 8,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/240020/content/images/1777731042amy-denton-jpg1777731042.jpg",
-        "speakerName": "Amy Denton",
+        "name": "Amy Denton",
         "organisation": "Wellcome Sanger Institute, UK",
-        "talkTitle": "Generating bird and fish reference genomes using Oxford Nanopore ligation sequencing for the Tree of Life Programme",
-        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Amy%20Denton%20info%20FINAL_1777730812505_1778161205744.pdf"
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/240020/content/images/1777731042amy-denton-jpg1777731042.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Amy Denton info FINAL_1777730812505_1778161205744.pdf",
+        "sessions": [
+            {
+                "time": "On Demand (BST)",
+                "title": "Biodiversity genomics"
+            }
+        ]
     },
     {
         "index": 9,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132331andre-reis-jpeg1775132331.jpeg",
-        "speakerName": "André Reis",
+        "name": "André Reis",
         "organisation": "Garvan Institute of Medical Research, Australia",
-        "talkTitle": "Targeted nanopore sequencing and an integrated analysis framework for neurogenomic disease",
-        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132336lc2026-andre-reis-info-final-pdf1775132336.pdf"
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132331andre-reis-jpeg1775132331.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132336lc2026-andre-reis-info-final-pdf1775132336.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 01:15:02 PM (BST)",
+                "title": "Population data and human diversity"
+            }
+        ]
     },
     {
         "index": 10,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775723635anna-rommerskirchen-jpeg1775723636.jpeg",
-        "speakerName": "Anna Rommerskirchen",
+        "name": "Anna Rommerskirchen",
         "organisation": "Heinrich-Heine University Dusseldorf, Germany",
-        "talkTitle": "Implementation of innovative cell-free DNA-based sepsis diagnostics in resource-limited Ethiopian settings",
-        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775723642lc2026-anna-rommerskirchen-info-final-pdf1775723642.pdf"
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775723635anna-rommerskirchen-jpeg1775723636.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775723642lc2026-anna-rommerskirchen-info-final-pdf1775723642.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 11:40:01 AM (BST)",
+                "title": "Pathogen surveillance from in-house to in the field"
+            }
+        ]
     },
     {
         "index": 11,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/236331/content/images/1776088209anna-niewiadomska-jpeg1776088209.jpeg",
-        "speakerName": "Anna Maria Niewiadomska",
+        "name": "Anna Maria Niewiadomska",
         "organisation": "",
         "talkTitle": "",
-        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Knowledge%20Exchange_bacterial%20and%20fungal%20isolate%20sequencing%20with%20NOMISS%20info%20FINAL%20V3_1777652789074.pdf"
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236331/content/images/1776088209anna-niewiadomska-jpeg1776088209.jpeg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Knowledge Exchange_bacterial and fungal isolate sequencing with NOMISS info FINAL V3_1777652789074.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 12:00:00 PM (BST)",
+                "title": "Knowledge exchange: bacterial and fungal isolate sequencing with NO-MISS"
+            }
+        ]
     },
     {
         "index": 12,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/237270/content/images/1776089318anna-niewiadomska-jpeg1776089318.jpeg",
-        "speakerName": "Anna Maria Niewiadomska",
+        "name": "Anna Maria Niewiadomska",
         "organisation": "",
         "talkTitle": "",
-        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Knowledge%20exchange%20how%20to%20sequence%20full-length%2016S%20and%20ITS%20microbial%20amplicons%20info%20FINAL%20V2_1777652930626.pdf"
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/237270/content/images/1776089318anna-niewiadomska-jpeg1776089318.jpeg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Knowledge exchange how to sequence full-length 16S and ITS microbial amplicons info FINAL V2_1777652930626.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 04:55:00 PM (BST)",
+                "title": "Knowledge exchange: how to sequence full-length 16S and ITS microbial amplicons with Oxford Nanopore"
+            }
+        ]
     },
     {
         "index": 13,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/237268/content/images/1776870541arianna-ceruti-png1776870541.png",
-        "speakerName": "Arianna Ceruti",
+        "name": "Arianna Ceruti",
         "organisation": "Leipzig University, Germany",
         "talkTitle": "",
-        "bioLink": "https://events.nanoporetech.com/"
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/237268/content/images/1776870541arianna-ceruti-png1776870541.png",
+        "bioUrl": "",
+        "sessions": [
+            {
+                "time": "2026-05-20 12:45:00 PM (BST)",
+                "title": "From London Calling 2025: Rapid-response mobile laboratory for disease elimination, outbreak investigation, and pathogen X"
+            }
+        ]
     },
     {
         "index": 14,
-        "profilePic": "https://data-eu.vfairs.com/V2/10000225/users/Arnfinnur_Kallsberg_1777731658306.jpg",
-        "speakerName": "Arnfinnur Kallsberg",
+        "name": "Arnfinnur Kallsberg",
         "organisation": "Faroese Health Authority, Faroe Islands",
-        "talkTitle": "Targeted nanopore sequencing for newborn screening in a small population",
-        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Arnfinnur%20Kallsberg%20info%20FINAL%20v2_1777731712354.pdf"
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Arnfinnur_Kallsberg_1777731658306.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Arnfinnur Kallsberg info FINAL v2_1777731712354.pdf",
+        "sessions": [
+            {
+                "time": "On Demand (BST)",
+                "title": "Clinical research"
+            }
+        ]
     },
     {
         "index": 15,
-        "profilePic": "https://data-eu.vfairs.com/V2/10000225/users/Art_Rand_1777492086247.jpg",
-        "speakerName": "Art Rand",
+        "name": "Art Rand",
         "organisation": "Research Scientist, Machine Learning, Oxford Nanopore Technologies",
-        "talkTitle": "Leveraging base modification information with Modkit",
-        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Art%20Rand%20info%20FINAL%20(1)_1777985853168.pdf"
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Art_Rand_1777492086247.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Art Rand info FINAL (1)_1777985853168.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 01:00:00 PM (BST)",
+                "title": "Data for lunch"
+            }
+        ]
     },
     {
         "index": 16,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1775663245ashley-pritchard-jpg1775663245.jpg",
-        "speakerName": "Ashley Pritchard",
+        "name": "Ashley Pritchard",
         "organisation": "Great Ormond Street Hospital for Children NHS Foundation Trust, UK",
-        "talkTitle": "Translating long-read sequencing into a scalable NHS bioinformatics workflow",
-        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1775663250lc2026-ashley-pritchard-info-final-pdf1775663250.pdf"
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1775663245ashley-pritchard-jpg1775663245.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1775663250lc2026-ashley-pritchard-info-final-pdf1775663250.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 11:40:01 AM (BST)",
+                "title": "Pipelines to enable clinical scientists"
+            }
+        ]
     },
     {
         "index": 17,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775728007brynja-sigurpalsdottir-jpg1775728007.jpg",
-        "speakerName": "Brynja Sigurpálsdóttir",
+        "name": "Brynja Sigurpálsdóttir",
         "organisation": "Amgen deCODE genetics, Iceland",
-        "talkTitle": "Oxford Nanopore sequencing of the UK Biobank",
-        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Brynja%20Sigurp%C3%A1lsd%C3%B3ttir%20info%20FINAL%20v2_1777986054105.pdf"
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775728007brynja-sigurpalsdottir-jpg1775728007.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Brynja Sigurpálsdóttir info FINAL v2_1777986054105.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 04:30:00 PM (BST)",
+                "title": "Panel plenary: Methylation matters"
+            }
+        ]
     },
     {
         "index": 18,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/236589/content/images/1775644980carla-apaza-jpeg1775644980.jpeg",
-        "speakerName": "Carla Apaza",
+        "name": "Carla Apaza",
         "organisation": "Peruvian University Cayetano Heredia, Peru",
-        "talkTitle": "Revealing minor subpopulations in mixed infections with targeted sequencing",
-        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/236589/content/images/1775644986lc2026-carla-apaza-info-final-pdf1775644986.pdf"
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236589/content/images/1775644980carla-apaza-jpeg1775644980.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236589/content/images/1775644986lc2026-carla-apaza-info-final-pdf1775644986.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 09:45:00 AM (BST)",
+                "title": "Lightning talks"
+            }
+        ]
     },
     {
         "index": 19,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/237270/content/images/1776089589catriona-williams-jpeg1776089589.jpeg",
-        "speakerName": "Catriona Williams",
+        "name": "Catriona Williams",
         "organisation": "",
         "talkTitle": "",
-        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Knowledge%20exchange%20how%20to%20sequence%20full-length%2016S%20and%20ITS%20microbial%20amplicons%20info%20FINAL%20V2_1777652966581.pdf"
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/237270/content/images/1776089589catriona-williams-jpeg1776089589.jpeg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Knowledge exchange how to sequence full-length 16S and ITS microbial amplicons info FINAL V2_1777652966581.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 04:55:00 PM (BST)",
+                "title": "Knowledge exchange: how to sequence full-length 16S and ITS microbial amplicons with Oxford Nanopore"
+            }
+        ]
     },
     {
         "index": 20,
-        "profilePic": "https://data-eu.vfairs.com/V2/10000225/users/Cecilia_Mancini_1777731551450.jpg",
-        "speakerName": "Cecilia Mancini",
+        "name": "Cecilia Mancini",
         "organisation": "Bambino Gesù Children’s Hospital, Italy",
-        "talkTitle": "Oxford Nanopore sequencing to handle missing heritability in rare diseases",
-        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Cecilia%20Mancini%20info%20FINAL%20V2_1777731613811.pdf"
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Cecilia_Mancini_1777731551450.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Cecilia Mancini info FINAL V2_1777731613811.pdf",
+        "sessions": [
+            {
+                "time": "On Demand (BST)",
+                "title": "Clinical research"
+            }
+        ]
     },
     {
         "index": 21,
-        "profilePic": "https://data-eu.vfairs.com/V2/10000225/users/1775134941chanatjit-cheawsamoot-jpeg1775134941_1777329231284.jpeg",
-        "speakerName": "Chanatjit Cheawsamoot",
+        "name": "Chanatjit Cheawsamoot",
         "organisation": "Chulalongkorn University, Thailand",
-        "talkTitle": "High-resolution structural variant detection and validation via nanopore long-read whole-genome sequencing",
-        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/1775134970lc2026-chanatjit-cheawsamoot-info-final-pdf1775134970_1777329157538.pdf"
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/1775134941chanatjit-cheawsamoot-jpeg1775134941_1777329231284.jpeg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/1775134970lc2026-chanatjit-cheawsamoot-info-final-pdf1775134970_1777329157538.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 03:35:00 PM (BST)",
+                "title": "Spotlight Session"
+            }
+        ]
     },
     {
         "index": 22,
-        "profilePic": "https://data-eu.vfairs.com/V2/10000225/users/Claudia_Strafella_1777731524995.jpg",
-        "speakerName": "Claudia Strafella",
+        "name": "Claudia Strafella",
         "organisation": "Santa Lucia Foundation IRCCS, Italy",
-        "talkTitle": "An integrated long-read sequencing workflow for molecular profiling in facioscapulohumeral muscular dystrophy",
-        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Claudia%20Strafella%20info%20FINAL_1777731489714.pdf"
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Claudia_Strafella_1777731524995.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Claudia Strafella info FINAL_1777731489714.pdf",
+        "sessions": [
+            {
+                "time": "On Demand (BST)",
+                "title": "Human translational research"
+            }
+        ]
     },
     {
         "index": 23,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775727526danny-miller-1-jpg1775727526.jpg",
-        "speakerName": "Danny E. Miller",
+        "name": "Danny E. Miller",
         "organisation": "University of Washington, USA",
-        "talkTitle": "Population-scale long-read methylation signatures for rare disease classification",
-        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Danny%20E.%20Miller%20info%20FINAL%20v2_1777495518220.pdf"
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775727526danny-miller-1-jpg1775727526.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Danny E. Miller info FINAL v2_1777495518220.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 04:30:00 PM (BST)",
+                "title": "Panel plenary: Methylation matters"
+            }
+        ]
     },
     {
         "index": 24,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/236342/content/images/1775135813david-thomas-jpeg1775135813.jpeg",
-        "speakerName": "David Thomas",
+        "name": "David Thomas",
         "organisation": "University of New South Wales, Australia",
         "talkTitle": "",
-        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/236342/content/images/1776160856lc2026-david-thomas-info-final-pdf1776160856.pdf"
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236342/content/images/1775135813david-thomas-jpeg1775135813.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236342/content/images/1776160856lc2026-david-thomas-info-final-pdf1776160856.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 04:15:00 PM (BST)",
+                "title": "Improving diagnosis in Li-Fraumeni syndrome using long-read whole-genome and integrated multiomic sequencing"
+            }
+        ]
     },
     {
         "index": 25,
-        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775727646eilis-hannon-jpeg1775727646.jpeg",
-        "speakerName": "Eilis Hannon",
+        "name": "Eilis Hannon",
         "organisation": "University of Exeter, UK",
-        "talkTitle": "Leveraging epigenetic signatures to predict cell-type of origin from nanopore sequencing",
-        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775727657lc2026-eilis-hannon-info-final-pdf1775727657.pdf"
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775727646eilis-hannon-jpeg1775727646.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775727657lc2026-eilis-hannon-info-final-pdf1775727657.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 04:30:00 PM (BST)",
+                "title": "Panel plenary: Methylation matters"
+            }
+        ]
+    },
+    {
+        "index": 1,
+        "name": "Eleanor Woodward",
+        "organisation": "Newcastle University, UK",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236339/content/images/1775134833eleanor-woodward-jpeg1775134833.jpeg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/1776872244lc2026-eleanor-woodward-info-final-2-pdf1776872244_1777330519164.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 03:35:00 PM (BST)",
+                "title": "Spotlight Session"
+            }
+        ]
+    },
+    {
+        "index": 2,
+        "name": "Emma White",
+        "organisation": "xxx,xxx",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Emma_White_1778077014804.jpeg",
+        "bioUrl": "",
+        "sessions": [
+            {
+                "time": "2026-05-20 09:45:00 AM (BST)",
+                "title": "Welcome to London Calling"
+            }
+        ]
+    },
+    {
+        "index": 3,
+        "name": "Eugenie ‘Charley’ Yen",
+        "organisation": "University of Massachusetts Amherst/Queen Mary University of London, USA/UK",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Eugenie_Yen_1777731750599.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Eugenie ‘Charley’ Yen info FINAL_1777731810561.pdf",
+        "sessions": [
+            {
+                "time": "On Demand (BST)",
+                "title": "Animal genome assemblies"
+            }
+        ]
+    },
+    {
+        "index": 4,
+        "name": "Francis van Parys",
+        "organisation": "Chief Executive Officer, Oxford Nanopore Technologies",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/235387/content/images/1776870098francis-van-parys-jpg1776870098.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/235387/content/images/1776870102lc2026-francis-van-parys-info-final-1-pdf1776870103.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 09:45:00 AM (BST)",
+                "title": "Welcome to London Calling"
+            },
+            {
+                "time": "2026-05-21 05:30:00 PM (BST)",
+                "title": "Closing remarks"
+            },
+            {
+                "time": "2026-05-21 09:00:00 AM (BST)",
+                "title": "Welcome back to London Calling 2026"
+            }
+        ]
+    },
+    {
+        "index": 5,
+        "name": "Fritz Sedlazeck",
+        "organisation": "Baylor College of Medicine, USA",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236341/content/images/1775135167fritz-sedlazeck-jpeg1775135167.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236341/content/images/1775135148lc2026-fritz-sedlazeck-info-final-pdf1775135148.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 03:50:00 PM (BST)",
+                "title": "Genetic and epigenetic landscape of self-identified Hispanics in All of Us"
+            }
+        ]
+    },
+    {
+        "index": 6,
+        "name": "Graham Hall",
+        "organisation": "",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Graham_Hall_1778077513508.jpeg",
+        "bioUrl": "",
+        "sessions": [
+            {
+                "time": "2026-05-20 05:50:00 PM (BST)",
+                "title": "Tech talk"
+            }
+        ]
+    },
+    {
+        "index": 7,
+        "name": "Jaime Chaves",
+        "organisation": "San Francisco State University, USA",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Jaime_Chaves_1777731844086.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Jaime Chaves info FINAL_1777731889113.pdf",
+        "sessions": [
+            {
+                "time": "On Demand (BST)",
+                "title": "Animal genome assemblies"
+            }
+        ]
+    },
+    {
+        "index": 8,
+        "name": "Jamie Moore",
+        "organisation": "Johns Hopkins University, USA",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236589/content/images/1775644695jamie-moore-jpg1775644695.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236589/content/images/1775644636lc2026-jamie-moore-info-final-pdf1775644636.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 09:45:00 AM (BST)",
+                "title": "Lightning talks"
+            }
+        ]
+    },
+    {
+        "index": 9,
+        "name": "Javeria Aijaz",
+        "organisation": "Indus Hospital & Health Network, Pakistan",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236592/content/images/1775659307javeria-aijaz-jpg1775659307.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236592/content/images/1775659347lc2026-javeria-aijaz-info-final-pdf1775659347.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 10:45:00 AM (BST)",
+                "title": "Democratising access to the future of paediatric leukaemia diagnostics: a St. Jude Global Alliance showcase"
+            }
+        ]
+    },
+    {
+        "index": 10,
+        "name": "Jayne Wallace",
+        "organisation": "",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Jayne_Wallace_1778077903080.jpeg",
+        "bioUrl": "",
+        "sessions": [
+            {
+                "time": "2026-05-20 05:50:00 PM (BST)",
+                "title": "Tech talk"
+            }
+        ]
+    },
+    {
+        "index": 11,
+        "name": "Kamil Khanipov",
+        "organisation": "The University of Texas Medical Branch, USA",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/197010/content/images/1775131337kamil-khanipov-jpg1775131337.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/197010/content/images/1776157725lc2026-kamil-khanipov-info-final-v2-pdf1776157725.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 01:15:01 PM (BST)",
+                "title": "Metagenomics — insights without culture"
+            }
+        ]
+    },
+    {
+        "index": 12,
+        "name": "Kimberley Billingsley",
+        "organisation": "National Institutes of Health, USA",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132868kimberley-billingsley-jpg1775132868.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132927lc2026-kimberley-billingsley-info-final-pdf1775132927.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 01:15:02 PM (BST)",
+                "title": "Population data and human diversity"
+            }
+        ]
+    },
+    {
+        "index": 13,
+        "name": "Kumeren Govender",
+        "organisation": "University of Oxford, UK",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236330/content/images/1775037183kumeren-govender-jpg1775037183.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236330/content/images/1775037206lc2026-kumeren-govender-info-final-pdf1775037206.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 11:00:00 AM (BST)",
+                "title": "Lightning talks"
+            }
+        ]
+    },
+    {
+        "index": 14,
+        "name": "Kylie Montgomery",
+        "organisation": "UK DRI at Cambridge, UK",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236330/content/images/1775037538kylie-montgomery-jpg1775037538.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236330/content/images/1775037543lc2026-kylie-montgomery-info-final-pdf1775037543.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 11:00:00 AM (BST)",
+                "title": "Lightning talks"
+            }
+        ]
+    },
+    {
+        "index": 15,
+        "name": "Lakmal Jayasinghe",
+        "organisation": "",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Lakmal_Jayasinghe_1778077451423.jpeg",
+        "bioUrl": "",
+        "sessions": [
+            {
+                "time": "2026-05-20 05:50:00 PM (BST)",
+                "title": "Tech talk"
+            }
+        ]
+    },
+    {
+        "index": 16,
+        "name": "Lara Urban",
+        "organisation": "University of Zurich, Switzerland",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/197010/content/images/1775130124lara-urban-jpeg1775130124.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/197010/content/images/1775130128lc2026-lara-urban-info-final-pdf1775130128.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 01:15:01 PM (BST)",
+                "title": "Metagenomics — insights without culture"
+            }
+        ]
+    },
+    {
+        "index": 17,
+        "name": "Lennart Kester",
+        "organisation": "Princess Maxima Center for Pediatric Oncology, The Netherlands",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775727833lennart-kester-jpg1775727833.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775727790lc2026-lennart-kester-info-final-pdf1775727790.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 04:30:00 PM (BST)",
+                "title": "Panel plenary: Methylation matters"
+            }
+        ]
+    },
+    {
+        "index": 18,
+        "name": "Lucas Esteban Wange",
+        "organisation": "Pompeu Fabra University, Spain",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Lucas%20Esteban%20Wange_1777730589024.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Lucas Esteban Wange info FINAL V2_1777730686585.pdf",
+        "sessions": [
+            {
+                "time": "On Demand (BST)",
+                "title": "Biodiversity genomics"
+            }
+        ]
+    },
+    {
+        "index": 19,
+        "name": "Luke Blagdon Snell",
+        "organisation": "King’s College London, UK",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/238153/content/images/1777195760luke-blagdon-snell-v2-jpg1777195760.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/238153/content/images/1777195764lc2026-luke-blagdon-snell-info-final-pdf1777195764.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 11:20:00 AM (BST)",
+                "title": "Embedding clinical metagenomics into NHS diagnostic pathways"
+            }
+        ]
+    },
+    {
+        "index": 20,
+        "name": "Mae Dolendo",
+        "organisation": "St. Jude Global Asia Pacific, Philippines",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236592/content/images/1775658295mae-dolendo-jpg1775658295.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236592/content/images/1776161061lc2026-mae-dolendo-info-final-pdf1776161061.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 10:45:00 AM (BST)",
+                "title": "Democratising access to the future of paediatric leukaemia diagnostics: a St. Jude Global Alliance showcase"
+            }
+        ]
+    },
+    {
+        "index": 21,
+        "name": "Maria Reyes Capilla-Guerra",
+        "organisation": "Dana-Farber Cancer Institute, USA",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/198502/content/images/1775662200maria-reyes-capilla-guerra-jpg1775662200.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/198502/content/images/1775662277lc2026-maria-reyes-capilla-guerra-info-final-pdf1775662277.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 11:40:01 AM (BST)",
+                "title": "Profiling and classification of cancer"
+            }
+        ]
+    },
+    {
+        "index": 22,
+        "name": "Mark Bruce",
+        "organisation": "",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Mark_Brucecompress_1778077849136.jpg",
+        "bioUrl": "",
+        "sessions": [
+            {
+                "time": "2026-05-20 05:50:00 PM (BST)",
+                "title": "Tech talk"
+            }
+        ]
+    },
+    {
+        "index": 23,
+        "name": "Marta Rudzite",
+        "organisation": "",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236331/content/images/1776088429marta-rudzite-jpeg1776088429.jpeg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Knowledge Exchange_bacterial and fungal isolate sequencing with NOMISS info FINAL V3_1777652739417.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 12:00:00 PM (BST)",
+                "title": "Knowledge exchange: bacterial and fungal isolate sequencing with NO-MISS"
+            }
+        ]
+    },
+    {
+        "index": 24,
+        "name": "Max Bloomfield",
+        "organisation": "Awanui Laboratories Wellington, New Zealand",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775727008max-bloomfield-jpg1775727008.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775727015lc2026-max-bloomfield-info-final-pdf1775727015.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 11:40:01 AM (BST)",
+                "title": "Pathogen surveillance from in-house to in the field"
+            }
+        ]
+    },
+    {
+        "index": 25,
+        "name": "Mayur Parihar",
+        "organisation": "Tata Medical Center, India",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236592/content/images/1775658999mayur-parihar-jpeg1775658999.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236592/content/images/1775658886lc2026-mayur-parihar-info-final-pdf1775658886.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 10:45:00 AM (BST)",
+                "title": "Democratising access to the future of paediatric leukaemia diagnostics: a St. Jude Global Alliance showcase"
+            }
+        ]
+    },
+    {
+        "index": 1,
+        "name": "Mike Clark",
+        "organisation": "The University of Melbourne, Australia",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236597/content/images/1775553800mike-clark-jpg1775553800.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236597/content/images/1775553805lc2026-mike-clark-info-final-pdf1775553805.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 02:25:00 PM (BST)",
+                "title": "Characterising the complete transcriptome and proteome with GenomeProt"
+            }
+        ]
+    },
+    {
+        "index": 2,
+        "name": "Mike Vella",
+        "organisation": "",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Mike_Vella_1778077757061.jpeg",
+        "bioUrl": "",
+        "sessions": [
+            {
+                "time": "2026-05-20 05:50:00 PM (BST)",
+                "title": "Tech talk"
+            }
+        ]
+    },
+    {
+        "index": 3,
+        "name": "Mikhail Kolmogorov",
+        "organisation": "National Cancer Institute, USA",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/197009/content/images/1775134048mikhail-kolmogorov-jpeg1775134048.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/197009/content/images/1775134008lc2026-mikhail-kolmogorov-info-final-pdf1775134008.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 01:15:03 PM (BST)",
+                "title": "Bioinformatic tools and insights for cancer research"
+            }
+        ]
+    },
+    {
+        "index": 4,
+        "name": "Min Seon Park",
+        "organisation": "University of Washington, USA",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/198502/content/images/1775661886min-seon-park-jpg1775661886.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/198502/content/images/1775661816lc2026-min-seon-park-info-final-pdf1775661816.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 11:40:01 AM (BST)",
+                "title": "Profiling and classification of cancer"
+            }
+        ]
+    },
+    {
+        "index": 5,
+        "name": "Natalia Garcia",
+        "organisation": "",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/237270/content/images/1776089443natalia-garcia-jpeg1776089443.jpeg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Knowledge exchange how to sequence full-length 16S and ITS microbial amplicons info FINAL V2_1777652996634.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 04:55:00 PM (BST)",
+                "title": "Knowledge exchange: how to sequence full-length 16S and ITS microbial amplicons with Oxford Nanopore"
+            }
+        ]
+    },
+    {
+        "index": 6,
+        "name": "Ni-Chung Lee",
+        "organisation": "National Taiwan University Hospital, Taiwan",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236328/content/images/1775037062ni-chung-lee-jpg1775037062.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236328/content/images/1775037065lc2026-ni-chung-lee-info-final-pdf1775037065.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 10:35:00 AM (BST)",
+                "title": "N-Care Project: using long-read sequencing for timely genetic diagnosis in critically ill infants across Asia-Pacific"
+            }
+        ]
+    },
+    {
+        "index": 7,
+        "name": "Rebecca Stubbs",
+        "organisation": "Senior Bioinformatician, Commercial Applications, Oxford Nanopore Technologies",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Rebecca_Stubbs_1777492107134_1778087664317.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Rebecca Stubbs_1778087704264.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 01:00:00 PM (BST)",
+                "title": "Data for lunch"
+            }
+        ]
+    },
+    {
+        "index": 8,
+        "name": "Rebecca Deane",
+        "organisation": "",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236331/content/images/1776088726rebecca-deane-jpeg1776088726.jpeg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Knowledge Exchange_bacterial and fungal isolate sequencing with NOMISS info FINAL V3_1777652763547.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 12:00:00 PM (BST)",
+                "title": "Knowledge exchange: bacterial and fungal isolate sequencing with NO-MISS"
+            }
+        ]
+    },
+    {
+        "index": 9,
+        "name": "Rhys White",
+        "organisation": "Institute of Environmental Science and Research, New Zealand",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/237269/content/images/1776089176rhys-white-jpg1776089176.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/237269/content/images/1776870927lc2026-rhys-white-info-final-v3-pdf1776870927.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 12:55:00 PM (BST)",
+                "title": "From London Calling 2025: Nanopore sequencing captures first in-patient evolution of vancomycin-resistant E. faecium in New Zealand"
+            }
+        ]
+    },
+    {
+        "index": 10,
+        "name": "Robert A. Edwards",
+        "organisation": "Flinders University, Australia",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/197010/content/images/1775131849robert-edwards-jpg1775131849.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/197010/content/images/1775131856lc2026-robert-a-edwards-info-final-pdf1775131856.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 01:15:01 PM (BST)",
+                "title": "Metagenomics — insights without culture"
+            }
+        ]
+    },
+    {
+        "index": 11,
+        "name": "Rowan Howell",
+        "organisation": "Genomics England, UK",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236588/content/images/1775552572rowan-howell-jpg1775552572.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236588/content/images/1775552501lc2026-rowan-howell-info-final-pdf1775552501.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 09:20:00 AM (BST)",
+                "title": "Cancer clinical genomic testing using Oxford Nanopore whole-genome sequencing"
+            }
+        ]
+    },
+    {
+        "index": 12,
+        "name": "Roy Williams",
+        "organisation": "Aspen Neuroscience, USA",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236590/content/images/1775553090roy-williams-jpeg1775553090.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236590/content/images/1775553094lc2026-roy-williams-info-final-pdf1775553094.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 10:05:00 AM (BST)",
+                "title": "Genomic integrity profiling of autologous iPSC derived therapeutics for Parkinson’s disease"
+            }
+        ]
+    },
+    {
+        "index": 13,
+        "name": "Sandy Fong",
+        "organisation": "SickKids Research Institute, Canada",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236636/content/images/1775554066sandy-fong-v2-jpg1775554066.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236636/content/images/1775554073lc2026-sandy-fong-info-final-v2-pdf1775554073.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 04:05:00 PM (BST)",
+                "title": "Rapid and accurate childhood cancer diagnosis with nanopore long-read RNA sequencing"
+            }
+        ]
+    },
+    {
+        "index": 14,
+        "name": "Sefi Prawer",
+        "organisation": "The University of Melbourne, Australia",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236589/content/images/1775645771sefi-prawer-jpg1775645771.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236589/content/images/1775645776lc2026-sefi-prawer-info-final-pdf1775645776.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 09:45:00 AM (BST)",
+                "title": "Lightning talks"
+            }
+        ]
+    },
+    {
+        "index": 15,
+        "name": "Sissel Juul",
+        "organisation": "",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Sissel_Juulcompressed_1778077644310.jpg",
+        "bioUrl": "",
+        "sessions": [
+            {
+                "time": "2026-05-20 05:50:00 PM (BST)",
+                "title": "Tech talk"
+            }
+        ]
+    },
+    {
+        "index": 16,
+        "name": "Sophie Ehresmann",
+        "organisation": "UdeM & IRCM, Canada",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Sophie_Ehresmann_1777731389109.jpeg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Sophie Ehresmann info FINAL v2_1777731345784.pdf",
+        "sessions": [
+            {
+                "time": "On Demand (BST)",
+                "title": "Human translational research"
+            }
+        ]
+    },
+    {
+        "index": 17,
+        "name": "Stefan Hardy Lung",
+        "organisation": "Institute of Virology Innsbruck, Austria",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/1775134591stefan-hardy-lung-jpeg1775134591_1777330165836.jpeg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/1775134621lc2026-stefan-hardy-lung-info-final-pdf1775134621_1777330159364.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 03:35:00 PM (BST)",
+                "title": "Spotlight Session"
+            }
+        ]
+    },
+    {
+        "index": 18,
+        "name": "Talal Al-Yazeedi",
+        "organisation": "United Arab Emirates University, UAE",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236330/content/images/1775037438talal-al-yazeedi-jpeg1775037438.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236330/content/images/1775037441lc2026-talal-al-yazeedi-info-final-pdf1775037441.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 11:00:00 AM (BST)",
+                "title": "Lightning talks"
+            }
+        ]
+    },
+    {
+        "index": 19,
+        "name": "Thomas Alexander",
+        "organisation": "University of North Carolina, USA",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/236327/content/images/1774869344thomas-alexander-jpeg1774869344.jpeg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/236327/content/images/1774869356lc2026-thomas-alexander-info-final-pdf1774869356.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 10:10:00 AM (BST)",
+                "title": "From innovation to global impact: adaptive genome sequencing for childhood leukemia"
+            }
+        ]
+    },
+    {
+        "index": 20,
+        "name": "Tobias Rausch",
+        "organisation": "European Molecular Biology Laboratory, Germany",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/197009/content/images/1776160563tobias-rausch-jpg1776160563.jpg",
+        "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/197009/content/images/1775133597lc2026-tobias-rausch-info-final-1-pdf1775133597.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-20 01:15:03 PM (BST)",
+                "title": "Bioinformatic tools and insights for cancer research"
+            }
+        ]
+    },
+    {
+        "index": 21,
+        "name": "Tom Rich",
+        "organisation": "Associate Director, Bioinformatics Platforms, Oxford Nanopore Technologies",
+        "talkTitle": "",
+        "image": "https://data-eu.vfairs.com/V2/10000225/users/Tom%20Rich_1778061911445.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Tom Rich info FINAL_1778061918432.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 01:00:00 PM (BST)",
+                "title": "Data for lunch"
+            }
+        ]
+    },
+    {
+        "index": 22,
+        "name": "Vincent-Philippe Lavallée",
+        "organisation": "CHU Sainte-Justine & University of Montreal, Canada",
+        "talkTitle": "",
+        "image": "https://euimg.vfairs.com/uploads/vjfnew/198502/content/images/1775662491vincent-philippe-lavalee-jpg1775662491.jpg",
+        "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Vincent-Philippe Lavallee info FINAL v3 (1)_1777986797236.pdf",
+        "sessions": [
+            {
+                "time": "2026-05-21 11:40:01 AM (BST)",
+                "title": "Profiling and classification of cancer"
+            }
+        ]
     }
 ]
