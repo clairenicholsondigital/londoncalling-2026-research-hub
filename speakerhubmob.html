@@ -1,0 +1,530 @@
+<style>
+  #lc2026_speaker_hub,
+  #lc2026_speaker_hub * {
+    box-sizing: border-box;
+  }
+
+  #lc2026_speaker_hub {
+    font-family: Arial, sans-serif;
+    background: #f7f8fd;
+    padding: 12px;
+    color: #1f2340;
+  }
+
+  #lc2026_speaker_hub h2 {
+    margin: 0 0 14px;
+    font-size: 24px;
+  }
+
+  .lc2026_speaker_search_wrap {
+    background: #ffffff;
+    border: 1px solid #d9dceb;
+    border-radius: 18px;
+    padding: 10px;
+    margin: 0 0 14px;
+    box-shadow: 0 8px 18px rgba(31, 35, 64, 0.06);
+  }
+
+  .lc2026_speaker_search_label {
+    display: block;
+    margin: 0 0 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1f2340;
+  }
+
+  .lc2026_speaker_search_row {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  #lc2026_speaker_search {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 46px;
+    border: 1px solid #c5c9dd;
+    border-radius: 999px;
+    padding: 0 14px;
+    font-size: 16px;
+    color: #1f2340;
+    background: #ffffff;
+  }
+
+  #lc2026_speaker_search:focus {
+    outline: 3px solid #eef0fb;
+    border-color: #7474c1;
+  }
+
+  #lc2026_speaker_clear {
+    flex: 0 0 auto;
+    min-width: 74px;
+    min-height: 46px;
+    border: 0;
+    border-radius: 999px;
+    background: #eef0fb;
+    color: #1f2340;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  #lc2026_speaker_result_count {
+    margin: 8px 2px 0;
+    font-size: 12px;
+    color: #606884;
+  }
+
+  #lc2026_speaker_status {
+    padding: 12px;
+    background: #ffffff;
+    border: 1px solid #d9dceb;
+    border-radius: 14px;
+    font-size: 13px;
+    color: #606884;
+  }
+
+  #lc2026_speaker_grid {
+    width: 100%;
+  }
+
+  .lc2026_speaker_grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .lc2026_speaker_card {
+    width: 100%;
+    min-width: 0;
+    min-height: 265px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #d9dceb;
+    border-radius: 16px;
+    padding: 10px;
+    box-shadow: 0 8px 18px rgba(31, 35, 64, 0.08);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lc2026_speaker_image_wrap {
+    width: 86px;
+    height: 86px;
+    margin: 0 auto 10px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #eef0fb;
+    flex-shrink: 0;
+  }
+
+  .lc2026_speaker_image_wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .lc2026_speaker_card h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    line-height: 1.25;
+    color: #1f2340;
+    word-break: break-word;
+  }
+
+  .lc2026_speaker_org {
+    margin: 0 0 12px;
+    font-size: 12px;
+    line-height: 1.35;
+    color: #5f6785;
+    word-break: break-word;
+  }
+
+  .lc2026_bio_button {
+    margin-top: auto;
+    width: 100%;
+    min-height: 42px;
+    border: 0;
+    border-radius: 999px;
+    background: #7474c1;
+    color: #fff !important;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+    text-align: center;
+    padding: 9px 10px;
+  }
+
+  .lc2026_bio_button:hover {
+    background: #5f5fb4;
+    color: #fff !important;
+  }
+
+  .lc2026_no_bio {
+    margin-top: auto;
+    width: 100%;
+    min-height: 42px;
+    border-radius: 999px;
+    background: #eef0fb;
+    color: #606884;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 9px 10px;
+  }
+
+  @media (max-width: 360px) {
+    .lc2026_speaker_grid {
+      gap: 8px;
+    }
+
+    .lc2026_speaker_card {
+      padding: 8px;
+      min-height: 250px;
+    }
+
+    .lc2026_speaker_image_wrap {
+      width: 76px;
+      height: 76px;
+    }
+
+    .lc2026_speaker_card h3 {
+      font-size: 13px;
+    }
+
+    .lc2026_speaker_org {
+      font-size: 11px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .lc2026_speaker_grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: 12px;
+    }
+
+    .lc2026_speaker_card {
+      min-height: 300px;
+      padding: 14px;
+    }
+
+    .lc2026_speaker_image_wrap {
+      width: 136px;
+      height: 136px;
+    }
+
+    .lc2026_speaker_card h3 {
+      font-size: 15px;
+    }
+
+    .lc2026_speaker_org {
+      font-size: 13px;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .lc2026_speaker_grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+  }
+</style>
+
+<div id="lc2026_speaker_hub">
+  <h2>Speakers</h2>
+
+  <div class="lc2026_speaker_search_wrap">
+    <label class="lc2026_speaker_search_label" for="lc2026_speaker_search">
+      Search speakers
+    </label>
+
+    <div class="lc2026_speaker_search_row">
+      <input
+        id="lc2026_speaker_search"
+        type="search"
+        placeholder="Search by name, organisation or topic"
+        autocomplete="off">
+
+      <button type="button" id="lc2026_speaker_clear">
+        Clear
+      </button>
+    </div>
+
+    <p id="lc2026_speaker_result_count"></p>
+  </div>
+
+  <div id="lc2026_speaker_status">
+    Loading speakers...
+  </div>
+
+  <div class="lc2026_speaker_grid" id="lc2026_speaker_grid"></div>
+</div>
+
+<script>
+(function () {
+  const DATA_URL =
+    "https://cdn.jsdelivr.net/gh/clairenicholsondigital/londoncalling-2026-research-hub@main/speaker-hub-mobile.json?v=20260507f";
+
+  const status = document.getElementById("lc2026_speaker_status");
+  const grid = document.getElementById("lc2026_speaker_grid");
+  const searchInput = document.getElementById("lc2026_speaker_search");
+  const clearButton = document.getElementById("lc2026_speaker_clear");
+  const resultCount = document.getElementById("lc2026_speaker_result_count");
+
+  let allSpeakers = [];
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function normaliseText(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function safeUrl(value) {
+    try {
+      const raw = String(value || "").trim();
+
+      if (!raw || raw === "#" || /^javascript:/i.test(raw)) {
+        return "";
+      }
+
+      const url = new URL(raw, window.location.origin);
+
+      if (url.protocol !== "https:" && url.protocol !== "http:") {
+        return "";
+      }
+
+      return url.href;
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function normaliseSpeaker(speaker) {
+    return {
+      name:
+        speaker.name ||
+        speaker.speakerName ||
+        speaker.fullName ||
+        speaker.full_name ||
+        speaker.title ||
+        "",
+
+      organisation:
+        speaker.organisation ||
+        speaker.organization ||
+        speaker.company ||
+        speaker.companyName ||
+        speaker.jobTitle ||
+        speaker.job_title ||
+        "",
+
+      image:
+        speaker.image ||
+        speaker.profilePic ||
+        speaker.profile_pic ||
+        speaker.profileImage ||
+        speaker.avatar ||
+        "",
+
+      bioUrl:
+        speaker.bioUrl ||
+        speaker.bioLink ||
+        speaker.bio ||
+        speaker.pdfUrl ||
+        speaker.pdf ||
+        "",
+
+      sessions:
+        Array.isArray(speaker.sessions)
+          ? speaker.sessions
+          : []
+    };
+  }
+
+  function getSpeakerSearchText(speaker) {
+    const sessionText = Array.isArray(speaker.sessions)
+      ? speaker.sessions
+          .map(function (session) {
+            return [
+              session.title,
+              session.sessionTitle,
+              session.time,
+              session.startTime
+            ].join(" ");
+          })
+          .join(" ")
+      : "";
+
+    return normaliseText([
+      speaker.name,
+      speaker.organisation,
+      speaker.bioUrl,
+      sessionText
+    ].join(" "));
+  }
+
+  function createSpeakerCard(rawSpeaker) {
+    const speaker = normaliseSpeaker(rawSpeaker);
+
+    const name = escapeHtml(speaker.name || "Unnamed speaker");
+    const organisation = escapeHtml(
+      speaker.organisation || "Organisation not listed"
+    );
+
+    const image = safeUrl(speaker.image);
+    const bioUrl = safeUrl(speaker.bioUrl);
+
+    return `
+      <article class="lc2026_speaker_card">
+        <div class="lc2026_speaker_image_wrap">
+          ${
+            image
+              ? `
+                <img
+                  src="${escapeHtml(image)}"
+                  alt="${name}"
+                  loading="lazy">
+              `
+              : ""
+          }
+        </div>
+
+        <h3>${name}</h3>
+
+        <p class="lc2026_speaker_org">
+          ${organisation}
+        </p>
+
+        ${
+          bioUrl
+            ? `
+              <a
+                class="lc2026_bio_button"
+                href="${escapeHtml(bioUrl)}"
+                target="_blank"
+                rel="noopener noreferrer">
+                View bio
+              </a>
+            `
+            : `
+              <div class="lc2026_no_bio">
+                Bio coming soon
+              </div>
+            `
+        }
+      </article>
+    `;
+  }
+
+  function extractSpeakers(data) {
+    if (Array.isArray(data)) {
+      return data;
+    }
+
+    if (data && Array.isArray(data.speakers)) {
+      return data.speakers;
+    }
+
+    if (data && Array.isArray(data.data)) {
+      return data.data;
+    }
+
+    if (data && data.data && Array.isArray(data.data.speakers)) {
+      return data.data.speakers;
+    }
+
+    if (data && data.result && Array.isArray(data.result.speakers)) {
+      return data.result.speakers;
+    }
+
+    return [];
+  }
+
+  function renderSpeakers(speakers) {
+    if (!speakers.length) {
+      grid.innerHTML = "";
+      resultCount.textContent = "No speakers found.";
+      return;
+    }
+
+    grid.innerHTML = speakers
+      .map(createSpeakerCard)
+      .join("");
+
+    resultCount.textContent =
+      "Showing " +
+      speakers.length +
+      " of " +
+      allSpeakers.length +
+      " speakers.";
+  }
+
+  function filterSpeakers() {
+    const query = normaliseText(searchInput.value);
+
+    if (!query) {
+      renderSpeakers(allSpeakers);
+      return;
+    }
+
+    const filtered = allSpeakers.filter(function (rawSpeaker) {
+      const speaker = normaliseSpeaker(rawSpeaker);
+      return getSpeakerSearchText(speaker).indexOf(query) !== -1;
+    });
+
+    renderSpeakers(filtered);
+  }
+
+  searchInput.addEventListener("input", filterSpeakers);
+
+  clearButton.addEventListener("click", function () {
+    searchInput.value = "";
+    searchInput.focus();
+    renderSpeakers(allSpeakers);
+  });
+
+  fetch(DATA_URL, {
+    cache: "no-store"
+  })
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error("Failed to load speaker JSON");
+      }
+
+      return response.json();
+    })
+    .then(function (data) {
+      allSpeakers = extractSpeakers(data);
+
+      if (!allSpeakers.length) {
+        status.textContent = "No speakers found.";
+        return;
+      }
+
+      status.remove();
+      renderSpeakers(allSpeakers);
+    })
+    .catch(function (error) {
+      console.error(error);
+      status.textContent = "Could not load speakers at this time.";
+    });
+})();
+</script>
