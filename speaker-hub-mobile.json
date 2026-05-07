@@ -142,34 +142,6 @@
                     "title": "Pathogen surveillance from in-house to in the field"
                 }
             ]
-        }
-        {
-            "index": 12,
-            "name": "Anna Maria Niewiadomska",
-            "organisation": "",
-            "talkTitle": "",
-            "image": "https://euimg.vfairs.com/uploads/vjfnew/237270/content/images/1776089318anna-niewiadomska-jpeg1776089318.jpeg",
-            "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Knowledge exchange how to sequence full-length 16S and ITS microbial amplicons info FINAL V2_1777652930626.pdf",
-            "sessions": [
-                {
-                    "time": "2026-05-20 04:55:00 PM (BST)",
-                    "title": "Knowledge exchange: how to sequence full-length 16S and ITS microbial amplicons with Oxford Nanopore"
-                }
-            ]
-        },
-        {
-            "index": 13,
-            "name": "Arianna Ceruti",
-            "organisation": "Leipzig University, Germany",
-            "talkTitle": "",
-            "image": "https://euimg.vfairs.com/uploads/vjfnew/237268/content/images/1776870541arianna-ceruti-png1776870541.png",
-            "bioUrl": "",
-            "sessions": [
-                {
-                    "time": "2026-05-20 12:45:00 PM (BST)",
-                    "title": "From London Calling 2025: Rapid-response mobile laboratory for disease elimination, outbreak investigation, and pathogen X"
-                }
-            ]
         },
         {
             "index": 14,
@@ -238,20 +210,6 @@
                 {
                     "time": "2026-05-21 09:45:00 AM (BST)",
                     "title": "Lightning talks"
-                }
-            ]
-        },
-        {
-            "index": 19,
-            "name": "Catriona Williams",
-            "organisation": "",
-            "talkTitle": "",
-            "image": "https://euimg.vfairs.com/uploads/vjfnew/237270/content/images/1776089589catriona-williams-jpeg1776089589.jpeg",
-            "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Knowledge exchange how to sequence full-length 16S and ITS microbial amplicons info FINAL V2_1777652966581.pdf",
-            "sessions": [
-                {
-                    "time": "2026-05-20 04:55:00 PM (BST)",
-                    "title": "Knowledge exchange: how to sequence full-length 16S and ITS microbial amplicons with Oxford Nanopore"
                 }
             ]
         },
@@ -656,20 +614,6 @@
             ]
         },
         {
-            "index": 48,
-            "name": "Marta Rudzite",
-            "organisation": "",
-            "talkTitle": "",
-            "image": "https://euimg.vfairs.com/uploads/vjfnew/236331/content/images/1776088429marta-rudzite-jpeg1776088429.jpeg",
-            "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Knowledge Exchange_bacterial and fungal isolate sequencing with NOMISS info FINAL V3_1777652739417.pdf",
-            "sessions": [
-                {
-                    "time": "2026-05-20 12:00:00 PM (BST)",
-                    "title": "Knowledge exchange: bacterial and fungal isolate sequencing with NO-MISS"
-                }
-            ]
-        },
-        {
             "index": 49,
             "name": "Max Bloomfield",
             "organisation": "Awanui Laboratories Wellington, New Zealand",
@@ -754,20 +698,6 @@
             ]
         },
         {
-            "index": 55,
-            "name": "Natalia Garcia",
-            "organisation": "",
-            "talkTitle": "",
-            "image": "https://euimg.vfairs.com/uploads/vjfnew/237270/content/images/1776089443natalia-garcia-jpeg1776089443.jpeg",
-            "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Knowledge exchange how to sequence full-length 16S and ITS microbial amplicons info FINAL V2_1777652996634.pdf",
-            "sessions": [
-                {
-                    "time": "2026-05-20 04:55:00 PM (BST)",
-                    "title": "Knowledge exchange: how to sequence full-length 16S and ITS microbial amplicons with Oxford Nanopore"
-                }
-            ]
-        },
-        {
             "index": 56,
             "name": "Ni-Chung Lee",
             "organisation": "National Taiwan University Hospital, Taiwan",
@@ -792,34 +722,6 @@
                 {
                     "time": "2026-05-21 01:00:00 PM (BST)",
                     "title": "Data for lunch"
-                }
-            ]
-        },
-        {
-            "index": 58,
-            "name": "Rebecca Deane",
-            "organisation": "",
-            "talkTitle": "",
-            "image": "https://euimg.vfairs.com/uploads/vjfnew/236331/content/images/1776088726rebecca-deane-jpeg1776088726.jpeg",
-            "bioUrl": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026 Knowledge Exchange_bacterial and fungal isolate sequencing with NOMISS info FINAL V3_1777652763547.pdf",
-            "sessions": [
-                {
-                    "time": "2026-05-20 12:00:00 PM (BST)",
-                    "title": "Knowledge exchange: bacterial and fungal isolate sequencing with NO-MISS"
-                }
-            ]
-        },
-        {
-            "index": 59,
-            "name": "Rhys White",
-            "organisation": "Institute of Environmental Science and Research, New Zealand",
-            "talkTitle": "",
-            "image": "https://euimg.vfairs.com/uploads/vjfnew/237269/content/images/1776089176rhys-white-jpg1776089176.jpg",
-            "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/237269/content/images/1776870927lc2026-rhys-white-info-final-v3-pdf1776870927.pdf",
-            "sessions": [
-                {
-                    "time": "2026-05-20 12:55:00 PM (BST)",
-                    "title": "From London Calling 2025: Nanopore sequencing captures first in-patient evolution of vancomycin-resistant E. faecium in New Zealand"
                 }
             ]
         },
