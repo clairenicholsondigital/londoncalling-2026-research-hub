@@ -1,0 +1,202 @@
+[
+    {
+        "index": 1,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1775723193adam-giess-jpeg1775723193.jpeg",
+        "speakerName": "Adam Giess",
+        "organisation": "Genomics England, UK",
+        "talkTitle": "Long-read sequencing at Genomics England",
+        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1775723207lc2026-adam-giess-info-final-pdf1775723207.pdf"
+    },
+    {
+        "index": 2,
+        "profilePic": "https://data-eu.vfairs.com/V2/10000225/users/1776086958adela-alcolea-medina-jpg1776086958_1777328203986.jpg",
+        "speakerName": "Adela Alcolea-Medina",
+        "organisation": "Synnovis, Guy’s and St Thomas’ NHS Foundation Trust, UK",
+        "talkTitle": "",
+        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Adela%20Alcolea-Medina%20info%20FINAL%20(1)_1777495269316.pdf"
+    },
+    {
+        "index": 3,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1776944939alberto-magi-jpg1776944939.jpg",
+        "speakerName": "Alberto Magi",
+        "organisation": "University of Florence, Italy",
+        "talkTitle": "Third-generation homozygosity analysis",
+        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1776944943lc2026-alberto-magi-info-final-pdf1776944943.pdf"
+    },
+    {
+        "index": 4,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776770505alessandra-renieri-jpeg1776770505.jpeg",
+        "speakerName": "Alessandra Renieri",
+        "organisation": "University of Siena, Italy",
+        "talkTitle": "",
+        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776770508lc2026-alessandra-renieri-info-final-pdf1776770508.pdf"
+    },
+    {
+        "index": 5,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132593alfredo-hidalgo-miranda-jpg1775132593.jpg",
+        "speakerName": "Alfredo Hidalgo-Miranda",
+        "organisation": "National Institute of Genomic Medicine, Mexico",
+        "talkTitle": "Assembly of an almost complete T2T Mexican Mestizo genome using long and ultra-long nanopore sequencing",
+        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132605lc2026-alfredo-hidalgo-miranda-info-final-pdf1775132605.pdf"
+    },
+    {
+        "index": 6,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775726627alice-osmaston-jpg1775726627.jpg",
+        "speakerName": "Alice Osmaston",
+        "organisation": "University College London, UK",
+        "talkTitle": "A low-cost Mycobacterium tuberculosis complete genome using nanopore sequencing",
+        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775726631lc2026-alice-osmaston-info-final-pdf1775726631.pdf"
+    },
+    {
+        "index": 7,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/197009/content/images/1775133813alvin-ng-jpeg1775133813.jpeg",
+        "speakerName": "Alvin Ng",
+        "organisation": "Nanyang Technological University, Singapore",
+        "talkTitle": "Building a multiomic homologous recombination deficiency clinical test using Adaptive Sampling",
+        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/197009/content/images/1775133817lc2026-alvin-ng-info-final-pdf1775133817.pdf"
+    },
+    {
+        "index": 8,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/240020/content/images/1777731042amy-denton-jpg1777731042.jpg",
+        "speakerName": "Amy Denton",
+        "organisation": "Wellcome Sanger Institute, UK",
+        "talkTitle": "Generating bird and fish reference genomes using Oxford Nanopore ligation sequencing for the Tree of Life Programme",
+        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Amy%20Denton%20info%20FINAL_1777730812505_1778161205744.pdf"
+    },
+    {
+        "index": 9,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132331andre-reis-jpeg1775132331.jpeg",
+        "speakerName": "André Reis",
+        "organisation": "Garvan Institute of Medical Research, Australia",
+        "talkTitle": "Targeted nanopore sequencing and an integrated analysis framework for neurogenomic disease",
+        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/193360/content/images/1775132336lc2026-andre-reis-info-final-pdf1775132336.pdf"
+    },
+    {
+        "index": 10,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775723635anna-rommerskirchen-jpeg1775723636.jpeg",
+        "speakerName": "Anna Rommerskirchen",
+        "organisation": "Heinrich-Heine University Dusseldorf, Germany",
+        "talkTitle": "Implementation of innovative cell-free DNA-based sepsis diagnostics in resource-limited Ethiopian settings",
+        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/198504/content/images/1775723642lc2026-anna-rommerskirchen-info-final-pdf1775723642.pdf"
+    },
+    {
+        "index": 11,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/236331/content/images/1776088209anna-niewiadomska-jpeg1776088209.jpeg",
+        "speakerName": "Anna Maria Niewiadomska",
+        "organisation": "",
+        "talkTitle": "",
+        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Knowledge%20Exchange_bacterial%20and%20fungal%20isolate%20sequencing%20with%20NOMISS%20info%20FINAL%20V3_1777652789074.pdf"
+    },
+    {
+        "index": 12,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/237270/content/images/1776089318anna-niewiadomska-jpeg1776089318.jpeg",
+        "speakerName": "Anna Maria Niewiadomska",
+        "organisation": "",
+        "talkTitle": "",
+        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Knowledge%20exchange%20how%20to%20sequence%20full-length%2016S%20and%20ITS%20microbial%20amplicons%20info%20FINAL%20V2_1777652930626.pdf"
+    },
+    {
+        "index": 13,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/237268/content/images/1776870541arianna-ceruti-png1776870541.png",
+        "speakerName": "Arianna Ceruti",
+        "organisation": "Leipzig University, Germany",
+        "talkTitle": "",
+        "bioLink": "https://events.nanoporetech.com/"
+    },
+    {
+        "index": 14,
+        "profilePic": "https://data-eu.vfairs.com/V2/10000225/users/Arnfinnur_Kallsberg_1777731658306.jpg",
+        "speakerName": "Arnfinnur Kallsberg",
+        "organisation": "Faroese Health Authority, Faroe Islands",
+        "talkTitle": "Targeted nanopore sequencing for newborn screening in a small population",
+        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Arnfinnur%20Kallsberg%20info%20FINAL%20v2_1777731712354.pdf"
+    },
+    {
+        "index": 15,
+        "profilePic": "https://data-eu.vfairs.com/V2/10000225/users/Art_Rand_1777492086247.jpg",
+        "speakerName": "Art Rand",
+        "organisation": "Research Scientist, Machine Learning, Oxford Nanopore Technologies",
+        "talkTitle": "Leveraging base modification information with Modkit",
+        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Art%20Rand%20info%20FINAL%20(1)_1777985853168.pdf"
+    },
+    {
+        "index": 16,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1775663245ashley-pritchard-jpg1775663245.jpg",
+        "speakerName": "Ashley Pritchard",
+        "organisation": "Great Ormond Street Hospital for Children NHS Foundation Trust, UK",
+        "talkTitle": "Translating long-read sequencing into a scalable NHS bioinformatics workflow",
+        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/198503/content/images/1775663250lc2026-ashley-pritchard-info-final-pdf1775663250.pdf"
+    },
+    {
+        "index": 17,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775728007brynja-sigurpalsdottir-jpg1775728007.jpg",
+        "speakerName": "Brynja Sigurpálsdóttir",
+        "organisation": "Amgen deCODE genetics, Iceland",
+        "talkTitle": "Oxford Nanopore sequencing of the UK Biobank",
+        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Brynja%20Sigurp%C3%A1lsd%C3%B3ttir%20info%20FINAL%20v2_1777986054105.pdf"
+    },
+    {
+        "index": 18,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/236589/content/images/1775644980carla-apaza-jpeg1775644980.jpeg",
+        "speakerName": "Carla Apaza",
+        "organisation": "Peruvian University Cayetano Heredia, Peru",
+        "talkTitle": "Revealing minor subpopulations in mixed infections with targeted sequencing",
+        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/236589/content/images/1775644986lc2026-carla-apaza-info-final-pdf1775644986.pdf"
+    },
+    {
+        "index": 19,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/237270/content/images/1776089589catriona-williams-jpeg1776089589.jpeg",
+        "speakerName": "Catriona Williams",
+        "organisation": "",
+        "talkTitle": "",
+        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Knowledge%20exchange%20how%20to%20sequence%20full-length%2016S%20and%20ITS%20microbial%20amplicons%20info%20FINAL%20V2_1777652966581.pdf"
+    },
+    {
+        "index": 20,
+        "profilePic": "https://data-eu.vfairs.com/V2/10000225/users/Cecilia_Mancini_1777731551450.jpg",
+        "speakerName": "Cecilia Mancini",
+        "organisation": "Bambino Gesù Children’s Hospital, Italy",
+        "talkTitle": "Oxford Nanopore sequencing to handle missing heritability in rare diseases",
+        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Cecilia%20Mancini%20info%20FINAL%20V2_1777731613811.pdf"
+    },
+    {
+        "index": 21,
+        "profilePic": "https://data-eu.vfairs.com/V2/10000225/users/1775134941chanatjit-cheawsamoot-jpeg1775134941_1777329231284.jpeg",
+        "speakerName": "Chanatjit Cheawsamoot",
+        "organisation": "Chulalongkorn University, Thailand",
+        "talkTitle": "High-resolution structural variant detection and validation via nanopore long-read whole-genome sequencing",
+        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/1775134970lc2026-chanatjit-cheawsamoot-info-final-pdf1775134970_1777329157538.pdf"
+    },
+    {
+        "index": 22,
+        "profilePic": "https://data-eu.vfairs.com/V2/10000225/users/Claudia_Strafella_1777731524995.jpg",
+        "speakerName": "Claudia Strafella",
+        "organisation": "Santa Lucia Foundation IRCCS, Italy",
+        "talkTitle": "An integrated long-read sequencing workflow for molecular profiling in facioscapulohumeral muscular dystrophy",
+        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Claudia%20Strafella%20info%20FINAL_1777731489714.pdf"
+    },
+    {
+        "index": 23,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775727526danny-miller-1-jpg1775727526.jpg",
+        "speakerName": "Danny E. Miller",
+        "organisation": "University of Washington, USA",
+        "talkTitle": "Population-scale long-read methylation signatures for rare disease classification",
+        "bioLink": "https://data-eu.vfairs.com/V2/10000225/session-speaker/LC2026%20Danny%20E.%20Miller%20info%20FINAL%20v2_1777495518220.pdf"
+    },
+    {
+        "index": 24,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/236342/content/images/1775135813david-thomas-jpeg1775135813.jpeg",
+        "speakerName": "David Thomas",
+        "organisation": "University of New South Wales, Australia",
+        "talkTitle": "",
+        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/236342/content/images/1776160856lc2026-david-thomas-info-final-pdf1776160856.pdf"
+    },
+    {
+        "index": 25,
+        "profilePic": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775727646eilis-hannon-jpeg1775727646.jpeg",
+        "speakerName": "Eilis Hannon",
+        "organisation": "University of Exeter, UK",
+        "talkTitle": "Leveraging epigenetic signatures to predict cell-type of origin from nanopore sequencing",
+        "bioLink": "https://euimg.vfairs.com/uploads/vjfnew/236637/content/images/1775727657lc2026-eilis-hannon-info-final-pdf1775727657.pdf"
+    }
+]
