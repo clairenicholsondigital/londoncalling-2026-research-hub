@@ -1074,6 +1074,20 @@
                     "title": "App only speakers"
                 }
             ]
+        },
+        {
+            "index": 85,
+            "name": "Madeline Page",
+            "organisation": "University of Kentucky, USA",
+            "talkTitle": "",
+            "image": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776932662madeline-page-jpg1776932662.jpg",
+            "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776932666lc2026-madeline-page-info-final-pdf1776932666.pdf",
+            "sessions": [
+                {
+                    "time": "2026-05-19 09:45:00 AM (BST)",
+                    "title": "App only speakers"
+                }
+            ]
         }
     ]
 }
