@@ -600,6 +600,8 @@
             ]
         },
         {
+  "index": 73,
+        {
             "index": 47,
             "name": "Mark Bruce",
             "organisation": "",
@@ -904,6 +906,132 @@
                 {
                     "time": "2026-05-21 11:40:01 AM (BST)",
                     "title": "Profiling and classification of cancer"
+                }
+            ]
+        },
+        {
+            "index": 73,
+            "name": "Amanda Hughes",
+            "organisation": "Lonza, The Netherlands",
+            "talkTitle": "",
+            "image": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776761931amanda-hughes-v2-jpg1776761931.jpg",
+            "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776761936lc2026-amanda-hughes-info-final-pdf1776761936.pdf",
+            "sessions": [
+                {
+                    "time": "2026-05-19 09:45:00 AM (BST)",
+                    "title": "App only speakers"
+                }
+            ]
+        },
+        {
+            "index": 74,
+            "name": "Steven Verbruggen",
+            "organisation": "OHMX.bio Belgium",
+            "talkTitle": "",
+            "image": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776769957steven-verbruggen-jpeg1776769957.jpeg",
+            "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776769962lc2026-steven-verbruggen-info-final-1-pdf1776769963.pdf",
+            "sessions": [
+                {
+                    "time": "2026-05-19 09:45:00 AM (BST)",
+                    "title": "App only speakers"
+                }
+            ]
+        },
+        {
+            "index": 75,
+            "name": "Christoph Dieterich",
+            "organisation": "Heidelberg University, Germany",
+            "talkTitle": "",
+            "image": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776770376christoph-dieterich-jpg1776770376.jpg",
+            "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776770380lc2026-christoph-dieterich-info-final-pdf1776770380.pdf",
+            "sessions": [
+                {
+                    "time": "2026-05-19 09:45:00 AM (BST)",
+                    "title": "App only speakers"
+                }
+            ]
+        },
+        {
+            "index": 76,
+            "name": "Hagar Mor-Shaked",
+            "organisation": "Hadassah Medical Center, Israel",
+            "talkTitle": "",
+            "image": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776770659hagar-mor-shaked-1-jpg1776770659.jpg",
+            "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776770663lc2026-hagar-mor-shaked-info-final-pdf1776770663.pdf",
+            "sessions": [
+                {
+                    "time": "2026-05-19 09:45:00 AM (BST)",
+                    "title": "App only speakers"
+                }
+            ]
+        },
+        {
+            "index": 77,
+            "name": "Ailsa MacCalman",
+            "organisation": "University of Exeter, UK",
+            "talkTitle": "",
+            "image": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776932448ailsa-maccalman-1-jpeg1776932448.jpeg",
+            "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776932451lc2026-ailsa-maccalman-info-final-1-pdf1776932451.pdf",
+            "sessions": [
+                {
+                    "time": "2026-05-19 09:45:00 AM (BST)",
+                    "title": "App only speakers"
+                }
+            ]
+        },
+        {
+            "index": 78,
+            "name": "Macey Slota",
+            "organisation": "University of California, USA",
+            "talkTitle": "",
+            "image": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776932585macey-slota-jpeg1776932585.jpeg",
+            "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776932589lc2026-macey-slota-info-final-v2-pdf1776932589.pdf",
+            "sessions": [
+                {
+                    "time": "2026-05-19 09:45:00 AM (BST)",
+                    "title": "App only speakers"
+                }
+            ]
+        },
+        {
+            "index": 79,
+            "name": "Monika Cechova",
+            "organisation": "Masaryk University, Czechia",
+            "talkTitle": "",
+            "image": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776935931monika-cechova-jpeg1776935931.jpeg",
+            "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776935934lc2026-monika-cechova-info-final-pdf1776935934.pdf",
+            "sessions": [
+                {
+                    "time": "2026-05-19 09:45:00 AM (BST)",
+                    "title": "App only speakers"
+                }
+            ]
+        },
+        {
+            "index": 80,
+            "name": "Sebastian Lunke",
+            "organisation": "Victorian Clinical Genetics Services, Australia",
+            "talkTitle": "",
+            "image": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776932819sebastian-lunke-jpg1776932819.jpg",
+            "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776932822lc2026-sebastian-lunke-info-final-pdf1776932822.pdf",
+            "sessions": [
+                {
+                    "time": "2026-05-19 09:45:00 AM (BST)",
+                    "title": "App only speakers"
+                }
+            ]
+        },
+        {
+            "index": 81,
+            "name": "Gabrielle Hartley",
+            "organisation": "University of Connecticut, USA",
+            "talkTitle": "",
+            "image": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776932953gabrielle-hartley-jpg1776932953.jpg",
+            "bioUrl": "https://euimg.vfairs.com/uploads/vjfnew/239163/content/images/1776932956lc2026-gabrielle-hartley-info-final-pdf1776932956.pdf",
+            "sessions": [
+                {
+                    "time": "2026-05-19 09:45:00 AM (BST)",
+                    "title": "App only speakers"
                 }
             ]
         }
